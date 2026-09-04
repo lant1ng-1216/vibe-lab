@@ -1,38 +1,44 @@
-# vibe-lab · Vibe Lab 站点与创作者数据仓库
+# Vibe Lab · 振动实验室
 
-这里是 **Vibe Lab** 站点的源码 + 创作者数据中枢。站点「实验室 /lab」页的所有创作者与作品，都从本仓库 `creators/` 实时拉取展示。
+> AI 时代的野路子训练场 —— 工具在手、作品说话。
+> 面向想用 AI 真正做出东西的人:从 0 上手 AI 工具,到独立做出自己的作品,再到把作品摆上台、被更多人看见。
 
-## 快速导航（按你的身份选）
+## 这个仓库
 
-| 你是谁 | 看哪个 |
-|---|---|
-| **想入驻的创作者**（人） | [creators/README.md](creators/README.md) —— 入驻教程与日常操作 |
-| **想让 AI Agent 代办的创作者 / 维护者** | [AGENTS.md](AGENTS.md) —— AI 操作手册（可直接丢给 AI 执行） |
-| **维护者（生成封面等）** | [docs/COVER-WORKFLOW.md](docs/COVER-WORKFLOW.md) |
-| **校验数据 / 自动收录作品** | [scripts/validate.mjs](scripts/validate.mjs) / [scripts/sync-works.mjs](scripts/sync-works.mjs) |
+Vibe Lab 官网源码 + **创作者数据中枢**。站点的「实验室 /lab」——创作者与他们的作品——都从本仓库 [`creators/`](creators/) 实时拉取展示:任何人提交的作品,过审后即可上线。
 
-## 目录速览
+## 我们做什么
 
-```
-creators/index.json           花名册（站长维护：谁入驻了）
-creators/<handle>/profile.json 创作者个人资料 + 收录范围 sync（本人可编辑）
-creators/<handle>/works.json   作品展示集（本人 + 审核后合入）
-covers/<id>.jpg                AI 封面产物
-schema/*.json                  JSON Schema：数据字段约束（机器单一事实源）
-docs/COVER-WORKFLOW.md         封面生成 SOP（先读说明再生成）
-```
+| 板块 | 做什么 | 代码/数据 |
+|---|---|---|
+| **工具库** | 70+ 精选 AI 工具,逐个上手讲明白 | `data/tools.ts` |
+| **教程库** | 站内精读的 AI 学习路线,能落地、不灌水 | `data/tutorials/` |
+| **实战训练营** | Starter / Builder / Hacker 三档:从上手工具,一路做到作品打磨上线、个人网站收官 | `app/courses` |
+| **实验室 Lab** | 创作者作品展示场:做出来 → 摆上台 → 被看见 | `creators/` + `app/lab` |
 
-## 审核与上线（所有写操作都遵守）
+## 技术栈
 
-**任何改动（创作者 / 维护者 / AI）都走 PR，审核通过合入后才上线：**
+- **Next.js 15**(App Router)+ **TypeScript** + GSAP
+- 服务端从本仓库**实时拉取**创作者数据(token → GitHub API / 无 token → CDN,60s 缓存)
+- 代码:`app/` `components/` `lib/`;内容与数据:`data/` `creators/`
+- 部署:海外 Vercel(免备案)
 
-1. 提交 PR（数据改动标题带 `creators:` 前缀）。
-2. 自动闸：CI 跑 `scripts/validate.mjs`，格式不对直接红。
-3. 人工闸：站长按 checklist 审核（资料真实、type/status 合理、无敏感信息、收录范围符合本人 `sync` 配置）。
-4. 合并 = 上线（站点最长 60s 缓存后可见）。
+## 共建与创作者
 
-唯一豁免：`/api/lab-cover` 运行时封面回写（AI 机器产物、幂等、带 coverVersion 可追溯）。
+Lab 欢迎每一个把作品摆上台的人。当前在台上的创作者:
 
-## 协议版本
+- **yu7dan** — 站长 · *喜欢把想到的东西做出来*([GitHub](https://github.com/lant1ng-1216))
 
-v2（2026-09）：`index.json` 只存花名册；个人资料与 `sync{all|selected|manual}` 移入 `<handle>/profile.json`。字段约束见 `schema/*.json`，改协议必须同步 schema + 两份文档，不许打架。
+> 完整创作者墙见站点 `/lab`。
+
+- 想 **入驻 / 提交作品**(人读教程)→ [`creators/README.md`](creators/README.md)
+- 想让 **AI Agent 代你操作** → [`AGENTS.md`](AGENTS.md)
+- 改动流程:提交 PR → 自动校验 → 站长 review → 合入即上线
+
+## 贡献者
+
+![GitHub Contributors](https://img.shields.io/github/contributors/lant1ng-1216/vibe-lab)
+
+- lant1ng-1216 — 站长 · 维护者
+
+感谢每一位把作品摆上台、把想法做成东西的人。
