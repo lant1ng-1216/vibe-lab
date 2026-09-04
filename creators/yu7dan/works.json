@@ -8,13 +8,22 @@
       "thumb": "/assets/lab/covers/tools.png",
       "link": "https://github.com/lant1ng-1216/vibe-lab",
       "status": "实验进行中",
-      "tags": ["Next.js", "GSAP", "Vercel"],
+      "tags": [
+        "Next.js",
+        "GSAP",
+        "Vercel"
+      ],
       "date": "2026-09",
       "meta": {
         "role": "产品 / 设计 / 开发",
         "published": "2026-09",
         "industry": "AI 教育",
-        "tech": ["Next.js 15", "TypeScript", "GSAP", "Vercel"]
+        "tech": [
+          "Next.js 15",
+          "TypeScript",
+          "GSAP",
+          "Vercel"
+        ]
       },
       "body": "把「AI 资源门户 + 实战训练营」从 PRD 一路做到可上线预览。工具库 72 款、教程库接入 10+ 本开源教程站内阅读、训练营课程台带阶梯解锁、Lab 创作者展示。过程中踩遍 Next.js 服务端渲染、GSAP 动画、GitHub 内容拉取的坑——这个站就是我的实验记录。"
     },
@@ -23,17 +32,26 @@
       "type": "App",
       "title": "Chinese Handwriting Generator · 中文手写模拟器",
       "desc": "把文字渲染到任意打印模板上的手写效果生成器——开源、确定性、无需 AI 生图、快。",
-      "thumb": null,
+      "thumb": "covers/chinese-handwriting-generator.jpg",
       "link": "https://github.com/lant1ng-1216/chinese-handwriting-generator",
       "status": "已开源",
-      "tags": ["Python", "PDF", "手写"],
+      "tags": [
+        "Python",
+        "PDF",
+        "手写"
+      ],
       "date": "2026-08",
       "meta": {
         "role": "作者",
         "published": "2026-08",
-        "tech": ["Python", "Pillow", "PDF"]
+        "tech": [
+          "Python",
+          "Pillow",
+          "PDF"
+        ]
       },
-      "body": "把印刷模板与手写内容合成的手写体渲染工具：模板化、可调潦草度、多字体随机切换避免重复穿帮。面向学校报告书 / 调研报告等需要手写提交的场景。"
+      "body": "把印刷模板与手写内容合成的手写体渲染工具：模板化、可调潦草度、多字体随机切换避免重复穿帮。面向学校报告书 / 调研报告等需要手写提交的场景。",
+      "cardSummary": "这是一个开源的 Python 工具，能快速将文字渲染成逼真的手写效果并应用到 PDF 模板上，无需 AI 生成，速度快且效果可预测。"
     },
     {
       "id": "zhongqian-zhongyao-huajia",
@@ -43,13 +61,21 @@
       "thumb": null,
       "link": "https://github.com/lant1ng-1216/zhongqian-zhongyao-huajia",
       "status": "已开源",
-      "tags": ["Python", "桌面软件", "离线"],
+      "tags": [
+        "Python",
+        "桌面软件",
+        "离线"
+      ],
       "date": "2026-07",
       "meta": {
         "role": "作者",
         "published": "2026-07",
         "industry": "医疗 / 诊所",
-        "tech": ["Python", "PySide", "SQLite"]
+        "tech": [
+          "Python",
+          "PySide",
+          "SQLite"
+        ]
       },
       "body": "单机离线、不上云的行业小软件：开方即划价，库存进货、顾客档案、常用方、调价与进销存报表一屏管理。为小型诊所/药房降本设计。"
     },
@@ -61,12 +87,19 @@
       "thumb": null,
       "link": "https://github.com/lant1ng-1216/eln-core",
       "status": "已开源",
-      "tags": ["Agent", "Story", "Runtime"],
+      "tags": [
+        "Agent",
+        "Story",
+        "Runtime"
+      ],
       "date": "2026-07",
       "meta": {
         "role": "作者",
         "published": "2026-07",
-        "tech": ["TypeScript", "LLM"]
+        "tech": [
+          "TypeScript",
+          "LLM"
+        ]
       },
       "body": "把叙事世界做成 Agent 可运行的环境：世界状态、角色、事件由 Agent 驱动演进。偏向实验性的运行时设计。"
     }
