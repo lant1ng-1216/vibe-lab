@@ -4411,3 +4411,14 @@ a.tcard:hover .tcard-meta { color: var(--ink-soft); }
   letter-spacing: 0;
 }
 .lab4-card-ph-sub { font-size: 10.5px; color: #a6a6a0; }
+
+/* ---- Lab 卡片 v2：标题 + AI 摘要 + 封面 ---- */
+.lab4-card-hit { display: flex; flex-direction: column; }
+.lab4-card-media { display: block; width: 100%; aspect-ratio: 3 / 2; overflow: hidden; border-radius: 8px; background: #f2f1ee; position: relative; }
+.lab4-card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.lab4-card-ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #d4d2cc; }
+.lab4-card-copy { display: flex; flex-direction: column; gap: 4px; padding: 10px 2px 0; text-align: left; }
+.lab4-card-title { font-size: 15px; font-weight: 650; letter-spacing: -0.01em; color: #0b0b0b; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.lab4-card-sub { font-size: 10px; color: #aaa; letter-spacing: 0.06em; }
+.lab4-card-summary { font-size: 12px; color: #666; line-height: 1.6; margin-top: 2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.lab4-card-meta { display: flex; align-items: center; gap: 6px; padding: 8px 2px 0; border-top: 1px solid #f2f1ee; margin-top: 8px; }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { WORK_TYPES, type Creator, type Work, type WorkType } from "@/data/creators";
@@ -8,6 +8,25 @@ import { WorkDetail } from "./WorkDetail";
 import CreatorAvatar from "./CreatorAvatar";
 
 const TABS: ("All" | WorkType)[] = ["All", ...WORK_TYPES];
+
+type CoverInfo = { url?: string; summary?: string };
+
+/** 解析 thumb → 可直接用于 img 的 src */
+function resolveThumb(thumb: string | null): string | null {
+  if (!thumb) return null;
+  if (thumb.startsWith("/assets/") || /^https?:|^\/\//.test(thumb)) return thumb;
+  if (thumb.startsWith("covers/") || thumb.startsWith("/covers/")) {
+    return `/api/lab-cover-file?path=${thumb.replace(/^\//, "")}`;
+  }
+  return thumb;
+}
+
+/** desc 首句作为摘要兜底 */
+function firstSentence(desc: string): string {
+  const cut = desc.split(/[。；！？\n]/)[0].trim();
+  if (!cut) return desc;
+  return cut.length < desc.length ? cut + "。" : cut;
+}
 
 export function LabFeed({
   works,
@@ -18,6 +37,28 @@ export function LabFeed({
 }) {
   const [tab, setTab] = useState<"All" | WorkType>("All");
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [covers, setCovers] = useState<Record<string, CoverInfo>>({});
+
+  // 无封面作品：异步调 /api/lab-cover（首次自动 AI 生成 + 回写，之后秒回缓存）
+  useEffect(() => {
+    let alive = true;
+    works
+      .filter((w) => !w.thumb && !covers[w.id])
+      .forEach((w) => {
+        fetch(`/api/lab-cover?workId=${encodeURIComponent(w.id)}`, { cache: "no-store" })
+          .then((r) => (r.ok ? r.json() : null))
+          .then((d: CoverInfo | null) => {
+            if (alive && d && (d.url || d.summary)) {
+              setCovers((p) => ({ ...p, [w.id]: { url: d.url, summary: d.summary } }));
+            }
+          })
+          .catch(() => {});
+      });
+    return () => {
+      alive = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [works]);
 
   const byHandle = useMemo(() => {
     const m = new Map<string, Creator>();
@@ -107,27 +148,33 @@ export function LabFeed({
             >
               <button type="button" className="lab4-card-hit" onClick={() => setActiveId(w.id)} aria-label={`查看作品 ${w.title}`}>
                 <span className="lab4-card-media">
-                  {w.thumb ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={w.thumb} alt={w.title} loading="lazy" />
-                  ) : (
-                    <span className="lab4-card-ph">
-                      {w.title}
-                      <span className="lab4-card-ph-sub mono">
-                        {w.type} · {w.status}
-                      </span>
-                    </span>
-                  )}
+                  {(() => {
+                    const imgSrc = resolveThumb(w.thumb) || covers[w.id]?.url;
+                    if (imgSrc) {
+                      return (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img key={imgSrc} src={imgSrc} alt={w.title} loading="lazy" />
+                      );
+                    }
+                    return <span className="lab4-card-ph" aria-hidden="true">✦</span>;
+                  })()}
+                </span>
+                <span className="lab4-card-copy">
+                  <span className="lab4-card-title">{w.title}</span>
+                  <span className="lab4-card-sub mono">{w.type} · {w.status}</span>
+                  <span className="lab4-card-summary">
+                    {covers[w.id]?.summary || w.cardSummary || firstSentence(w.desc)}
+                  </span>
                 </span>
                 <span className="lab4-card-meta">
-                <span className="lab4-card-author">
-                  {c ? (
-                    <CreatorAvatar creator={c} className="lab4-author-av" />
-                  ) : (
-                    <span className="lab4-author-av">{(w.handle).slice(0, 1).toUpperCase()}</span>
-                  )}
-                  <span className="lab4-author-name">{c?.name ?? w.handle}</span>
-                </span>
+                  <span className="lab4-card-author">
+                    {c ? (
+                      <CreatorAvatar creator={c} className="lab4-author-av" />
+                    ) : (
+                      <span className="lab4-author-av">{(w.handle).slice(0, 1).toUpperCase()}</span>
+                    )}
+                    <span className="lab4-author-name">{c?.name ?? w.handle}</span>
+                  </span>
                   <span className="lab4-card-actions" onClick={(e) => e.stopPropagation()}>
                     <button type="button" className="lab4-card-act" aria-label="关闭" tabIndex={-1}>✕</button>
                     <a className="lab4-card-act" href={w.link} target="_blank" rel="noopener noreferrer" aria-label="打开原作品" tabIndex={-1}>↗</a>

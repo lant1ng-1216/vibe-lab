@@ -99,6 +99,7 @@ async function loadWorksOf(dir: string): Promise<Work[]> {
       type: w.type || "Website",
       title: w.title || String(w.id),
       desc: w.desc || "",
+      cardSummary: w.cardSummary,
       thumb: w.thumb || null,
       link: w.link || "#",
       status: w.status || "已上线",
@@ -142,4 +143,10 @@ export async function getCreator(handle: string): Promise<Creator | null> {
 
 export async function worksOf(handle: string): Promise<Work[]> {
   return (await listWorks()).filter((w) => w.handle === handle);
+}
+
+/** 使数据缓存失效（works.json / index.json 被回写后调用） */
+export function invalidateLabCache(path?: string): void {
+  if (path) cache.delete(path);
+  else cache.clear();
 }
