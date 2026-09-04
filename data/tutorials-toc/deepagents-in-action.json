@@ -1,0 +1,97 @@
+[
+ {
+  "t": "agent harness",
+  "path": "content/ch01-agent-harness.md",
+  "group": null
+ },
+ {
+  "t": "quickstart",
+  "path": "content/ch02-quickstart.md",
+  "group": null
+ },
+ {
+  "t": "virtual filesystem",
+  "path": "content/ch03-virtual-filesystem.md",
+  "group": null
+ },
+ {
+  "t": "task planning",
+  "path": "content/ch04-task-planning.md",
+  "group": null
+ },
+ {
+  "t": "subagents",
+  "path": "content/ch05-subagents.md",
+  "group": null
+ },
+ {
+  "t": "async subagents",
+  "path": "content/ch06-async-subagents.md",
+  "group": null
+ },
+ {
+  "t": "skills",
+  "path": "content/ch07-skills.md",
+  "group": null
+ },
+ {
+  "t": "long term memory",
+  "path": "content/ch08-long-term-memory.md",
+  "group": null
+ },
+ {
+  "t": "human in the loop",
+  "path": "content/ch09-human-in-the-loop.md",
+  "group": null
+ },
+ {
+  "t": "sandboxes",
+  "path": "content/ch10-sandboxes.md",
+  "group": null
+ },
+ {
+  "t": "filesystem permissions",
+  "path": "content/ch11-filesystem-permissions.md",
+  "group": null
+ },
+ {
+  "t": "mcp",
+  "path": "content/ch12-mcp.md",
+  "group": null
+ },
+ {
+  "t": "grading rubrics",
+  "path": "content/ch13-grading-rubrics.md",
+  "group": null
+ },
+ {
+  "t": "streaming",
+  "path": "content/ch14-streaming.md",
+  "group": null
+ },
+ {
+  "t": "interpreters",
+  "path": "content/ch15-interpreters.md",
+  "group": null
+ },
+ {
+  "t": "dynamic subagents",
+  "path": "content/ch16-dynamic-subagents.md",
+  "group": null
+ },
+ {
+  "t": "pre01 agentseek create",
+  "path": "content/pre01-agentseek-create.md",
+  "group": null
+ },
+ {
+  "t": "pre02 agentseek skills",
+  "path": "content/pre02-agentseek-skills.md",
+  "group": null
+ },
+ {
+  "t": "release v0 7",
+  "path": "content/release-v0-7.md",
+  "group": null
+ }
+]

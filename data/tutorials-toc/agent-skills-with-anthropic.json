@@ -1,0 +1,52 @@
+[
+ {
+  "t": "1、Introduction",
+  "path": "1.Introduction（课程介绍）.md",
+  "group": null
+ },
+ {
+  "t": "2、Why Use Skills - Part I",
+  "path": "2.Why Use Skills 1（Skills的意义）.md",
+  "group": null
+ },
+ {
+  "t": "3、Why Use Skills - Part II",
+  "path": "3.Why Use Skills 2 - Agent and Skills（从Agent角度思考Skills）.md",
+  "group": null
+ },
+ {
+  "t": "4、Skills vs Tools, MCP, and Subagents",
+  "path": "4.Skills vs Tools, MCP, and Subagents（技能 vs 工具、MCP 和子代理）.md",
+  "group": null
+ },
+ {
+  "t": "5、Exploring Pre-Built Skills",
+  "path": "5.Exploring Pre-Built Skills （预设Skills探索）.md",
+  "group": null
+ },
+ {
+  "t": "6、Creating Custom Skills",
+  "path": "6.Creating Custom Skills（自定义skills）/6.Creating Custom Skills（自定义skills）.md",
+  "group": null
+ },
+ {
+  "t": "7、Skills with the Claude API",
+  "path": "7.Skill with the Claude API（在Claude API使用skills）.md",
+  "group": null
+ },
+ {
+  "t": "8、Skills with Claude Code",
+  "path": "8.Skill with Claude Code（在Claude Code使用skills）.md",
+  "group": null
+ },
+ {
+  "t": "9、Skills with the Claude Agent SDK",
+  "path": "9.Skills with the Claude Agent SDK（Claude Agent SDK 中的技能）.md",
+  "group": null
+ },
+ {
+  "t": "10、Conclusion",
+  "path": "10.Conclusion（总结）.md",
+  "group": null
+ }
+]

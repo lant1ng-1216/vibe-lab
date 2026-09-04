@@ -1,0 +1,100 @@
+/* ============================================================
+   Beautiful UI token 映射层（方案 A 配套）
+   Beautiful UI 源码使用 Tailwind utility + 语义 CSS 变量。
+   这里在 @theme 中把 BUI 变量名映射到 Vibe Lab 品牌色板，
+   并补齐源码引用的 @keyframes。
+   preflight 不做全局 reset——以低优先级 layer 引入，避免破坏
+   已定稿的手写 CSS 页面。
+   ============================================================ */
+
+/* Tailwind v4 三层：theme / preflight(base) / utilities。
+   preflight 放进低优先级 base layer；我们的手写样式无 layer 包裹，
+   CSS 层规则保证 unlayered 样式优先于 layered，因此已定稿页面不受影响。 */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* ---- BUI 语义 token → Vibe Lab 深色工作台品牌色 ----
+   这些变量名与 Beautiful UI 源码中的引用完全一致，
+   值映射到我们 Lab Agent 深色面板（#0c0c0e ~ #17171a 系）。 */
+@theme {
+  /* surfaces */
+  --color-surface: #101013;
+  --color-inset: #0c0c0e;
+  --color-field: #17171a;
+  --color-hover: rgba(239, 237, 232, 0.07);
+  --color-hover-2: rgba(239, 237, 232, 0.12);
+
+  /* ink scale（深底上的文字层级） */
+  --color-ink: #efede8;
+  --color-ink-2: rgba(239, 237, 232, 0.68);
+  --color-ink-3: rgba(239, 237, 232, 0.38);
+
+  /* lines */
+  --color-line: rgba(239, 237, 232, 0.1);
+  --color-line-strong: rgba(239, 237, 232, 0.22);
+
+  /* accents */
+  --color-accent: #8b7cf6;
+  --color-accent-ink: #9d8cff;
+  --color-accent-tint: rgba(139, 124, 246, 0.14);
+  --color-orange: #ff9a52;
+  --color-green: #27ff64;
+  --color-green-tint: rgba(39, 255, 100, 0.12);
+  --color-red: #ff5f57;
+  --color-red-tint: rgba(255, 95, 87, 0.12);
+
+  /* misc */
+  --color-page: #0c0c0e;
+  --color-bg: #0c0c0e;
+
+  /* radius / shadow */
+  --radius-card: 14px;
+  --radius-control: 10px;
+  --radius-chip: 999px;
+  --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.35);
+  --shadow-btn: 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(239, 237, 232, 0.08) inset;
+  --shadow-hairline: 0 0 0 1px rgba(239, 237, 232, 0.06);
+  --shadow-overlay: 0 24px 64px rgba(0, 0, 0, 0.5);
+  --shadow-raised: 0 8px 24px rgba(0, 0, 0, 0.35);
+
+  /* widths used in code block etc */
+  --spacing: 0.25rem;
+
+  /* durations used by BUI classes like duration-400 */
+  --transition-duration-400: 400ms;
+}
+
+/* ---- BUI 源码引用的 @keyframes（搜索源码关键字确认的集合） ---- */
+@keyframes shimmer-text {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes pixel-on {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.35); }
+}
+
+/* ---- BUI 自定义工具类兜底（源码里出现但非默认 Tailwind 类） ---- */
+@utility animated-underline {
+  background-image: linear-gradient(to right, currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-size: 0% 1.5px;
+  background-position: 0 100%;
+  transition: background-size 0.3s ease;
+}
+.animated-underline:hover {
+  background-size: 100% 1.5px;
+}

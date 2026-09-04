@@ -1,0 +1,142 @@
+[
+ {
+  "t": "RAG简介",
+  "path": "docs/chapter1/01_RAG_intro.md",
+  "group": null
+ },
+ {
+  "t": "准备工作",
+  "path": "docs/chapter1/02_preparation.md",
+  "group": null
+ },
+ {
+  "t": "四步构建RAG",
+  "path": "docs/chapter1/03_get_start_rag.md",
+  "group": null
+ },
+ {
+  "t": "附：环境部署",
+  "path": "docs/chapter1/virtualenv.md",
+  "group": null
+ },
+ {
+  "t": "数据加载",
+  "path": "docs/chapter2/04_data_load.md",
+  "group": null
+ },
+ {
+  "t": "文本分块",
+  "path": "docs/chapter2/05_text_chunking.md",
+  "group": null
+ },
+ {
+  "t": "向量嵌入",
+  "path": "docs/chapter3/06_vector_embedding.md",
+  "group": null
+ },
+ {
+  "t": "多模态嵌入",
+  "path": "docs/chapter3/07_multimodal_embedding.md",
+  "group": null
+ },
+ {
+  "t": "向量数据库",
+  "path": "docs/chapter3/08_vector_db.md",
+  "group": null
+ },
+ {
+  "t": "Milvus实践",
+  "path": "docs/chapter3/09_milvus.md",
+  "group": null
+ },
+ {
+  "t": "索引优化",
+  "path": "docs/chapter3/10_index_optimization.md",
+  "group": null
+ },
+ {
+  "t": "混合检索",
+  "path": "docs/chapter4/11_hybrid_search.md",
+  "group": null
+ },
+ {
+  "t": "查询构建",
+  "path": "docs/chapter4/12_query_construction.md",
+  "group": null
+ },
+ {
+  "t": "Text2SQL",
+  "path": "docs/chapter4/13_text2sql.md",
+  "group": null
+ },
+ {
+  "t": "查询重构与分发",
+  "path": "docs/chapter4/14_query_rewriting.md",
+  "group": null
+ },
+ {
+  "t": "检索进阶技术",
+  "path": "docs/chapter4/15_advanced_retrieval_techniques.md",
+  "group": null
+ },
+ {
+  "t": "格式化生成",
+  "path": "docs/chapter5/16_formatted_generation.md",
+  "group": null
+ },
+ {
+  "t": "评估介绍",
+  "path": "docs/chapter6/18_system_evaluation.md",
+  "group": null
+ },
+ {
+  "t": "评估工具",
+  "path": "docs/chapter6/19_common_tools.md",
+  "group": null
+ },
+ {
+  "t": "基于知识图谱的RAG",
+  "path": "docs/chapter7/20_kg_rag.md",
+  "group": null
+ },
+ {
+  "t": "环境配置与项目架构",
+  "path": "docs/chapter8/01_env_architecture.md",
+  "group": null
+ },
+ {
+  "t": "数据准备模块实现",
+  "path": "docs/chapter8/02_data_preparation.md",
+  "group": null
+ },
+ {
+  "t": "索引构建与检索优化",
+  "path": "docs/chapter8/03_index_retrieval.md",
+  "group": null
+ },
+ {
+  "t": "生成集成与系统整合",
+  "path": "docs/chapter8/04_generation_sys.md",
+  "group": null
+ },
+ {
+  "t": "图RAG架构设计",
+  "path": "docs/chapter9/01_graph_rag_architecture.md",
+  "group": null
+ },
+ {
+  "t": "图数据建模与准备",
+  "path": "docs/chapter9/02_graph_data_modeling.md",
+  "group": null
+ },
+ {
+  "t": "Milvus索引构建",
+  "path": "docs/chapter9/03_index_construction.md",
+  "group": null
+ },
+ {
+  "t": "智能查询路由与检索策略",
+  "path": "docs/chapter9/04_intelligent_query_routing.md",
+  "group": null
+ }
+]

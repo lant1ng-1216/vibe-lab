@@ -1,0 +1,42 @@
+[
+ {
+  "t": "Introduction",
+  "path": "guides/prompts-intro.md",
+  "group": null
+ },
+ {
+  "t": "Basic Usage",
+  "path": "guides/prompts-basic-usage.md",
+  "group": null
+ },
+ {
+  "t": "Advanced Usage",
+  "path": "guides/prompts-advanced-usage.md",
+  "group": null
+ },
+ {
+  "t": "Applications",
+  "path": "guides/prompts-applications.md",
+  "group": null
+ },
+ {
+  "t": "Adversarial Prompting",
+  "path": "guides/prompts-adversarial.md",
+  "group": null
+ },
+ {
+  "t": "Reliability",
+  "path": "guides/prompts-reliability.md",
+  "group": null
+ },
+ {
+  "t": "ChatGPT Prompting",
+  "path": "guides/prompts-chatgpt.md",
+  "group": null
+ },
+ {
+  "t": "Miscellaneous",
+  "path": "guides/prompts-miscellaneous.md",
+  "group": null
+ }
+]

@@ -1,0 +1,57 @@
+[
+ {
+  "t": "Dify本地部署",
+  "path": "doc/1. Dify本地部署.md",
+  "group": null
+ },
+ {
+  "t": "掌握提示词设计",
+  "path": "doc/2. 掌握提示词（prompt）设计.md",
+  "group": null
+ },
+ {
+  "t": "哄哄模拟器",
+  "path": "doc/3. 哄哄模拟器.md",
+  "group": null
+ },
+ {
+  "t": "新生入学指南助手",
+  "path": "doc/4. 新生入学指南助手.md",
+  "group": null
+ },
+ {
+  "t": "快速批处理小问题",
+  "path": "doc/5.快速批处理小问题.md",
+  "group": null
+ },
+ {
+  "t": "小红书读书卡片",
+  "path": "doc/6.小红书读书卡片.md",
+  "group": null
+ },
+ {
+  "t": "面试宝典",
+  "path": "doc/7.面试宝典.md",
+  "group": null
+ },
+ {
+  "t": "text2sql及echart数据分析",
+  "path": "doc/8.text2sql及echart数据分析.md",
+  "group": null
+ },
+ {
+  "t": "deepresearch 设计",
+  "path": "doc/9.deepresearch 设计.md",
+  "group": null
+ },
+ {
+  "t": "mcp",
+  "path": "doc/10.mcp.md",
+  "group": null
+ },
+ {
+  "t": "多模态入门（语音文本转化）",
+  "path": "doc/11.多模态入门（语音文本转化）.md",
+  "group": null
+ }
+]

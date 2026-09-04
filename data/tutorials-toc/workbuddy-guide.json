@@ -1,0 +1,157 @@
+[
+ {
+  "t": "如何阅读这本蓝皮书",
+  "path": "docs/reading-guide.md",
+  "group": null
+ },
+ {
+  "t": "初识 WorkBuddy",
+  "path": "docs/bluebook/第一篇 使用手册：先把 WorkBuddy 用起来/第 1 章 初识 WorkBuddy/index.md",
+  "group": "第一篇 使用手册：先把 WorkBuddy 用起来"
+ },
+ {
+  "t": "WorkBuddy 自动化任务",
+  "path": "docs/bluebook/第一篇 使用手册：先把 WorkBuddy 用起来/第 10 章 WorkBuddy 自动化任务/index.md",
+  "group": "第一篇 使用手册：先把 WorkBuddy 用起来"
+ },
+ {
+  "t": "WorkBuddy的下载、安装、登录与更新",
+  "path": "docs/bluebook/第一篇 使用手册：先把 WorkBuddy 用起来/第 2 章 WorkBuddy的下载、安装、登录与更新/index.md",
+  "group": "第一篇 使用手册：先把 WorkBuddy 用起来"
+ },
+ {
+  "t": "WorkBuddy 的主界面、任务与工作区",
+  "path": "docs/bluebook/第一篇 使用手册：先把 WorkBuddy 用起来/第 3 章 WorkBuddy 的主界面、任务与工作区/index.md",
+  "group": "第一篇 使用手册：先把 WorkBuddy 用起来"
+ },
+ {
+  "t": "快速完成第一个 WorkBuddy 任务",
+  "path": "docs/bluebook/第一篇 使用手册：先把 WorkBuddy 用起来/第 4 章 快速完成第一个 WorkBuddy 任务/index.md",
+  "group": "第一篇 使用手册：先把 WorkBuddy 用起来"
+ },
+ {
+  "t": "WorkBuddy加载一个真正用得上的 Skill",
+  "path": "docs/bluebook/第一篇 使用手册：先把 WorkBuddy 用起来/第 5 章 WorkBuddy加载一个真正用得上的 Skill/index.md",
+  "group": "第一篇 使用手册：先把 WorkBuddy 用起来"
+ },
+ {
+  "t": "WorkBuddy的专家和专家团",
+  "path": "docs/bluebook/第一篇 使用手册：先把 WorkBuddy 用起来/第 6 章 WorkBuddy的专家和专家团/index.md",
+  "group": "第一篇 使用手册：先把 WorkBuddy 用起来"
+ },
+ {
+  "t": "WorkBuddy 使用连接器",
+  "path": "docs/bluebook/第一篇 使用手册：先把 WorkBuddy 用起来/第 7 章 WorkBuddy 使用连接器/index.md",
+  "group": "第一篇 使用手册：先把 WorkBuddy 用起来"
+ },
+ {
+  "t": "WorkBuddy 接入小程序与 IM 助理",
+  "path": "docs/bluebook/第一篇 使用手册：先把 WorkBuddy 用起来/第 8 章 WorkBuddy 接入小程序与 IM 助理/index.md",
+  "group": "第一篇 使用手册：先把 WorkBuddy 用起来"
+ },
+ {
+  "t": "如何接入外部 API",
+  "path": "docs/bluebook/第一篇 使用手册：先把 WorkBuddy 用起来/第 9 章 如何接入外部 API/index.md",
+  "group": "第一篇 使用手册：先把 WorkBuddy 用起来"
+ },
+ {
+  "t": "课外阅读：一章看懂 AI 工作系统",
+  "path": "docs/bluebook/第一篇 使用手册：先把 WorkBuddy 用起来/课外阅读：一章看懂 AI 工作系统/index.md",
+  "group": "第一篇 使用手册：先把 WorkBuddy 用起来"
+ },
+ {
+  "t": "打造skill：将书和视频蒸馏为可执行 Skill",
+  "path": "docs/bluebook/第三篇 进阶篇：把案例变成自己的工作系统/第 22 章 打造skill：将书和视频蒸馏为可执行 Skill/index.md",
+  "group": "第三篇 进阶篇：把案例变成自己的工作系统"
+ },
+ {
+  "t": "其他用法补充：WorkBuddy 实操案例集",
+  "path": "docs/bluebook/第三篇 进阶篇：把案例变成自己的工作系统/第 23 章 其他用法补充：WorkBuddy 实操案例集/index.md",
+  "group": "第三篇 进阶篇：把案例变成自己的工作系统"
+ },
+ {
+  "t": "如何进行多 Agent 系统设计",
+  "path": "docs/bluebook/第三篇 进阶篇：把案例变成自己的工作系统/第 24 章 如何进行多 Agent 系统设计/index.md",
+  "group": "第三篇 进阶篇：把案例变成自己的工作系统"
+ },
+ {
+  "t": "自动化工作流的可靠性",
+  "path": "docs/bluebook/第三篇 进阶篇：把案例变成自己的工作系统/第 25 章 自动化工作流的可靠性/index.md",
+  "group": "第三篇 进阶篇：把案例变成自己的工作系统"
+ },
+ {
+  "t": "办公三件套：Word、Excel、PPT",
+  "path": "docs/bluebook/第二篇 案例篇：从一项任务到一支 AI 团队/第 11 章 办公三件套：Word、Excel、PPT/index.md",
+  "group": "第二篇 案例篇：从一项任务到一支 AI 团队"
+ },
+ {
+  "t": "从整理桌面文件这些小事做起",
+  "path": "docs/bluebook/第二篇 案例篇：从一项任务到一支 AI 团队/第 12 章 从整理桌面文件这些小事做起/index.md",
+  "group": "第二篇 案例篇：从一项任务到一支 AI 团队"
+ },
+ {
+  "t": "远程控制你的电脑，不用发愁不在电脑前",
+  "path": "docs/bluebook/第二篇 案例篇：从一项任务到一支 AI 团队/第 13 章 远程控制你的电脑，不用发愁不在电脑前/index.md",
+  "group": "第二篇 案例篇：从一项任务到一支 AI 团队"
+ },
+ {
+  "t": "生活助手的价值，是减少琐碎",
+  "path": "docs/bluebook/第二篇 案例篇：从一项任务到一支 AI 团队/第 14 章 生活助手的价值，是减少琐碎/index.md",
+  "group": "第二篇 案例篇：从一项任务到一支 AI 团队"
+ },
+ {
+  "t": "资讯整合：把信息流变成每日通知",
+  "path": "docs/bluebook/第二篇 案例篇：从一项任务到一支 AI 团队/第 15 章 资讯整合：把信息流变成每日通知/index.md",
+  "group": "第二篇 案例篇：从一项任务到一支 AI 团队"
+ },
+ {
+  "t": "收藏不是知识管理，能再次用起来才是",
+  "path": "docs/bluebook/第二篇 案例篇：从一项任务到一支 AI 团队/第 16 章 收藏不是知识管理，能再次用起来才是/index.md",
+  "group": "第二篇 案例篇：从一项任务到一支 AI 团队"
+ },
+ {
+  "t": "会议结束不是终点，工作才刚刚开始",
+  "path": "docs/bluebook/第二篇 案例篇：从一项任务到一支 AI 团队/第 17 章 会议结束不是终点，工作才刚刚开始/index.md",
+  "group": "第二篇 案例篇：从一项任务到一支 AI 团队"
+ },
+ {
+  "t": "把投资分析变成你的日常",
+  "path": "docs/bluebook/第二篇 案例篇：从一项任务到一支 AI 团队/第 18 章 把投资分析变成你的日常/index.md",
+  "group": "第二篇 案例篇：从一项任务到一支 AI 团队"
+ },
+ {
+  "t": "一句话召唤 AI 视频团队",
+  "path": "docs/bluebook/第二篇 案例篇：从一项任务到一支 AI 团队/第 19 章 一句话召唤 AI 视频团队/index.md",
+  "group": "第二篇 案例篇：从一项任务到一支 AI 团队"
+ },
+ {
+  "t": "自媒体不只是靠努力，而是一条增长闭环",
+  "path": "docs/bluebook/第二篇 案例篇：从一项任务到一支 AI 团队/第 20 章 自媒体不只是靠努力，而是一条增长闭环/index.md",
+  "group": "第二篇 案例篇：从一项任务到一支 AI 团队"
+ },
+ {
+  "t": "WorkBuddy也能做GEO专家",
+  "path": "docs/bluebook/第二篇 案例篇：从一项任务到一支 AI 团队/第 21 章 WorkBuddy也能做GEO专家/index.md",
+  "group": "第二篇 案例篇：从一项任务到一支 AI 团队"
+ },
+ {
+  "t": "岗位路线图：不同岗位如何把 WorkBuddy 用深",
+  "path": "docs/bluebook/第四篇 岗位与行业落地/第 26 章 岗位路线图：不同岗位如何把 WorkBuddy 用深/index.md",
+  "group": "第四篇 岗位与行业落地"
+ },
+ {
+  "t": "行业路线图：从通用能力到行业工作流",
+  "path": "docs/bluebook/第四篇 岗位与行业落地/第 27 章 行业路线图：从通用能力到行业工作流/index.md",
+  "group": "第四篇 岗位与行业落地"
+ },
+ {
+  "t": "附录 A 常用指令模板",
+  "path": "docs/bluebook/附录/附录 A 常用指令模板/index.md",
+  "group": "附录"
+ },
+ {
+  "t": "附录 B 场景速查表",
+  "path": "docs/bluebook/附录/附录 B 场景速查表/index.md",
+  "group": "附录"
+ }
+]

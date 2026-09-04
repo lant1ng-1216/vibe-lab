@@ -1,0 +1,127 @@
+[
+ {
+  "t": "1.1 Ollama 介绍",
+  "path": "docs/C1/1. Ollama 介绍.md",
+  "group": null
+ },
+ {
+  "t": "2.1 macOS 安装与配置",
+  "path": "docs/C2/1. Ollama 在 macOS 下的安装与配置.md",
+  "group": null
+ },
+ {
+  "t": "2.2 Windows 安装与配置",
+  "path": "docs/C2/2. Ollama 在 Windows 下的安装与配置.md",
+  "group": null
+ },
+ {
+  "t": "2.3 Linux 安装与配置",
+  "path": "docs/C2/3. Ollama 在 Linux 下的安装与配置.md",
+  "group": null
+ },
+ {
+  "t": "2.4 Docker 安装与配置",
+  "path": "docs/C2/4. Ollama 在 Docker 下的安装与配置.md",
+  "group": null
+ },
+ {
+  "t": "3.1 自定义导入模型",
+  "path": "docs/C3/1. 自定义导入模型.md",
+  "group": null
+ },
+ {
+  "t": "3.2 自定义模型存储位置",
+  "path": "docs/C3/2. 自定义模型存储位置.md",
+  "group": null
+ },
+ {
+  "t": "3.3 自定义在 GPU 中运行",
+  "path": "docs/C3/3. 自定义在 GPU 中运行.md",
+  "group": null
+ },
+ {
+  "t": "4.1 Ollama API 使用指南",
+  "path": "docs/C4/1. Ollama API 使用指南.md",
+  "group": null
+ },
+ {
+  "t": "4.2 Python 中使用 Ollama API",
+  "path": "docs/C4/2. 在 Python 中使用 Ollama API.md",
+  "group": null
+ },
+ {
+  "t": "4.3 Java 中使用 Ollama API",
+  "path": "docs/C4/3. 在 Java 中使用 Ollama API.md",
+  "group": null
+ },
+ {
+  "t": "4.4 JavaScript 中使用 Ollama API",
+  "path": "docs/C4/4. 在 JavaScript 中使用 Ollama API.md",
+  "group": null
+ },
+ {
+  "t": "4.5 C++ 中使用 Ollama API",
+  "path": "docs/C4/5. 在 C++ 中使用 Ollama API.md",
+  "group": null
+ },
+ {
+  "t": "4.6 Golang 中使用 Ollama API",
+  "path": "docs/C4/6. 在 Golang 中使用 Ollama API.md",
+  "group": null
+ },
+ {
+  "t": "5.1 Python 中的集成",
+  "path": "docs/C5/1. Ollama 在 LangChain 中的使用 - Python 集成.md",
+  "group": null
+ },
+ {
+  "t": "5.2 JavaScript 中的集成",
+  "path": "docs/C5/2. Ollama 在 LangChain 中的使用 - JavaScript 集成.md",
+  "group": null
+ },
+ {
+  "t": "6.1 FastAPI 部署可视化界面",
+  "path": "docs/C6/1. 使用 FastAPI 部署 Ollama 可视化对话界面.md",
+  "group": null
+ },
+ {
+  "t": "6.2 WebUI 部署可视化界面",
+  "path": "docs/C6/2. 使用 WebUI 部署 Ollama 可视化对话界面.md",
+  "group": null
+ },
+ {
+  "t": "7.1 搭建本地 AI Copilot 编程助手",
+  "path": "docs/C7/1. 搭建本地的 AI Copilot 编程助手.md",
+  "group": null
+ },
+ {
+  "t": "7.2 Dify 接入本地模型",
+  "path": "docs/C7/2. Dify 接入 Ollama 部署的本地模型.md",
+  "group": null
+ },
+ {
+  "t": "7.3 LangChain 搭建本地 RAG 应用",
+  "path": "docs/C7/3. 使用 LangChain 搭建本地 RAG 应用.md",
+  "group": null
+ },
+ {
+  "t": "7.4 LlamaIndex 搭建本地 RAG 应用",
+  "path": "docs/C7/4. 使用 LlamaIndex 搭建本地 RAG 应用.md",
+  "group": null
+ },
+ {
+  "t": "7.5 LangChain 实现本地 Agent",
+  "path": "docs/C7/5. 使用 LangChain 实现本地 Agent.md",
+  "group": null
+ },
+ {
+  "t": "7.6 LlamaIndex 实现本地 Agent",
+  "path": "docs/C7/6. 使用 LlamaIndex 实现本地 Agent.md",
+  "group": null
+ },
+ {
+  "t": "7.7 DeepSeek R1 + Ollama 本地 RAG",
+  "path": "docs/C7/7. 使用 DeepSeek R1 和 Ollama 实现本地 RAG 应用.md",
+  "group": null
+ }
+]

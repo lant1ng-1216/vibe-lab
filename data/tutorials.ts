@@ -1,0 +1,286 @@
+// 教程库数据 —— GitHub 开源文字教程（站内阅读）
+// 内容由各自仓库作者开源提供（协议见 license 字段），本站仅做站内排版展示，保留原出处。
+// 章节目录 toc 独立存放于 data/tutorials-toc/<id>.json（服务端读取）。
+
+export type Tutorial = {
+  id: string;
+  repo: string; // owner/name
+  branch: string; // 默认分支
+  title: string; // 中文书名
+  cat: string; // 分类
+  desc: string;
+  org: string; // 出品方（徽章文案）
+  stars: string; // 数据快照（如 "76.9k"）
+  license: string; // 开源协议
+  repoUrl: string; // 原仓库（信息性外链）
+  online?: string; // 作者在线阅读站（备用）
+};
+
+export type TocEntry = { t: string; path: string; group?: string | null };
+
+export const TUTORIAL_CATEGORIES: string[] = [
+  "入门与通识",
+  "提示词工程",
+  "Vibe Coding",
+  "Agent 与自动化",
+  "工具实战",
+  "原理进阶",
+];
+
+export const TUTORIALS: Tutorial[] = [
+  /* ---------- 入门与通识 ---------- */
+  {
+    id: "llm-universe",
+    repo: "datawhalechina/llm-universe",
+    branch: "main",
+    title: "《大模型应用开发极简入门》",
+    cat: "入门与通识",
+    desc: "Datawhale 面向完全小白的大模型应用开发教程：从调 API 到做应用、再部署上线全流程。",
+    org: "Datawhale",
+    stars: "13.9k",
+    license: "CC BY-NC-SA",
+    repoUrl: "https://github.com/datawhalechina/llm-universe",
+    online: "https://datawhalechina.github.io/llm-universe/",
+  },
+  {
+    id: "llm-cookbook",
+    repo: "datawhalechina/llm-cookbook",
+    branch: "main",
+    title: "《吴恩达大模型系列中文翻译》",
+    cat: "入门与通识",
+    desc: "吴恩达 DeepLearning.AI 大模型系列课程中文版：提示词、RAG、微调、Agent 共 8 门课。",
+    org: "Datawhale",
+    stars: "24.6k",
+    license: "Apache-2.0",
+    repoUrl: "https://github.com/datawhalechina/llm-cookbook",
+  },
+  {
+    id: "liyupi-ai-guide",
+    repo: "liyupi/ai-guide",
+    branch: "main",
+    title: "《鱼皮 AI 指南》",
+    cat: "入门与通识",
+    desc: "程序员鱼皮的 AI 资源大全 + Vibe Coding 零基础 + OpenClaw 保姆级教程 + Prompt 大全。",
+    org: "liyupi",
+    stars: "19.5k",
+    license: "CC BY-NC-SA",
+    repoUrl: "https://github.com/liyupi/ai-guide",
+  },
+
+  /* ---------- 提示词工程 ---------- */
+  {
+    id: "prompt-engineering-guide",
+    repo: "dair-ai/Prompt-Engineering-Guide",
+    branch: "main",
+    title: "《Prompt Engineering Guide》",
+    cat: "提示词工程",
+    desc: "全球最权威的提示词工程指南：技巧、用例、上下文工程与 AI Agent 章节。英文原版。",
+    org: "DAIR.AI",
+    stars: "78k",
+    license: "MIT",
+    repoUrl: "https://github.com/dair-ai/Prompt-Engineering-Guide",
+    online: "https://www.promptingguide.ai/",
+  },
+  {
+    id: "context-engineering-intro",
+    repo: "coleam00/context-engineering-intro",
+    branch: "main",
+    title: "《Context Engineering 入门》",
+    cat: "提示词工程",
+    desc: "Vibe Coding 时代的新核心技能——教会 AI 编程助手真正理解你的代码库。英文。",
+    org: "coleam00",
+    stars: "13.8k",
+    license: "MIT",
+    repoUrl: "https://github.com/coleam00/context-engineering-intro",
+  },
+
+  /* ---------- Vibe Coding ---------- */
+  {
+    id: "vibe-vibe",
+    repo: "datawhalechina/vibe-vibe",
+    branch: "main",
+    title: "《Vibe Vibe · Vibe Coding 系统教程》",
+    cat: "Vibe Coding",
+    desc: "「AI for All」——首个系统性 Vibe Coding 中文教程：从零到全栈，把想法变成能上线的产品。",
+    org: "Datawhale",
+    stars: "6.0k",
+    license: "CC BY-NC-SA",
+    repoUrl: "https://github.com/datawhalechina/vibe-vibe",
+  },
+  {
+    id: "vibe-coding-cn",
+    repo: "2025Emma/vibe-coding-cn",
+    branch: "main",
+    title: "《Vibe Coding 中文教程》",
+    cat: "Vibe Coding",
+    desc: "零基础 Vibe Coding 中文教程：从环境搭建到完成项目，社区口碑极高。",
+    org: "2025Emma",
+    stars: "22.9k",
+    license: "MIT",
+    repoUrl: "https://github.com/2025Emma/vibe-coding-cn",
+  },
+  {
+    id: "claude-code-best-practice",
+    repo: "shanraisshan/claude-code-best-practice",
+    branch: "main",
+    title: "《Claude Code 最佳实践》",
+    cat: "Vibe Coding",
+    desc: "from vibe coding to agentic engineering——大规模项目里用 Claude Code 的实战沉淀。英文。",
+    org: "shanraisshan",
+    stars: "65.6k",
+    license: "MIT",
+    repoUrl: "https://github.com/shanraisshan/claude-code-best-practice",
+  },
+
+  /* ---------- Agent 与自动化 ---------- */
+  {
+    id: "hello-agents",
+    repo: "datawhalechina/hello-agents",
+    branch: "main",
+    title: "《从零开始构建智能体》",
+    cat: "Agent 与自动化",
+    desc: "系统性智能体教程：理论 + 实战，从核心原理到亲手构建多智能体应用。站内已收录 17 章。",
+    org: "Datawhale",
+    stars: "76.9k",
+    license: "CC BY-NC-SA",
+    repoUrl: "https://github.com/datawhalechina/hello-agents",
+    online: "https://hello-agents.datawhale.cc",
+  },
+  {
+    id: "ai-agents-from-zero",
+    repo: "didilili/ai-agents-from-zero",
+    branch: "main",
+    title: "《AI Agent 速成指南》",
+    cat: "Agent 与自动化",
+    desc: "对标大模型应用开发工程师的系统速成：LangChain / LangGraph / Coze / Dify / MCP 全覆盖。",
+    org: "didilili",
+    stars: "4.4k",
+    license: "MIT",
+    repoUrl: "https://github.com/didilili/ai-agents-from-zero",
+  },
+  {
+    id: "agentic-ai",
+    repo: "datawhalechina/agentic-ai",
+    branch: "main",
+    title: "《吴恩达 Agentic AI 中文教程》",
+    cat: "Agent 与自动化",
+    desc: "吴恩达 Agentic AI 系列课程中文翻译与知识整理：Agentic 工作流设计模式详解。",
+    org: "Datawhale",
+    stars: "1.2k",
+    license: "Apache-2.0",
+    repoUrl: "https://github.com/datawhalechina/agentic-ai",
+  },
+  {
+    id: "agent-skills-with-anthropic",
+    repo: "datawhalechina/agent-skills-with-anthropic",
+    branch: "main",
+    title: "《Agent Skills 实战(Anthropic)》",
+    cat: "Agent 与自动化",
+    desc: "吴恩达 agent-skills-with-anthropic 课程中文版：如何用 Anthropic 构建 Agent Skills。",
+    org: "Datawhale",
+    stars: "1.5k",
+    license: "CC BY-NC-SA",
+    repoUrl: "https://github.com/datawhalechina/agent-skills-with-anthropic",
+  },
+  {
+    id: "hermes-agent-orange-book",
+    repo: "alchaincyf/hermes-agent-orange-book",
+    branch: "main",
+    title: "《Hermes Agent 橙皮书》",
+    cat: "Agent 与自动化",
+    desc: "Hermes Agent 从入门到精通实战指南——开源 AI Agent 框架的完整使用手册。",
+    org: "alchaincyf",
+    stars: "4.9k",
+    license: "CC BY-NC-SA",
+    repoUrl: "https://github.com/alchaincyf/hermes-agent-orange-book",
+  },
+  {
+    id: "deepagents-in-action",
+    repo: "datawhalechina/deepagents-in-action",
+    branch: "main",
+    title: "《Deep Agents 实战》",
+    cat: "Agent 与自动化",
+    desc: "基于 LangChain / LangGraph 生态，从零构建生产级 AI Agent 的完整指南。",
+    org: "Datawhale",
+    stars: "1.9k",
+    license: "CC BY-NC-SA",
+    repoUrl: "https://github.com/datawhalechina/deepagents-in-action",
+  },
+
+  /* ---------- 工具实战 ---------- */
+  {
+    id: "handy-ollama",
+    repo: "datawhalechina/handy-ollama",
+    branch: "main",
+    title: "《动手学 Ollama》",
+    cat: "工具实战",
+    desc: "CPU 也能玩的本地大模型部署教程：Ollama 上手、模型管理、接口调用全流程。",
+    org: "Datawhale",
+    stars: "2.5k",
+    license: "CC BY-NC-SA",
+    repoUrl: "https://github.com/datawhalechina/handy-ollama",
+  },
+  {
+    id: "self-dify",
+    repo: "datawhalechina/self-dify",
+    branch: "main",
+    title: "《手把手自建 Dify 应用》",
+    cat: "工具实战",
+    desc: "从 Docker 安装到本地部署 Dify，自定义你自己的 AI 助手应用环境。",
+    org: "Datawhale",
+    stars: "590",
+    license: "CC BY-NC-SA",
+    repoUrl: "https://github.com/datawhalechina/self-dify",
+  },
+  {
+    id: "workbuddy-guide",
+    repo: "AlephAITech/WorkBuddyGuide",
+    branch: "main",
+    title: "《WorkBuddy 实战蓝皮书》",
+    cat: "工具实战",
+    desc: "WorkBuddy 官方开源实战指南：教程、真实工作流、Skills 与 MCP 配置。",
+    org: "AlephAI",
+    stars: "2.8k",
+    license: "MIT",
+    repoUrl: "https://github.com/AlephAITech/WorkBuddyGuide",
+  },
+
+  /* ---------- 原理进阶 ---------- */
+  {
+    id: "all-in-rag",
+    repo: "datawhalechina/all-in-rag",
+    branch: "main",
+    title: "《RAG 技术全栈指南》",
+    cat: "原理进阶",
+    desc: "大模型应用开发实战：RAG 检索增强生成全链路——从原理到生产落地。",
+    org: "Datawhale",
+    stars: "10.8k",
+    license: "CC BY-NC-SA",
+    repoUrl: "https://github.com/datawhalechina/all-in-rag",
+    online: "https://datawhalechina.github.io/all-in-rag/",
+  },
+  {
+    id: "self-llm",
+    repo: "datawhalechina/self-llm",
+    branch: "master",
+    title: "《开源大模型食用指南》",
+    cat: "原理进阶",
+    desc: "Linux 环境快速微调（全参 / LoRA）与部署开源 LLM / MLLM 的完整教程。程序员向。",
+    org: "Datawhale",
+    stars: "32k",
+    license: "CC BY-NC-SA",
+    repoUrl: "https://github.com/datawhalechina/self-llm",
+  },
+  {
+    id: "happy-llm",
+    repo: "datawhalechina/happy-llm",
+    branch: "main",
+    title: "《从零开始构建大模型》",
+    cat: "原理进阶",
+    desc: "手把手从数据到训练跑通一个大语言模型——理解 LLM 是如何炼成的。",
+    org: "Datawhale",
+    stars: "33.5k",
+    license: "CC BY-NC-SA",
+    repoUrl: "https://github.com/datawhalechina/happy-llm",
+  },
+];

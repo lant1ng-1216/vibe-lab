@@ -1,0 +1,52 @@
+[
+ {
+  "t": "学习与环境准备",
+  "path": "docs/学习与环境准备.md",
+  "group": null
+ },
+ {
+  "t": "前言",
+  "path": "docs/前言.md",
+  "group": null
+ },
+ {
+  "t": "第一章 NLP 基础概念",
+  "path": "docs/chapter1/第一章 NLP基础概念.md",
+  "group": null
+ },
+ {
+  "t": "第二章 Transformer 架构",
+  "path": "docs/chapter2/第二章 Transformer架构.md",
+  "group": null
+ },
+ {
+  "t": "第三章 预训练语言模型",
+  "path": "docs/chapter3/第三章 预训练语言模型.md",
+  "group": null
+ },
+ {
+  "t": "第四章 大语言模型",
+  "path": "docs/chapter4/第四章 大语言模型.md",
+  "group": null
+ },
+ {
+  "t": "第五章 动手搭建大模型",
+  "path": "docs/chapter5/第五章 动手搭建大模型.md",
+  "group": null
+ },
+ {
+  "t": "第六章 大模型训练实践",
+  "path": "docs/chapter6/第六章 大模型训练流程实践.md",
+  "group": null
+ },
+ {
+  "t": "第七章 大模型应用",
+  "path": "docs/chapter7/第七章 大模型应用.md",
+  "group": null
+ },
+ {
+  "t": "第八章 Agentic-RL",
+  "path": "docs/chapter8/第八章 大模型强化学习.md",
+  "group": null
+ }
+]
