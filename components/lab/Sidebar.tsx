@@ -1,13 +1,14 @@
 import Link from "next/link";
-import { CREATORS, WORKS } from "@/data/creators";
+import { loadLab } from "@/lib/lab";
 import CreatorAvatar from "./CreatorAvatar";
 
 function pad2(n: number) {
   return n.toString().padStart(2, "0");
 }
 
-export default function Sidebar() {
-  const total = WORKS.length;
+export default async function Sidebar() {
+  const { creators, works } = await loadLab();
+  const total = works.length;
 
   return (
     <aside className="lab4-side">
@@ -16,7 +17,7 @@ export default function Sidebar() {
         <Link href="/lab" className="lab4-logo" aria-label="Lab 首页">
           <span className="lab4-logo-badge" aria-hidden="true">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/assets/flasks/green_1.png" alt="" width={40} height={40} />
+            <img src="/assets/flasks/green_1.png" alt="" width={34} height={34} />
           </span>
           <span className="lab4-logo-word">
             <span className="lab4-logo-text">Vibe Lab</span>
@@ -34,8 +35,8 @@ export default function Sidebar() {
             </Link>
           </nav>
           <div className="lab4-list lab4-list--inner">
-            {CREATORS.map((c) => {
-              const n = WORKS.filter((w) => w.handle === c.handle).length;
+            {creators.map((c) => {
+              const n = works.filter((w) => w.handle === c.handle).length;
               return (
                 <Link
                   className="lab4-list-item lab4-list-item--creator"

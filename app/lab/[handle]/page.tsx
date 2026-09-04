@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getCreator, worksOf, listCreators } from "@/lib/creators";
+import { getCreator, worksOf, listCreators } from "@/lib/lab";
 import { LabFeed } from "@/components/lab/LabFeed";
 import CreatorHeader from "@/components/lab/CreatorHeader";
 
 export const dynamicParams = true;
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -12,13 +13,9 @@ export async function generateMetadata({
   params: Promise<{ handle: string }>;
 }): Promise<Metadata> {
   const { handle } = await params;
-  const c = getCreator(handle);
+  const c = await getCreator(handle);
   if (!c) return { title: "未找到 — Vibe Lab" };
   return { title: `${c.name} · Lab — Vibe Lab`, description: c.tagline };
-}
-
-export function generateStaticParams() {
-  return listCreators().map((c) => ({ handle: c.handle }));
 }
 
 export default async function CreatorPage({
@@ -27,10 +24,10 @@ export default async function CreatorPage({
   params: Promise<{ handle: string }>;
 }) {
   const { handle } = await params;
-  const c = getCreator(handle);
+  const c = await getCreator(handle);
   if (!c) notFound();
-  const works = worksOf(handle);
-  const all = listCreators();
+  const works = await worksOf(handle);
+  const all = await listCreators();
   return (
     <>
       <CreatorHeader creator={c} />
