@@ -4349,3 +4349,65 @@ a.tcard:hover .tcard-meta { color: var(--ink-soft); }
   border: 1px dashed #e0e0dc;
   background: #fff;
 }
+
+/* ---- Lab 详情预览：README 站内文档 / 上传媒体 ---- */
+.lab4-preview-box {
+  width: 100%;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: #fff;
+  border: 1px solid #f0f0ee;
+  border-radius: 10px;
+  padding: 34px 26px;
+  text-align: center;
+  color: #888;
+  font-size: 13px;
+}
+.lab4-preview-hint { margin: 0; line-height: 1.8; max-width: 380px; }
+.lab4-preview-link { color: var(--accent); font-size: 12px; text-decoration: none; }
+.lab4-preview-link:hover { text-decoration: underline; }
+.lab4-video { width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 8px; background: #000; display: block; }
+.lab4-preview-imgs { overflow: auto; align-items: stretch; justify-content: flex-start; }
+.lab4-preview-imgs img { width: 100%; border-radius: 8px; display: block; }
+
+.lab4-readme-wrap {
+  width: 100%; min-width: 0;
+  display: flex; flex-direction: column;
+  background: #fff;
+  border: 1px solid #f0f0ee;
+  border-radius: 10px;
+  overflow: hidden;
+  align-self: stretch;
+}
+.lab4-readme {
+  overflow: auto;
+  padding: 24px 30px 18px;
+  max-height: calc(100vh - 190px);
+}
+.lab4-readme .md-body { font-size: 14px; }
+.lab4-readme .md-body > :first-child { margin-top: 0; }
+.lab4-readme .md-body pre { max-width: 100%; }
+.lab4-readme-src {
+  margin: 0;
+  padding: 9px 16px;
+  border-top: 1px solid #f1f1f1;
+  color: #aaa;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+
+/* 无封面作品的卡片占位：标题信息 */
+.lab4-card-ph {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 7px;
+  padding: 22px; text-align: center;
+  color: #3a3a38;
+  font-size: 15px; line-height: 1.5;
+  letter-spacing: 0;
+}
+.lab4-card-ph-sub { font-size: 10.5px; color: #a6a6a0; }

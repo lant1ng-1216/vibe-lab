@@ -107,6 +107,7 @@ async function loadWorksOf(dir: string): Promise<Work[]> {
       meta: w.meta,
       stats: w.stats,
       body: w.body,
+      demoVideo: w.demoVideo,
       gallery: w.gallery,
     }) as Work);
 }

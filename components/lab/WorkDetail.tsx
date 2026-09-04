@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import type { Creator, Work } from "@/data/creators";
 import CreatorAvatar from "./CreatorAvatar";
+import WorkPreview from "./WorkPreview";
 
 export function WorkDetail({
   work,
@@ -106,12 +107,7 @@ export function WorkDetail({
               </aside>
 
               <div className="lab4-detail-preview">
-                {work.thumb ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={work.thumb} alt={work.title} />
-                ) : (
-                  <div className="lab4-detail-ph mono">EXP / {work.id.slice(-4).toUpperCase()}</div>
-                )}
+                <WorkPreview work={work} />
               </div>
             </div>
           </motion.div>

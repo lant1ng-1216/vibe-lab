@@ -83,5 +83,8 @@ export interface Work {
   meta?: WorkMeta;
   stats?: { impressions?: number; outbound?: number };
   body?: string; // 长描述
+  /** 演示视频（创作者上传，如 B 站 iframe / mp4）——详情预览优先展示 */
+  demoVideo?: string;
+  /** 截图集（创作者上传）——详情预览优先于 README 展示 */
   gallery?: string[]; // 多图预览
 }

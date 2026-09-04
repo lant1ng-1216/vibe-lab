@@ -111,7 +111,12 @@ export function LabFeed({
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={w.thumb} alt={w.title} loading="lazy" />
                   ) : (
-                    <span className="lab4-card-ph mono">EXP / {w.id.slice(-4).toUpperCase()}</span>
+                    <span className="lab4-card-ph">
+                      {w.title}
+                      <span className="lab4-card-ph-sub mono">
+                        {w.type} · {w.status}
+                      </span>
+                    </span>
                   )}
                 </span>
                 <span className="lab4-card-meta">
