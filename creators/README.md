@@ -25,18 +25,25 @@ scripts/               校验 / sync 工具脚本
 - `profile.json` = **你的地盘**：自我介绍、头像来源、社交链接、**收录作品的范围**，随时可改。
 - `works.json` = **你的作品集**：放哪些作品、顺序、描述，随时可改。
 
-## 二、五步入驻
+## 二、入驻流程(先邮件申请 → 站长白名单 → 之后提交才被受理)
 
-1. **申请**：通过站点「＋你的位置」→ 联系页，把 handle 和 GitHub 用户名告诉站长。
-2. **站长加你入花名册**：`creators/index.json` 出现你的条目 `{ dir, handle, joinedAt }`。
-3. **建你的文件夹**（参考 `yu7dan/` 现成例子）：
-   - `creators/<handle>/profile.json` —— 复制 yu7dan 的模板改掉。
-   - `creators/<handle>/works.json` —— 先放空 `{ "works": [] }`，或用下面「收录作品」的方式让 sync 帮你填。
-4. **设置收录范围**（profile.json 里的 `sync` 字段，三选一）：
-   - `"mode": "all"` —— 我 GitHub 账号下**所有可见仓库**都当作候选作品（可配 `excludeRepos` 排除不想展示的，如平台自身）。
+> 项目公开,但不是谁都能提交。**先申请,后提交**——没经过申请的提交会被自动拦截。
+
+1. **发邮件申请**(必须):发送至 **zfu9751@gmail.com**,主题写「Vibe Lab 创作者入驻申请」。邮件里**务必写清**:
+   - 你的 **GitHub 用户名**(最关键,站长靠它拉取你/审核你的提交)
+   - 想要的花名 `handle` 与展示名
+   - 一两句自我介绍 / 想展示什么
+   - (可选)代表作链接
+2. **站长审核 → 拉你入白名单**:你的 GitHub 账号被加进花名册 `creators/index.json`(并建好你的 `profile.json`)。**入册 = 白名单放行**。
+3. 建你的文件夹(参考 `yu7dan/` 现成例子):
+   - `creators/<handle>/works.json` —— 先放空 `{ "works": [] }`,或用下面「收录作品」的方式让 sync 帮你填。
+4. **设置收录范围**(profile.json 里的 `sync` 字段,三选一):
+   - `"mode": "all"` —— 我 GitHub 账号下**所有可见仓库**都当作候选作品(可配 `excludeRepos` 排除不想展示的,如平台自身)。
    - `"mode": "selected"` —— 只展示我在 `includeRepos` 里点名的仓库。
-   - `"mode": "manual"` —— 完全手工，不自动 sync，我全部自己写。
-5. **提交 PR**：标题写 `creators: 入驻 <handle>`。合并后去 /lab 检查展示效果。
+   - `"mode": "manual"` —— 完全手工,不自动 sync,我全部自己写。
+5. **提交 PR**:标题写 `creators: 入驻 <handle>`。合并后去 /lab 检查展示效果。
+
+> ⚠️ 提醒:你没有入册前提的 PR 会被自动校验拦下(改到 `creators/` 或 `covers/` 时,系统会检查你的账号是否在花名册)。所以**顺序一定是:先邮件申请 → 站长拉你入册 → 你再提交**。站长拉你入册时,请确认 `profile.json` 里的 `github` 字段写的就是你的 GitHub 用户名——那是白名单校验的凭据。
 
 > 想改个人介绍？直接改自己的 `profile.json` 提 PR 即可，**不必等站长**。
 > 想增删作品？如果你开了 `all`/`selected`，跑一次 sync 工具会自动生成「建议清单 + PR」给你和站长 review（详见 AGENTS.md）；不开 sync 就手工改 `works.json`。

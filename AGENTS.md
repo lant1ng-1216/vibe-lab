@@ -63,9 +63,17 @@ creators/ 数据文件  →  站点 lib/lab.ts（token→GitHub API / 无 token�
 
 ## 3. 可执行任务 SOP
 
-### 任务 A：新增创作者入驻
-1. 确认已在站点侧完成申请沟通（联系页），拿到 `handle` 与 `github`。
-2. `creators/index.json` 追加花名册条目（`dir`=handle，`joinedAt`=`YYYY-MM`）。
+### 任务 A：新增创作者入驻（白名单流程）
+**前置（用户拍板 2026-09）**：仓库公开，但**不是谁都能提交**。创作者必须：
+1. **先邮件申请**：发邮件至 `zfu9751@gmail.com`，邮件必须写明：**GitHub 用户名、想要的花名 handle、展示名、简介、（可选）代表作链接**——站长据此主动拉取/邀请，或审核其后续提交。
+2. 站长审核通过 → 加入花名册 `creators/index.json`（`dir`=handle，`joinedAt`=`YYYY-MM`）并建 `profile.json` —— **入册即白名单放行**。
+3. **CI 白名单闸**（`scripts/check-author.mjs`）：改动 `creators/` 或 `covers/` 的 PR，作者 GitHub 账号必须已在花名册（profile.github），否则自动红，站长不会收到人工审核。
+4. 未申请/未入册的人即使 fork + PR 也会被自动拦截——**先申请，后提交**。
+> 站长注意：给新创作者开目录时，先把他加进 `index.json` + `profile.json`（github 字段填全），他的后续 PR 才能过白名单闸。
+
+**Agent 入驻执行**：
+1. 确认站长已完成邮件申请沟通并授权（拿 handle/github）。
+2. `creators/index.json` 追加花名册条目。
 3. 新建 `creators/<handle>/profile.json`（复制 yu7dan 改）；`sync.mode` 按创作者意愿设（默认 `selected` 更稳妥，避免没筛选的作品一拥而上）。
 4. 新建 `creators/<handle>/works.json`：空数组，或首批人工条目。
 5. 跑 `node scripts/validate.mjs` 全绿 → 开 PR：`creators: 入驻 <handle>`。
