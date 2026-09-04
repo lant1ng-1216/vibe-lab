@@ -68,3 +68,18 @@ creators/
 1. 把资料与作品按上面格式整理好
 2. Fork 本仓库 → 改 `index.json` 加入自己 + 新建 `creators/<你的 handle>/works.json`
 3. 提交 Pull Request → 站长 review 后 merge，作品即出现在 /lab
+
+## 作品预览图（thumb）来源
+
+`works.json` 的 `thumb` 字段支持三档来源，**按这个优先级自动降级**：
+
+1. **作者上传图**：你提供的截图 URL（CDN/你自己的图床均可）
+2. **维护员 AI 自动截图**：站长 PR 合并前/后跑 `scripts/capture-previews.py` 自动去 `link` 拉真实产品页截图（Playwright + Chromium，1440 viewport × 2x = 2880 高清 PNG）
+3. **仓库 README 兜底**：如果链接无法访问，自动截 GitHub repo 的 README 区域
+
+脚本走完整链路：跑一遍你的 `link` → 命中真实产品页就截产品，命中 GitHub repo 就截 README，失败继续降级到 README 截图。
+
+```bash
+# 一次性截图当前所有作品预览（需 GitHub token）
+GITHUB_TOKEN=$(gh auth token) python3 scripts/capture-previews.py
+```
