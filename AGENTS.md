@@ -14,8 +14,16 @@ creators/ 数据文件  →  站点 lib/lab.ts（token→GitHub API / 无 token�
 **稳定守则（不可违反）**：
 1. `works.json` 是**最终展示集**——sync / 封面回写**只建议、只补充字段，永不删除**人写的手工条目。
 2. 人工写过的字段（title/type/desc/body/status）**永不被自动流程覆盖**；自动流程只补 `thumb / cardSummary / coverVersion / stats` 等机器字段。
-3. 任何写仓库动作走 **PR**（例外：`/api/lab-cover` 回写封面与摘要走维护 token 直推，属既定运维）。
+3. **一切写仓库动作 = 走 PR，维护 Agent 也不例外**：creators 数据、站点代码、文档的改动都先开 PR 供站长 review，merge 后才生效；站长不在场时只开 PR、绝不自行 merge。**唯一豁免**：`/api/lab-cover` 运行时封面回写（AI 机器产物、幂等、coverVersion 可追溯，站长已批准直推）。
 4. 数据协议变更必须同步三处：`schema/*.json`、`AGENTS.md`、`creators/README.md`，三者不许打架。
+
+## 1.5 审核流程（所有写操作都遵守）
+
+- PR 标题前缀规范：`creators: 入驻 <handle>` / `creators: sync <handle> 作品` / `creators: <handle> 资料` / `docs:` / `feat:` / `fix:`。
+- **自动闸**：CI 跑 `scripts/validate.mjs`，红了不能合。
+- **人工闸（站长 review）**：资料真实；type/status 合理；无敏感信息；收录范围符合本人 `profile.sync`；文档与 schema 未打架。
+- merge = 上线（站点 60s 缓存自动过期）；驳回须留言原因。
+- Agent 自审（PR 提交前必过）：本地 `node scripts/validate.mjs` 全绿；自查 checklist 见任务 SOP 与 docs/COVER-WORKFLOW.md。
 
 ## 2. 数据结构速查
 
@@ -96,3 +104,19 @@ node scripts/sync-works.mjs <handle>            # 读 profile.sync + works.json 
 - [ ] 本文件 + creators/README.md 同步
 - [ ] 站点 lib/lab.ts / data/creators.ts 若涉及字段透传同步更新
 - [ ] 跑 validate；给旧数据写迁移（如 index→profile 拆分）
+
+## 6. 创作者 ↔ AI 协作（大白话入口）
+
+创作者可能完全不懂协议，直接把口语化的需求发给你。**听到这类需求时**：先定位下表对应任务 → 读 schema/示例 → 执行；任何写操作前若需求有歧义，先问清楚，**绝不猜着直推**。
+
+| 创作者说（示例） | 你做什么 |
+|---|---|
+| 「帮我入驻 vibe-lab，GitHub 是 xxx」 | 任务 A（先向创作者确认 handle 与展示名） |
+| 「把我 GitHub 上的作品整理成清单给我挑」 | 任务 B：先跑 sync 出**建议清单**，等创作者勾选，不擅自写入 |
+| 「把我的仓库 my-tool 加进 Lab，类型 App」 | 任务 B selected 语义：编辑 works.json → validate → PR |
+| 「给我 my-tool 生成封面/一句话简介」 | 任务 C：**先读该仓库 README/body**（见 docs/COVER-WORKFLOW.md）→ 生成 → 回写 |
+| 「把我的介绍/签名/标签改成：…」 | 编辑该创作者 `profile.json` → validate → PR |
+| 「我不想展示 XX 仓库了」 | works.json 移除对应条目 → PR（创作者本人要求，不算违反守则 1） |
+| 「收录范围改成只挑我点名的仓库」 | profile.json `sync.mode: "selected"` + includeRepos → PR |
+
+**提醒创作者**：每个 PR 都会过站长审核；AI 只负责把改动做对、把 PR 开好，不负责替你拍板上线。
