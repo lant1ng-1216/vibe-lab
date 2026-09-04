@@ -85,7 +85,7 @@
       "type": "Agent",
       "title": "eln-core · Agentic Story World Runtime",
       "desc": "开源的 Agentic 叙事世界运行时——让 Agent 在可演进的故事世界里行动。",
-      "thumb": null,
+      "thumb": "covers/eln-core.jpg",
       "link": "https://github.com/lant1ng-1216/eln-core",
       "status": "已开源",
       "tags": [
@@ -102,7 +102,8 @@
           "LLM"
         ]
       },
-      "body": "把叙事世界做成 Agent 可运行的环境：世界状态、角色、事件由 Agent 驱动演进。偏向实验性的运行时设计。"
+      "body": "把叙事世界做成 Agent 可运行的环境：世界状态、角色、事件由 Agent 驱动演进。偏向实验性的运行时设计。",
+      "cardSummary": "这是一个开源的 Agentic 叙事世界运行时，它能让智能体在不断演化的故事世界中自主行动和交互。"
     }
   ]
 }
