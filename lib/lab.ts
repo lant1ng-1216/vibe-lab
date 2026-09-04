@@ -99,6 +99,7 @@ async function loadWorksOf(dir: string): Promise<Work[]> {
       type: w.type || "Website",
       title: w.title || String(w.id),
       desc: w.desc || "",
+      coverHint: w.coverHint,
       cardSummary: w.cardSummary,
       thumb: w.thumb || null,
       link: w.link || "#",

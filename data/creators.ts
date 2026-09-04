@@ -73,6 +73,8 @@ export interface Work {
   title: string;
   /** 一句话描述（feed 卡片 meta 行显示） */
   desc: string;
+  /** AI 封面定制画面提示（可选：override 自动 prompt） */
+  coverHint?: string;
   /** AI 一句话摘要（卡片展示；自动生成后回写 works.json） */
   cardSummary?: string;
   /** 预览图 URL；null 用克制的黑白封面 */

@@ -6,21 +6,21 @@ import { generateImage, generateSummary, buildCoverPrompt } from "@/lib/minimax"
 export const dynamic = "force-dynamic";
 
 /**
- * Lab 作品封面生成 + 一句话摘要（幂等，首次调用触发后永久走缓存）
- *  GET /api/lab-cover?workId=<id>
+ * Lab 作品封面生成 + 一句话摘要（幂等；?force=1 可重生成覆盖）
+ *  GET /api/lab-cover?workId=<id>[&force=1]
  * 返回 { ok, url?, summary?, existing? }
- * - url 为站内代理 /api/lab-cover-file?path=covers/<id>.jpg（私有仓库经 token 读）
+ * - url 为站内代理 /api/lab-cover-file?path=covers/<id>.jpg
  */
 const inflight = new Map<string, Promise<NextResponse>>();
 
 export async function GET(req: NextRequest) {
   const workId = req.nextUrl.searchParams.get("workId");
   if (!workId) return NextResponse.json({ ok: false, error: "workId required" }, { status: 400 });
+  const force = req.nextUrl.searchParams.get("force") === "1";
 
-  // 并发防重
   const running = inflight.get(workId);
   if (running) return running;
-  const p = handle(workId);
+  const p = handle(workId, force);
   inflight.set(workId, p);
   try {
     return await p;
@@ -29,25 +29,27 @@ export async function GET(req: NextRequest) {
   }
 }
 
-async function handle(workId: string): Promise<NextResponse> {
+async function handle(workId: string, force: boolean): Promise<NextResponse> {
   const { works } = await loadFresh();
   const work = works.find((w) => w.id === workId);
   if (!work) return NextResponse.json({ ok: false, error: "work not found" }, { status: 404 });
 
   const coverPath = `covers/${work.id}.jpg`;
 
-  // 已有封面：vibe-lab 等自带 tools.png 或已生成的 covers/*.jpg
-  if (work.thumb) {
+  // 已有封面且未强制重生成 → 直接返回
+  if (work.thumb && !force) {
     const url = resolveCoverUrl(work.thumb, work.id);
     const summary = work.cardSummary || null;
     return NextResponse.json({ ok: true, existing: true, url, summary });
   }
 
-  // —— 首次：生成封面 + 摘要 ——
+  // —— 生成封面（首次或 force）+ 摘要 ——
   const prompt = buildCoverPrompt({
     title: work.title,
     desc: work.desc,
     tags: work.tags,
+    type: work.type,
+    coverHint: work.coverHint,
   });
 
   const img = await generateImage(prompt, { aspectRatio: "16:9" });
@@ -66,7 +68,6 @@ async function handle(workId: string): Promise<NextResponse> {
     );
   }
 
-  // 一句话摘要（失败 fallback desc 首句，由卡片层处理）
   let summary = await generateSummary({
     title: work.title,
     desc: work.desc,
@@ -77,10 +78,10 @@ async function handle(workId: string): Promise<NextResponse> {
   await writeBackWorks(work, coverPath, summary);
 
   const url = `/api/lab-cover-file?path=${coverPath}`;
-  return NextResponse.json({ ok: true, existing: false, url, summary });
+  return NextResponse.json({ ok: true, existing: false, regenerated: force, url, summary });
 }
 
-/** 把 coverPath 写入该创作者 works.json 对应作品（thumb/cardSummary） */
+/** 把 coverPath + summary 写入该创作者 works.json */
 async function writeBackWorks(
   work: { id: string; handle: string },
   coverPath: string,
@@ -106,7 +107,7 @@ async function writeBackWorks(
     );
     if (ok) invalidateLabCache(filePath);
   } catch {
-    /* 回写失败不阻塞：下次请求会以已有 covers/ 直接返回 */
+    /* 回写失败不阻塞 */
   }
 }
 
@@ -117,9 +118,9 @@ async function loadFresh() {
 }
 
 function resolveCoverUrl(thumb: string, workId: string): string {
-  if (thumb.startsWith("/assets/")) return thumb; // 站点静态资产（Vercel 已部署）
+  if (thumb.startsWith("/assets/")) return thumb;
   if (thumb.startsWith("covers/") || thumb.startsWith("/covers/")) {
     return `/api/lab-cover-file?path=${thumb.replace(/^\//, "")}`;
   }
-  return thumb; // 外链原样
+  return thumb;
 }
