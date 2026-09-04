@@ -12,6 +12,8 @@ import {
   UNLOCK_CODES,
   hasPack,
 } from "@/data/courses";
+import CourseLock from "@/components/CourseLock";
+import { hasInvite } from "@/components/InviteForm";
 
 const STORE_KEY = "vlab.unlocks";
 
@@ -123,12 +125,12 @@ function LessonModal({
             </div>
             <h3>本节属于「{pack.title}」</h3>
             <p>
-              报名该课包解锁全部课程，或输入你已收到的解锁码。
-              价格与档位详见报名页。
+              报名解锁该课包全部课程，或输入你已收到的解锁码。
+              价格与档位见联系页。
             </p>
             <div className="lesson-lock-actions">
-              <Link className="btn-main" href="/join">
-                去报名
+              <Link className="btn-main" href="/contact">
+                联系报名
               </Link>
             </div>
           </div>
@@ -204,8 +206,8 @@ function PackModule({
       {!unlocked && (
         <div className="mod-openline mono">
           {pack.emoji} 解锁后可见该课包全部 {pack.lessons.length} 节
-          <Link href="/join" style={{ marginLeft: 8 }}>
-            去报名 ↗
+          <Link href="/contact" style={{ marginLeft: 8 }}>
+            联系报名 ↗
           </Link>
         </div>
       )}
@@ -216,13 +218,18 @@ function PackModule({
 /* ---------- 主组件 ---------- */
 export default function CoursesClient({ packs }: { packs: CoursePack[] }) {
   const [unlocks, setUnlocks] = useState<Partial<Unlocks> | null>(null);
+  const [gate, setGate] = useState<"loading" | "locked" | "open">("loading");
   const [code, setCode] = useState("");
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [open, setOpen] = useState<{ p: CoursePack; l: Lesson } | null>(null);
   const [miniOpen, setMiniOpen] = useState<string | null>(null);
 
   useEffect(() => {
-    setUnlocks(readUnlocks());
+    const un = readUnlocks();
+    setUnlocks(un);
+    // 第一道锁：有邀请码 或 已解锁任一课包 → 放行；否则锁态页（内容不裸奔）
+    const anyUnlock = !!un && Object.values(un).some(Boolean);
+    setGate(hasInvite() || anyUnlock ? "open" : "locked");
   }, []);
 
   const mainPacks = packs.filter((p) => p.kind === "main");
@@ -275,6 +282,22 @@ export default function CoursesClient({ packs }: { packs: CoursePack[] }) {
   const stateLabel = guest
     ? "访客 · 浏览课纲"
     : `已解锁 ${unlockedKeys.map((k) => PACK_LABEL[k]).join(" + ")}`;
+
+  // 第一道锁：loading / 锁态 / 进入
+  if (gate === "loading") {
+    return (
+      <div className="course-lock">
+        <div className="course-wrap course-wrap--narrow">
+          <div className="course-lock-card">
+            <p className="mono">检查邀请状态…</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (gate === "locked") {
+    return <CourseLock onOk={() => setGate("open")} />;
+  }
 
   return (
     <>
@@ -354,8 +377,8 @@ export default function CoursesClient({ packs }: { packs: CoursePack[] }) {
                         </svg>
                       </span>
                       {!unlocked && (
-                        <Link href="/join" onClick={(e) => e.stopPropagation()}>
-                          去报名 ↗
+                        <Link href="/contact" onClick={(e) => e.stopPropagation()}>
+                          联系报名 ↗
                         </Link>
                       )}
                     </div>
@@ -432,8 +455,8 @@ export default function CoursesClient({ packs }: { packs: CoursePack[] }) {
               <button type="button" className="unlock-btn" onClick={tryUnlock}>
                 解锁
               </button>
-              <Link className="btn-ghost" href="/join" style={{ height: 42 }}>
-                还没有解锁码？去报名
+              <Link className="btn-ghost" href="/contact" style={{ height: 42 }}>
+                还没有解锁码？联系报名
               </Link>
             </div>
             {msg && (
@@ -445,7 +468,7 @@ export default function CoursesClient({ packs }: { packs: CoursePack[] }) {
         {!guest && (
           <p className="mod-openline mono" style={{ textAlign: "center" }}>
             已解锁：{stateLabel.replace("已解锁 ", "")} · 报名信息与档位升级：
-            <Link href="/join">报名页 ↗</Link>
+            <Link href="/contact">联系报名 ↗</Link>
           </p>
         )}
       </div>

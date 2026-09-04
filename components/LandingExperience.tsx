@@ -17,8 +17,7 @@ const MENU_LINKS = [
   { href: "/tutorials", label: "教程库", no: "03" },
   { href: "/lab", label: "实验室", no: "04" },
   { href: "/courses", label: "训练营", no: "05" },
-  { href: "/about", label: "关于", no: "06" },
-  { href: "/contact", label: "联系", no: "07" },
+  { href: "/contact", label: "关于 & 联系", no: "06" },
 ];
 
 type Social =
