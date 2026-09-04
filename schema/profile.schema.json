@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lant1ng-1216/vibe-lab/schema/profile.schema.json",
+  "title": "creators/<handle>/profile.json — 创作者个人资料",
+  "description": "创作者可自行编辑（PR）。github 用户名让头像自动跟随 GitHub 头像。sync 控制『收录作品』的拉取范围，见 AGENTS.md 的 sync 任务。",
+  "type": "object",
+  "required": ["handle", "name", "github"],
+  "properties": {
+    "handle": { "type": "string", "minLength": 1 },
+    "name": { "type": "string", "minLength": 1 },
+    "github": { "type": "string", "minLength": 1 },
+    "avatar": { "type": ["string", "null"] },
+    "tagline": { "type": "string" },
+    "bio": { "type": "string" },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "href"],
+        "properties": {
+          "label": { "type": "string" },
+          "href": { "type": "string", "format": "uri" }
+        }
+      }
+    },
+    "sync": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["all", "selected", "manual"],
+          "description": "all=自动发现该 GitHub 账号全部可见仓库; selected=只拉 includeRepos; manual=不自动 sync, 作品全靠手工维护"
+        },
+        "includeRepos": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[a-zA-Z0-9_.-]+$" }
+        },
+        "excludeRepos": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[a-zA-Z0-9_.-]+$" }
+        }
+      }
+    }
+  }
+}

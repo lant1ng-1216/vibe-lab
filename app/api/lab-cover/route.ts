@@ -99,6 +99,7 @@ async function writeBackWorks(
     const target = data.works.find((w) => w.id === work.id);
     if (!target) return;
     target.thumb = coverPath;
+    target.coverVersion = (Number(target.coverVersion) || 0) + 1; // 封面版本号防呆：旧图覆盖新图可追溯
     if (summary) target.cardSummary = summary;
     const ok = await commitFile(
       filePath,

@@ -65,27 +65,41 @@ async function readJson<T>(path: string): Promise<T | null> {
 type IndexCreator = Partial<Creator> & { dir?: string };
 type IndexFile = { creators?: IndexCreator[] };
 type WorksFile = { works?: Partial<Work>[] };
+/** creators/<dir>/profile.json — 创作者可编辑资料 + sync 配置（站点只消费展示字段） */
+type ProfileFile = {
+  name?: string;
+  github?: string;
+  avatar?: string | null;
+  tagline?: string;
+  bio?: string;
+  tags?: string[];
+  links?: { label: string; href: string }[];
+  sync?: { mode?: "all" | "selected" | "manual"; includeRepos?: string[]; excludeRepos?: string[] };
+};
 
 async function loadCreatorsRaw(): Promise<(Creator & { dir: string })[]> {
   const idx = await readJson<IndexFile>("creators/index.json");
   if (!idx?.creators?.length) return [];
-  return idx.creators
-    .filter((c) => c && c.handle)
-    .map((c) => {
-      const dir = c.dir || String(c.handle);
-      return {
-        handle: String(c.handle),
-        name: c.name || String(c.handle),
-        github: c.github,
-        tagline: c.tagline || "",
-        bio: c.bio || "",
-        tags: c.tags || [],
-        avatar: c.avatar || null,
-        links: c.links || [],
-        joinedAt: c.joinedAt || "",
-        dir,
-      } as Creator & { dir: string };
-    });
+  const out: (Creator & { dir: string })[] = [];
+  for (const c of idx.creators) {
+    if (!c || !c.handle) continue;
+    const dir = c.dir || String(c.handle);
+    // 花名册只留站务信息；展示资料以 profile.json 为准（缺失时回退花名册内嵌，兼容旧数据）
+    const prof = await readJson<ProfileFile>(`creators/${dir}/profile.json`);
+    out.push({
+      handle: String(c.handle),
+      name: prof?.name || c.name || String(c.handle),
+      github: prof?.github || c.github,
+      tagline: prof?.tagline || c.tagline || "",
+      bio: prof?.bio || c.bio || "",
+      tags: prof?.tags || c.tags || [],
+      avatar: prof?.avatar ?? c.avatar ?? null,
+      links: prof?.links || c.links || [],
+      joinedAt: c.joinedAt || "",
+      dir,
+    } as Creator & { dir: string });
+  }
+  return out;
 }
 
 async function loadWorksOf(dir: string): Promise<Work[]> {

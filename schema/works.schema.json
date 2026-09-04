@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lant1ng-1216/vibe-lab/schema/works.schema.json",
+  "title": "creators/<handle>/works.json — 作品清单",
+  "description": "最终展示集：人写或 AI 建议经 review 合入。sync 只建议，永不删除手工条目。type/status 枚举与站点 data/creators.ts 的 WORK_TYPES / WorkStatus 保持同步。",
+  "type": "object",
+  "required": ["works"],
+  "properties": {
+    "works": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "title", "link", "status"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "type": {
+            "type": "string",
+            "enum": ["Design", "Website", "App", "Product", "Tutorial", "Agent", "Skill", "Article", "Video", "Audio", "Model"]
+          },
+          "title": { "type": "string", "minLength": 1 },
+          "desc": { "type": "string" },
+          "coverHint": { "type": "string" },
+          "cardSummary": { "type": "string" },
+          "thumb": { "type": ["string", "null"] },
+          "link": { "type": "string", "format": "uri" },
+          "status": { "type": "string", "enum": ["实验进行中", "已上线", "已开源"] },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}$" },
+          "meta": {
+            "type": "object",
+            "properties": {
+              "role": { "type": "string" },
+              "published": { "type": "string" },
+              "industry": { "type": "string" },
+              "tech": { "type": "array", "items": { "type": "string" } },
+              "color": { "type": "string" },
+              "style": { "type": "string" }
+            }
+          },
+          "stats": {
+            "type": "object",
+            "properties": {
+              "impressions": { "type": "number" },
+              "outbound": { "type": "number" }
+            }
+          },
+          "body": { "type": "string" },
+          "demoVideo": { "type": "string" },
+          "gallery": { "type": "array", "items": { "type": "string" } },
+          "coverVersion": { "type": "integer", "minimum": 1 }
+        }
+      }
+    }
+  }
+}

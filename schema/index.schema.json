@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lant1ng-1216/vibe-lab/schema/index.schema.json",
+  "title": "creators/index.json — 花名册",
+  "description": "站点级花名册：只登记创作者身份与站务信息，由站长维护。个人资料不写这里，见 <handle>/profile.json。",
+  "type": "object",
+  "required": ["creators"],
+  "properties": {
+    "creators": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["dir", "handle"],
+        "properties": {
+          "dir": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+          "handle": { "type": "string", "minLength": 1 },
+          "joinedAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}$" }
+        }
+      }
+    }
+  }
+}
