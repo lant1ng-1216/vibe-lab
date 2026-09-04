@@ -3,6 +3,8 @@
 > AI 时代的野路子训练场 —— 工具在手、作品说话。
 > 面向想用 AI 真正做出东西的人:从 0 上手 AI 工具,到独立做出自己的作品,再到把作品摆上台、被更多人看见。
 
+**在线站点 → https://www.labagent.online**
+
 ## 这个仓库
 
 Vibe Lab 官网源码 + **创作者数据中枢**。站点的「实验室 /lab」——创作者与他们的作品——都从本仓库 [`creators/`](creators/) 实时拉取展示:任何人提交的作品,过审后即可上线。
@@ -21,7 +23,7 @@ Vibe Lab 官网源码 + **创作者数据中枢**。站点的「实验室 /lab�
 - **Next.js 15**(App Router)+ **TypeScript** + GSAP
 - 服务端从本仓库**实时拉取**创作者数据(token → GitHub API / 无 token → CDN,60s 缓存)
 - 代码:`app/` `components/` `lib/`;内容与数据:`data/` `creators/`
-- 部署:海外 Vercel(免备案)
+- 部署:海外 Vercel(免备案) · 线上 https://www.labagent.online
 
 ## 共建与创作者
 
