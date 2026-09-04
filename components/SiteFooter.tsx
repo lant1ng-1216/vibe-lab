@@ -54,14 +54,13 @@ export default function SiteFooter() {
             <Link href="/tools">工具库</Link>
             <Link href="/tutorials">教程库</Link>
             <Link href="/courses">训练营</Link>
-            <Link href="/about">关于 Vibe Lab</Link>
+            <Link href="/contact">关于 & 联系</Link>
           </div>
 
           {/* 资源列 */}
           <div className="footer-col">
             <h5 className="footer-h5 mono">资源</h5>
             <Link href="/">首页</Link>
-            <Link href="/contact">联系 · 咨询</Link>
             <a href="#announcements">站内公告</a>
             <a href="#" aria-disabled="true">
               RSS 订阅

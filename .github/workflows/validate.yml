@@ -7,6 +7,7 @@ on:
     branches: [main]
 
 jobs:
+  # 数据格式闸：schema 驱动校验（本地与 CI 同源）
   validate:
     runs-on: ubuntu-latest
     steps:
@@ -16,3 +17,20 @@ jobs:
           node-version: 20
       - name: Run creators data validation
         run: node scripts/validate.mjs
+
+  # 作者白名单闸：改动 creators/covers 的 PR，作者必须先邮件申请、站长放入花名册
+  check-author:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check creator author whitelist
+        env:
+          ACTOR: ${{ github.event.pull_request.user.login }}
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: node scripts/check-author.mjs

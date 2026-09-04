@@ -3278,8 +3278,12 @@ a.tcard:hover .tcard-meta { color: var(--ink-soft); }
 
 /* 主体 */
 .course-main { padding-top: 96px; padding-bottom: 60px; }
-.course-sec { padding: 0 0 110px; }
-.course-sec--alt { background: rgba(19, 19, 19, 0.028); padding: 104px 0; }
+.course-sec { padding: 96px 0 120px; }
+.course-sec--alt {
+  background: rgba(19, 19, 19, 0.042);
+  padding: 120px 0;
+  box-shadow: inset 0 1px 0 rgba(19, 19, 19, 0.03), inset 0 -1px 0 rgba(19, 19, 19, 0.03);
+}
 .course-h2 { font-family: var(--font-display); font-size: clamp(1.7rem, 3.6vw, 2.6rem); line-height: 1.22; letter-spacing: -0.02em; margin: 18px 0 40px; font-weight: 700; }
 
 /* 痛点 */
@@ -3353,7 +3357,7 @@ a.tcard:hover .tcard-meta { color: var(--ink-soft); }
 .join-hero h1 .hl { color: var(--accent-bright, #8b7dff); }
 .join-hero-lead { margin-top: 20px; color: rgba(242,240,234,.75); font-size: 16px; line-height: 1.8; max-width: 640px; }
 .join-hero-lead b { color:#fff; }
-.join-main { padding: 96px 0 0; }
+.join-main { padding: 8px 0 0; }
 .join-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
 .join-step { border: 1px solid var(--line); border-radius: 16px; padding: 22px 20px; background: var(--bg-2); }
 .join-step-no { color: var(--accent); font-size: 12px; letter-spacing: .08em; }
@@ -4477,3 +4481,107 @@ a.tcard:hover .tcard-meta { color: var(--ink-soft); }
 @media (max-width: 860px) {
   .lab4-pv { max-height: none; }
 }
+
+/* ============ 训练营邀请码门（第一道锁） ============ */
+.invite { max-width: 420px; margin: 4px auto 0; text-align: left; }
+.invite-row { display: flex; gap: 8px; }
+.invite-input {
+  flex: 1; min-width: 0; height: 42px; padding: 0 14px;
+  border: 1px solid var(--line); border-radius: 10px;
+  background: var(--bg); color: var(--ink);
+  font: inherit; font-size: 14px; letter-spacing: 0.06em;
+}
+.invite-input:focus { outline: none; border-color: var(--accent); }
+.invite-btn {
+  height: 42px; padding: 0 18px; border: none; border-radius: 10px;
+  background: var(--accent); color: #fff; cursor: pointer;
+  font: inherit; font-size: 14px; font-weight: 500; white-space: nowrap;
+}
+.invite-btn:disabled { opacity: 0.6; cursor: default; }
+.invite-err { margin: 8px 0 0; font-size: 12.5px; color: #c0392b; }
+.invite-hint { margin: 10px 0 0; font-size: 11px; color: var(--ink-faint); letter-spacing: 0.03em; }
+
+/* 导航锁图标 */
+.sitenav-lock { margin-right: 5px; font-size: 11px; vertical-align: 1px; }
+
+/* 弹窗底部联系行 */
+.navgate-foot {
+  margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--line);
+  font-size: 12.5px; color: var(--ink-soft);
+}
+.navgate-foot a { color: var(--accent); text-decoration: underline; }
+
+/* 课程台锁态整页 */
+.course-lock { padding: 8vh 24px 10vh; }
+.course-lock-card { max-width: 560px; margin: 0 auto; text-align: center; }
+.course-lock-icon { font-size: 40px; display: block; margin-bottom: 18px; }
+.course-lock-title { font-size: 30px; line-height: 1.25; margin: 0 0 14px; font-weight: 700; }
+.course-lock-lead { font-size: 15px; line-height: 1.8; color: var(--ink-soft); margin: 0 auto 26px; max-width: 460px; }
+.course-lock-box {
+  background: var(--bg-2); border: 1px solid var(--line); border-radius: 16px;
+  padding: 22px 20px 18px;
+}
+.course-lock-foot { margin-top: 18px; font-size: 11.5px; line-height: 1.8; color: var(--ink-faint); }
+.course-lock-foot a { color: var(--accent); text-decoration: underline; }
+@media (max-width: 560px) { .course-lock-title { font-size: 24px; } }
+
+/* ============ 关于&联系页 v2（contact-only） ============ */
+/* 压缩模块(02 相信 / 03 边界)：更低的纵向留白 */
+.course-sec--compact { padding-top: 72px; padding-bottom: 84px; }
+
+/* 01 四大能力：4 列平铺 */
+.blk-grid--4 { grid-template-columns: repeat(4, 1fr); }
+.blk-grid--4 .blk-card h3 { font-size: 16px; }
+.blk-card--plain { cursor: default; }
+.blk-go--muted { color: var(--ink-faint); }
+.blk-no { font-size: 20px; }
+@media (max-width: 1080px) { .blk-grid--4 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .blk-grid--4 { grid-template-columns: 1fr; } }
+
+/* 04 联系我们：场景(左) + 渠道(右) 同屏 */
+.c-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 40px; align-items: start; margin-top: 8px; }
+.c-scenes { display: flex; flex-direction: column; gap: 10px; }
+.c-scene {
+  display: flex; gap: 14px; align-items: flex-start;
+  border: 1px solid var(--line); border-radius: 14px;
+  background: var(--bg-2); padding: 14px 16px;
+}
+.c-scene-icon { font-size: 17px; line-height: 1.5; }
+.c-scene-body { flex: 1; min-width: 0; }
+.c-scene-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.c-scene-head h3 { font-size: 14.5px; font-weight: 650; margin: 0; }
+.c-scene-body p { margin: 4px 0 0; font-size: 12.5px; line-height: 1.7; color: var(--ink-soft); }
+.c-channels { display: flex; flex-direction: column; gap: 14px; }
+.c-channels .contact-card { margin: 0; }
+.c-mail {
+  border: 1px solid var(--line); border-radius: 16px;
+  background: var(--bg-2); padding: 18px 20px;
+}
+.c-mail p { margin: 8px 0 0; font-size: 12.5px; line-height: 1.7; color: var(--ink-soft); }
+@media (max-width: 960px) { .c-grid { grid-template-columns: 1fr; gap: 26px; } }
+
+/* ---- 04 左右平衡修正(contact v2b) ---- */
+.c-grid { grid-template-columns: 1.08fr 1fr; gap: 44px; }
+.c-scenes { gap: 12px; }
+.c-scene { padding: 17px 18px; gap: 15px; }
+.c-scene-icon { font-size: 20px; line-height: 1.4; }
+.c-scene-head h3 { font-size: 15px; }
+.c-scene-head { margin-bottom: 5px; }
+.c-scene-body p { font-size: 13px; line-height: 1.78; }
+.c-channels { gap: 16px; }
+.c-channels .contact-card { padding: 18px 18px 14px; }
+.c-channels .contact-card-head { margin-bottom: 12px; justify-content: space-between; padding: 0 4px; }
+.c-channels .contact-qr { width: auto; max-width: 218px; margin: 0 auto; }
+.c-channels .contact-hint { margin-top: 10px; }
+.c-mail { padding: 16px 20px 18px; }
+.c-mail .contact-mail-link { font-size: 15px; margin: 8px 0 6px; }
+.c-mail p { font-size: 12.5px; }
+.c-mail .contact-ps { margin-top: 12px; }
+
+/* ---- v2c: 04 右列再压缩以匹配左列 ---- */
+.c-channels .contact-card { padding: 16px 16px 12px; }
+.c-channels .contact-card-head { margin-bottom: 10px; padding: 0; }
+.c-channels .contact-qr { max-width: 174px; }
+.c-channels .contact-hint { margin-top: 8px; font-size: 10.5px; }
+.c-mail { padding: 14px 18px 16px; }
+.c-mail .contact-mail-link { font-size: 14.5px; margin: 6px 0 0; }
