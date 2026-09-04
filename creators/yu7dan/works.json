@@ -1,33 +1,6 @@
 {
   "works": [
     {
-      "id": "vibe-lab",
-      "type": "Website",
-      "title": "Vibe Lab · AI 资源门户与训练营",
-      "desc": "工具库 72 款 / 教程库站内读 10+ 本开源教程 / 训练营课程台阶梯解锁 / Lab 创作者展示——一个从 0 到上线预览的完整作品。",
-      "thumb": "/assets/lab/covers/tools.png",
-      "link": "https://github.com/lant1ng-1216/vibe-lab",
-      "status": "实验进行中",
-      "tags": [
-        "Next.js",
-        "GSAP",
-        "Vercel"
-      ],
-      "date": "2026-09",
-      "meta": {
-        "role": "产品 / 设计 / 开发",
-        "published": "2026-09",
-        "industry": "AI 教育",
-        "tech": [
-          "Next.js 15",
-          "TypeScript",
-          "GSAP",
-          "Vercel"
-        ]
-      },
-      "body": "把「AI 资源门户 + 实战训练营」从 PRD 一路做到可上线预览。工具库 72 款、教程库接入 10+ 本开源教程站内阅读、训练营课程台带阶梯解锁、Lab 创作者展示。过程中踩遍 Next.js 服务端渲染、GSAP 动画、GitHub 内容拉取的坑——这个站就是我的实验记录。"
-    },
-    {
       "id": "chinese-handwriting-generator",
       "type": "App",
       "title": "Chinese Handwriting Generator · 中文手写模拟器",
