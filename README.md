@@ -18,7 +18,7 @@
 
 ---
 
-![Vibe Lab 首页](docs/assets/hero.jpg)
+![Vibe Lab 首页](docs/assets/hero.png)
 
 ---
 
@@ -27,7 +27,6 @@
 - [🎯 这是个什么产品](#这是个什么产品)
 - [🧩 四大板块](#四大板块)
 - [🛠 技术栈](#技术栈)
-- [🚀 快速开始](#快速开始)
 - [🤝 共建与创作者](#共建与创作者)
 - [🗺 Roadmap](#roadmap)
 - [⚖️ License](#license)
@@ -64,34 +63,6 @@ Vibe Lab 不是又一个工具合集站，也不是纯教程站——它是把�
 | 数据 | **GitHub 即数据仓**（`creators/` 创作者中枢）+ jsdelivr CDN 兜底 |
 | 质量 | JSON Schema + `validate` 校验 · CI 白名单闸（作者须已入驻） |
 | AI | **MiniMax**（作品 AI 封面 / 摘要）· **DeepSeek**（Lab Agent 助手） |
-| 部署 | 海外 Vercel · 站点 https://www.labagent.online |
-
-## 快速开始
-
-```bash
-# 1. 克隆（本仓库 = 站点代码 + 创作者数据同仓）
-git clone https://github.com/lant1ng-1216/vibe-lab.git
-cd vibe-lab
-
-# 2. 安装依赖
-npm install
-
-# 3. 本地起站点
-npm run dev            # → http://localhost:3000
-
-# 4. (可选) 本机校验创作者数据
-node scripts/validate.mjs
-```
-
-**部署**（Vercel）：导入本仓库 → 环境变量设三项即可跑通全部功能：
-
-| 变量 | 用途 |
-|---|---|
-| `MINIMAX_API_KEY` | 实验室作品 AI 封面 / 一句话摘要 |
-| `DEEPSEEK_API_KEY` | 首页 Lab Agent 助手对话 |
-| `COURSE_INVITE_CODE` | 训练营课程台第一道锁的邀请码（人工发放） |
-
-> 创作者数据无需任何 token：仓库已公开，站点走 CDN 拉取即可。
 
 ## 共建与创作者
 
