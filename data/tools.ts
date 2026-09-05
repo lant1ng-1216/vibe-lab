@@ -206,8 +206,8 @@ export const TOOLS: Tool[] = [
     links: [
       {
         label: "蓝奏云整合包 · 国内直下",
-        url: "https://wwaoy.lanzoue.com/ihANw46o6upg",
-        note: "访问密码：d47z",
+        url: "https://wwaoy.lanzoue.com/irlYd46ucyeb",
+        note: "访问密码：45b4",
       },
       {
         label: "GitHub 仓库",
