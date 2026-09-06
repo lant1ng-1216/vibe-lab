@@ -54,7 +54,7 @@ export default function SiteFooter() {
             <Link href="/tools">资源库</Link>
             <Link href="/tutorials">教程库</Link>
             <Link href="/courses">训练营</Link>
-            <Link href="/contact">关于 & 联系</Link>
+            <Link href="/contact">支持我们</Link>
           </div>
 
           {/* 资源列 */}
