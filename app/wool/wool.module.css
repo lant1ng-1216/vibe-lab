@@ -1,0 +1,278 @@
+/* 羊毛专区 —— 局部样式（CSS Modules，物理隔离，不污染全站）
+   配色/字体一律引用 app/globals.css 的全局变量，避免风格漂移。 */
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 5rem;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  margin-bottom: 2rem;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 0.6rem;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 0.75rem;
+}
+
+.lede {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin: 0 0 1.25rem;
+  max-width: 46rem;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.statNum {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.statLabel {
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+}
+
+/* ---------- 筛选 ---------- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.filter {
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.4rem 0.95rem;
+  cursor: pointer;
+  transition: color 0.2s var(--ease-main), border-color 0.2s var(--ease-main),
+    background 0.2s var(--ease-main);
+}
+
+.filter:hover {
+  color: var(--ink);
+  border-color: var(--ink-soft);
+}
+
+.filterOn {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.filterOn:hover {
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* ---------- 卡片网格 ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.35rem;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  transition: border-color 0.2s var(--ease-main), transform 0.2s var(--ease-main);
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.cardDead {
+  opacity: 0.5;
+}
+
+.cardDead:hover {
+  border-color: var(--line);
+  transform: none;
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  object-fit: contain;
+  background: #fff;
+  border: 1px solid var(--line);
+  flex: none;
+}
+
+.logoFallback {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--accent);
+  background: var(--accent-soft);
+  flex: none;
+}
+
+.name {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.quota {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  line-height: 1.35;
+  color: var(--accent);
+  margin: 0;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.tag {
+  font-size: 0.72rem;
+  line-height: 1;
+  padding: 0.3rem 0.55rem;
+  border-radius: 5px;
+  color: var(--ink-soft);
+  background: var(--bg-deep);
+  white-space: nowrap;
+}
+
+.tagLive {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.tagDead {
+  color: var(--ink-faint);
+  background: var(--bg-deep);
+  text-decoration: line-through;
+}
+
+.body {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.trap {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--ink-faint);
+  margin: 0;
+  padding-left: 0.7rem;
+  border-left: 2px solid var(--line);
+}
+
+.cta {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  transition: background 0.2s var(--ease-main), color 0.2s var(--ease-main),
+    border-color 0.2s var(--ease-main);
+}
+
+.cta:hover {
+  color: #fff;
+  background: var(--wipe);
+  border-color: var(--wipe);
+}
+
+.ctaArrow {
+  flex: none;
+}
+
+/* ---------- 空态 ---------- */
+.empty {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: var(--ink-faint);
+  background: var(--bg-2);
+  border: 1px dashed var(--line);
+  border-radius: 14px;
+}
+
+.emptyTitle {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  margin: 0 0 0.4rem;
+}
+
+.emptyDesc {
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+@media (max-width: 520px) {
+  .page {
+    padding: 2.25rem 1.1rem 3.5rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
