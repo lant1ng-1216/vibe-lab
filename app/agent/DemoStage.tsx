@@ -1,9 +1,9 @@
 "use client";
 
-/* /agent 交互式演示舞台
- * 流程: 序章(无监工灾难预告) → 选任务 → LLM 追问×3(chips+自由输入)
- *      → PRD 卡 → 终端执行演出 → 汇报逐句翻译 → 决策点(接受/拒绝/问它)
- *      → 验收交付 / 落幕。LLM 全程可回落 script.ts 剧本, 演示永不卡死。 */
+/* /agent 交互式演示 · 双画布形态
+ * 左: Claude Code 工作画面(终端滚动 + 行末徽章) → 中: 监工视线 → 右: Lab Agent 姿态面板
+ * Lab Agent 不再"对话", 改为"批注" —— 在 coder 行后加 ✓ ⚠ ✗, 右侧只显示"此刻在干嘛"
+ * 整页锁 viewport, 终端内部滚动, 旧行顶出, 演示永不拉长页面。LLM 失败自动回落剧本。 */
 
 import { useEffect, useRef, useState } from "react";
 import styles from "./agent.module.css";
@@ -19,19 +19,43 @@ import {
 
 const STEPS = ["对齐意图", "产出 PRD", "派活执行", "翻译汇报", "验收抉择", "交付"];
 
-type Tone = "lab" | "ok" | "warn";
-type LabMsg =
-  | { kind: "text"; text: string; tone: Tone }
-  | { kind: "trans"; pair: { t: string; p: string } };
-type CodeLn = { tone: "ok" | "warn" | "cmd" | "dim"; text: string };
-type Ui = "intro" | "pick" | "ask" | "rogue" | "idle";
+/* 终端行类型 —— 行末有徽章（Lab Agent 的批注） */
+type BadgeKind = "ok" | "warn" | "reject" | "ask" | "dim" | "none";
+type CodeLn = { tone: "ok" | "warn" | "cmd" | "dim"; text: string; badge: BadgeKind };
 
-const CODE_TONE: Record<CodeLn["tone"], string> = {
+const TONE_CLS: Record<CodeLn["tone"], string> = {
   ok: "cOk",
   warn: "cWarn",
   cmd: "cCmd",
   dim: "cDim",
 };
+const BADGE_CLS: Record<BadgeKind, string> = {
+  ok: "bOk",
+  warn: "bWarn",
+  reject: "bReject",
+  ask: "bAsk",
+  dim: "bDim",
+  none: "bNone",
+};
+const BADGE_TXT: Record<BadgeKind, string> = {
+  ok: "✓ 通过",
+  warn: "⚠ 偏离",
+  reject: "✗ 打回",
+  ask: "? 需解释",
+  dim: "·",
+  none: "·",
+};
+
+/* Lab Agent 当前姿态（不再累积气泡，只显示此刻状态） */
+type Display =
+  | { kind: "idle" }
+  | { kind: "ask"; round: number; q?: string; options?: string[]; lastAnswer?: string }
+  | { kind: "prd"; status: "producing" | "ready"; card?: PrdCard }
+  | { kind: "run"; reportReceived: boolean; translating: boolean }
+  | { kind: "rogue"; note: string; label: string; asked: boolean; rejectVerdict?: string }
+  | { kind: "end"; accepted: boolean };
+
+const MAX_CODE_LINES = 14;
 
 /* 自定义任务(无特化剧本)的通用演出素材 */
 const GENERIC_ROLL: string[] = [
@@ -72,21 +96,16 @@ async function api(kind: string, payload: Record<string, unknown>): Promise<any 
 
 export default function DemoStage() {
   const [scene, setScene] = useState<"intro" | "play" | "end">("intro");
-  const [ui, setUi] = useState<Ui>("intro");
   const [step, setStep] = useState(0);
+  const [linkLabel, setLinkLabel] = useState("就绪");
   const [sys, setSys] = useState("");
   const [idea, setIdea] = useState("");
   const [task, setTask] = useState<ScriptTask | null>(null);
   const [customDraft, setCustomDraft] = useState("");
-
-  const [labMsgs, setLabMsgs] = useState<LabMsg[]>([]);
-  const [prd, setPrd] = useState<PrdCard | null>(null);
+  const [display, setDisplay] = useState<Display>({ kind: "idle" });
   const [code, setCode] = useState<CodeLn[]>([]);
   const [codeBusy, setCodeBusy] = useState(false);
-
   const [answers, setAnswers] = useState<{ q: string; a: string }[]>([]);
-  const [askUI, setAskUI] = useState<{ q: string; options: string[] } | null>(null);
-  const [rogueUI, setRogueUI] = useState<{ note: string; asked: boolean } | null>(null);
 
   const genRef = useRef(0);
   const waitRef = useRef<((v: string) => void) | null>(null);
@@ -94,61 +113,16 @@ export default function DemoStage() {
   const lastRun = useRef<{ id: string | null; text: string }>({ id: null, text: "" });
   const verdictRef = useRef<string | null>(null);
 
-  /* ---------- 舞台基础 ---------- */
   const gen = () => ++genRef.current;
-
-  const resetBoard = () => {
-    setLabMsgs([]);
-    setPrd(null);
-    setCode([]);
-    setSys("");
-    setAnswers([]);
-    setAskUI(null);
-    setRogueUI(null);
-    setUi("idle");
-    setStep(0);
-  };
-
-  const saySys = async (text: string, g: number) => {
-    setSys("");
-    for (let i = 0; i <= text.length; i += 3) {
-      if (genRef.current !== g) return;
-      setSys(text.slice(0, i));
-      await sleep(16);
-    }
-  };
-
-  const sayLab = async (text: string, tone: Tone, g: number) => {
-    setLabMsgs((m) => [...m, { kind: "text", text: "", tone }]);
-    for (let i = 0; i < text.length; i += 2) {
-      if (genRef.current !== g) return;
-      const head = text.slice(0, i);
-      setLabMsgs((m) => {
-        if (!m.length) return m;
-        const last = m[m.length - 1];
-        if (last.kind !== "text") return m;
-        return [...m.slice(0, -1), { ...last, text: head }];
-      });
-      await sleep(13);
-    }
-    if (genRef.current !== g) return;
-    setLabMsgs((m) => {
-      if (!m.length) return m;
-      const last = m[m.length - 1];
-      if (last.kind !== "text") return m;
-      return [...m.slice(0, -1), { ...last, text }];
-    });
-  };
-
-  const sayTrans = async (pair: { t: string; p: string }) => {
-    setLabMsgs((m) => [...m, { kind: "trans", pair }]);
-    await sleep(650);
-  };
 
   const pushCode = async (lines: CodeLn[], pace: number, g: number) => {
     for (const ln of lines) {
       if (genRef.current !== g) return;
-      setCode((c) => [...c, ln]);
+      setCode((c) => {
+        const next = [...c, ln];
+        if (next.length > MAX_CODE_LINES) next.splice(0, next.length - MAX_CODE_LINES);
+        return next;
+      });
       await sleep(pace);
     }
   };
@@ -163,41 +137,61 @@ export default function DemoStage() {
     waitRef.current = null;
   };
 
-  /* ---------- 序章 · 无监工预告(挂载一次) ---------- */
+  /* ---------- 序章 · 无监工预告（仅一次） ---------- */
   useEffect(() => {
     if (introRef.current) return;
     introRef.current = true;
     void (async () => {
       const g = gen();
       setScene("intro");
-      setUi("intro");
       setCodeBusy(true);
+      setLinkLabel("序章");
       for (const m of NO_LAB) {
         if (genRef.current !== g) return;
         if (m.who === "sys") {
           await saySys(m.text, g);
         } else if (m.who === "code") {
-          setCode((c) => [...c, { tone: m.text.startsWith("✓") ? "ok" : "cmd", text: m.text }]);
-          await sleep(850);
+          setCode((c) => {
+            const next = [
+              ...c,
+              { tone: m.text.startsWith("✓") ? ("ok" as const) : ("cmd" as const), text: m.text, badge: "none" as const },
+            ];
+            if (next.length > MAX_CODE_LINES) next.splice(0, next.length - MAX_CODE_LINES);
+            return next;
+          });
+          await sleep(800);
         } else {
-          await sayLab(m.text, "ok", g);
+          await saySys(m.text, g);
         }
       }
       if (genRef.current !== g) return;
       setCodeBusy(false);
       setScene("play");
-      setUi("pick");
+      setDisplay({ kind: "idle" });
       setStep(0);
+      setLinkLabel("选任务");
     })();
   }, []);
 
+  async function saySys(text: string, g: number) {
+    setSys("");
+    for (let i = 0; i <= text.length; i += 3) {
+      if (genRef.current !== g) return;
+      setSys(text.slice(0, i));
+      await sleep(14);
+    }
+  }
+
   /* ---------- 开始 / 重演 ---------- */
   function skipIntro() {
-    gen(); // 取消正在跑的序章
+    gen();
     setCodeBusy(false);
+    setCode([]);
+    setSys("");
     setScene("play");
-    resetBoard();
-    setUi("pick");
+    setDisplay({ kind: "idle" });
+    setStep(0);
+    setLinkLabel("选任务");
   }
 
   function replay() {
@@ -219,97 +213,117 @@ export default function DemoStage() {
     setIdea(theIdea);
     setScene("play");
     setCodeBusy(true);
-    resetBoard();
-    await sleep(500);
+    setStep(0);
+    setCode([]);
+    setAnswers([]);
+    setDisplay({ kind: "idle" });
+    setLinkLabel("对齐意图");
+    setSys("");
+    await sleep(400);
 
-    /* 第一幕 · 对齐意图(3 轮) */
-    await sayLab("开工前，先把你要的东西问清楚。你负责想，我负责别让它跑偏。", "lab", g);
+    /* 第一幕 · 对齐意图（3 轮追问） */
+    setDisplay({ kind: "ask", round: 0 });
+    await saySys("Lab Agent 把你的想法拆细一点，3 个问题问完就能定 PRD。", g);
     const past: { q: string; a: string }[] = [];
     for (let r = 0; r < 3; r++) {
       if (genRef.current !== g) return;
-      const res = await api("ask", { idea: theIdea, past, round: r });
-      const fb = t ? t.fallbackAsk[r] : CUSTOM_FALLBACK_ASK[r];
-      const q = res?.question ? String(res.question) : fb.q;
-      const options =
-        Array.isArray(res?.options) && (res.options as string[]).length === 3
-          ? (res.options as string[])
-          : fb.options;
       setStep(0);
-      setAskUI({ q, options });
-      setUi("ask");
+      setLinkLabel(`对齐 · 第 ${r + 1}/3 问`);
+      const ures = await api("ask", { idea: theIdea, past, round: r });
+      const fb = t ? t.fallbackAsk[r] : CUSTOM_FALLBACK_ASK[r];
+      const q = ures?.question ? String(ures.question) : fb.q;
+      const options =
+        Array.isArray(ures?.options) && (ures.options as string[]).length === 3
+          ? (ures.options as string[])
+          : fb.options;
+      setDisplay({ kind: "ask", round: r, q, options, lastAnswer: past.length ? past[past.length - 1].a : undefined });
       const a = await waitChoice();
       if (genRef.current !== g) return;
       past.push({ q, a });
       setAnswers([...past]);
-      setAskUI(null);
-      setUi("idle");
-      await sayLab(`收到——「${a}」。`, "ok", g);
-      await sleep(320);
+      setDisplay({ kind: "ask", round: r, q, options, lastAnswer: a });
+      await sleep(300);
     }
 
     /* 第二幕 · PRD */
     if (genRef.current !== g) return;
     setStep(1);
-    await saySys(
-      "三个问题问完。Lab Agent 把你的话整理成一页 PRD——接下来，这是 Claude Code 唯一要听的东西。",
-      g,
-    );
+    setLinkLabel("产出 PRD");
+    setDisplay({ kind: "prd", status: "producing" });
+    await saySys("3 个问题问完。Lab Agent 把你的话整理成一页 PRD。", g);
     const pres = await api("prd", { idea: theIdea, answers: past });
     const prdCard: PrdCard = pres?.prd ?? (t ? t.prd : customPrd(theIdea));
     if (genRef.current !== g) return;
-    setPrd(prdCard);
-    await sleep(500);
+    setDisplay({ kind: "prd", status: "ready", card: prdCard });
+    await sleep(700);
 
     /* 第三幕 · 派活 + 终端执行 */
     if (genRef.current !== g) return;
     setStep(2);
-    await sayLab("PRD 定了。派给 Claude Code——我开始盯。", "ok", g);
-    await saySys("Claude Code 收到 PRD，开工。Lab Agent 在旁边，全程跟着。", g);
+    setLinkLabel("派活 · 盯中");
+    setDisplay({ kind: "run", reportReceived: false, translating: false });
+    await saySys("PRD 派给 Claude Code —— Lab Agent 跟着它干活，全程盯。", g);
     const roll: string[] = t ? t.roll : GENERIC_ROLL;
-    const rollLn: CodeLn[] = roll.map((x) => {
-      if (x.startsWith(">")) return { tone: "cmd", text: x };
-      if (x.includes("顺手") || x.includes("先记着")) return { tone: "warn", text: x };
-      return { tone: "ok", text: x };
+    const rollLn: CodeLn[] = roll.map((x): CodeLn => {
+      let badge: BadgeKind = "ok";
+      if (x.startsWith(">")) badge = "none";
+      else if (x.includes("顺手") || x.includes("先记着")) badge = "none"; // 待 Lab Agent 在翻译阶段打 warn
+      return { tone: x.startsWith(">") ? "cmd" : "ok", text: x, badge };
     });
-    await pushCode(rollLn, 430, g);
+    await pushCode(rollLn, 380, g);
     if (genRef.current !== g) return;
 
-    /* 第四幕 · 交差 + 逐句翻译 */
+    /* 第四幕 · 提交报告 + Lab Agent 逐句翻译 + 在 coder 行后打批注 */
     setStep(3);
+    setLinkLabel("翻译 · 批注中");
     await pushCode(
       [
-        { tone: "dim", text: "→ git commit -m \"feat: 模块一交付\"" },
-        { tone: "cmd", text: "→ 向开发者汇报完成情况" },
+        { tone: "dim", text: "→ git commit -m \"feat: 模块一交付\"", badge: "dim" },
+        { tone: "cmd", text: "→ 向开发者汇报完成情况", badge: "dim" },
+        { tone: "ok", text: "【汇报】", badge: "dim" },
+        { tone: "ok", text: t ? t.techReport : GENERIC_REPORT, badge: "none" },
       ],
-      720,
+      560,
       g,
     );
     if (genRef.current !== g) return;
-    await saySys("coder 交差了。它的原始汇报长这样——技术话术，你看得懂几句？", g);
-    await sayLab(t ? t.techReport : GENERIC_REPORT, "lab", g);
-    await sleep(650);
-    await saySys("Lab Agent 开始逐句翻译，并对照 PRD 验收。", g);
-    for (const pair of t ? t.translate : GENERIC_TRANS) {
+    setDisplay({ kind: "run", reportReceived: true, translating: true });
+    await saySys("coder 交差了。Lab Agent 在技术汇报上一句句批注,翻译给你听。", g);
+    const trans = t ? t.translate : GENERIC_TRANS;
+    for (let i = 0; i < trans.length; i++) {
       if (genRef.current !== g) return;
-      await sayTrans(pair);
+      const pair = trans[i];
+      const isLast = i === trans.length - 1;
+      /* 在终端最后一行的"汇报"行后插入翻译行（带 bWarn 标记） */
+      setCode((c) => {
+        const lastIdx = c.length - 1;
+        const inject = {
+          tone: "warn" as const,
+          text: `▷ 翻译：${pair.t}\n   → ${pair.p}`,
+          badge: (isLast ? "warn" : "ok") as BadgeKind,
+        };
+        const next = [...c.slice(0, lastIdx), c[lastIdx], inject, ...c.slice(lastIdx + 1)];
+        if (next.length > MAX_CODE_LINES) next.splice(0, next.length - MAX_CODE_LINES);
+        return next;
+      });
+      await sleep(820);
     }
 
-    /* 第五幕 · 决策点 */
+    /* 第五幕 · 验收抉择 */
     if (genRef.current !== g) return;
     setStep(4);
+    setLinkLabel("验收 · 抉择");
     const rogueNote = t
       ? t.rogue.note
       : "验收发现一处偏离：它给自己加了个「从没提过的附加功能」。你的原始描述里没有它。";
     const rogueLabel = t ? t.rogue.label : "附加功能";
-    await sayLab(rogueNote, "warn", g);
-    setRogueUI({ note: rogueNote, asked: false });
-    setUi("rogue");
+    setDisplay({ kind: "rogue", note: rogueNote, label: rogueLabel, asked: false });
     const c1 = await waitChoice();
     if (genRef.current !== g) return;
 
     if (c1 === "ask") {
-      setUi("idle");
-      await saySys("你问了 Lab Agent：为什么不该加？", g);
+      setLinkLabel("验收 · 解释中");
+      await saySys("你问 Lab Agent：为什么不该加？", g);
       const vres = await api("verdict", { idea: theIdea, rogueLabel });
       const vText =
         vres?.reply ??
@@ -317,39 +331,32 @@ export default function DemoStage() {
           ? t.verdictFallback
           : "因为它不在你原本的意图里。想要的时候，写进 PRD 再让它做——顺序不能反。");
       verdictRef.current = vText;
-      await sayLab(vText, "warn", g);
+      setDisplay({ kind: "rogue", note: rogueNote, label: rogueLabel, asked: true, rejectVerdict: vText });
       await sleep(500);
-      await saySys("你被说服了。回到刚才的抉择——", g);
-      setRogueUI({ note: rogueNote, asked: true });
-      setUi("rogue");
+      await saySys("你被说服了。回到抉择——", g);
+      setLinkLabel("验收 · 抉择");
       const c2 = await waitChoice();
       if (genRef.current !== g) return;
-      await resolveRogue(c2, g, t, rogueLabel, theIdea);
+      await resolveRogue(c2, g, t, rogueLabel, theIdea, rogueNote);
       return;
     }
-    await resolveRogue(c1, g, t, rogueLabel, theIdea);
+    await resolveRogue(c1, g, t, rogueLabel, theIdea, rogueNote);
   }
 
-  async function resolveRogue(c: string, g: number, t: ScriptTask | null, rogueLabel: string, theIdea: string) {
+  async function resolveRogue(c: string, g: number, t: ScriptTask | null, rogueLabel: string, theIdea: string, rogueNote: string) {
     if (c === "accept") {
-      setUi("idle");
-      await saySys("你选了：算了，让它留着。", g);
-      await sayLab(
-        "留着可以——但它不是你要的，是它想加的。范围每松一次，产品就离你真正想要的样子远一步。",
-        "warn",
-        g,
-      );
-      if (genRef.current !== g) return;
+      setLinkLabel("收工");
+      await saySys("你选了：让它留着。Lab Agent 把它标记为「偏离 · 你已接受」。", g);
+      await sleep(400);
       setStep(5);
       setCodeBusy(false);
-      setUi("idle");
+      setDisplay({ kind: "end", accepted: true });
       setScene("end");
       return;
     }
     /* reject */
-    setUi("idle");
-    await saySys("你选了：按我说的来，删掉。", g);
-    await sayLab("打回。", "warn", g);
+    setLinkLabel("打回 · coder 重做");
+    await saySys("你选了：删掉。Lab Agent 把这一行打回给 coder。", g);
     const fbVerdict = t
       ? t.verdictFallback
       : `已打回 Claude Code：移除「${rogueLabel}」。理由：它不在你原本的意图里——PRD 没写的，不许加。`;
@@ -359,28 +366,26 @@ export default function DemoStage() {
       vText = String(vres?.reply ?? "") || fbVerdict;
       verdictRef.current = vText;
     }
-    await sayLab(vText, "warn", g);
-    if (genRef.current !== g) return;
+    setDisplay({ kind: "rogue", note: rogueNote, label: rogueLabel, asked: true, rejectVerdict: vText });
+    await sleep(500);
     await pushCode(
       [
-        { tone: "warn", text: `- 移除「${rogueLabel}」(按验收打回)` },
-        { tone: "ok", text: "✓ 已回滚，与 PRD 对齐" },
+        { tone: "warn", text: `↩ 收到打回：移除「${rogueLabel}」`, badge: "reject" },
+        { tone: "ok", text: "✓ 已回滚，与 PRD 对齐", badge: "ok" },
       ],
-      850,
+      750,
       g,
     );
     if (genRef.current !== g) return;
-    await saySys("重新验收……", g);
-    await sayLab("验收通过 ✓ 这次交付，和你说的完全一致。", "ok", g);
-    if (genRef.current !== g) return;
+    setLinkLabel("验收 · 通过");
     setStep(5);
     setCodeBusy(false);
-    setUi("idle");
+    setDisplay({ kind: "end", accepted: false });
     setScene("end");
     await saySys(ENDING.line, g);
   }
 
-  /* ---------- 交互回调 ---------- */
+  /* ---------- 回调 ---------- */
   function onPick(id: string) {
     void start(id, "");
   }
@@ -394,200 +399,238 @@ export default function DemoStage() {
     if (v && v.trim()) pick(v.trim());
   }
 
-  /* ---------- 渲染 ---------- */
-  const stepName = STEPS[Math.min(step, STEPS.length - 1)];
-  const codeTag = scene === "intro" ? "演出中" : codeBusy ? "工作中" : scene === "end" ? "交付" : "待命";
+  /* ---------- 渲染辅助：badge 文本 + Lab Agent 抬头文字 ---------- */
+  const labTitle = (() => {
+    switch (display.kind) {
+      case "idle":
+        return scene === "intro" ? "序章 · 没有监工" : "就绪 · 等你下任务";
+      case "ask":
+        return `追问 · 第 ${display.round + 1}/3 问`;
+      case "prd":
+        return display.status === "producing" ? "整理 PRD 中…" : `PRD · ${display.card?.title ?? ""}`;
+      case "run":
+        return display.translating ? "翻译汇报 · 批注中" : "派活执行 · 盯中";
+      case "rogue":
+        return display.asked ? "已给出打回理由" : "验收 · 发现 1 处偏离";
+      case "end":
+        return display.accepted ? "收工 · 偏离已留" : "收工 · 验收通过";
+    }
+  })();
 
+  const labSub = (() => {
+    switch (display.kind) {
+      case "idle":
+        return scene === "intro" ? "先看没监工时会怎么跑偏" : "左: Claude Code 执行端 · 中: 监工视线 · 右: 我的姿态";
+      case "ask":
+        return "Lab Agent 把你的想法拆细,3 个问题问完就能定 PRD";
+      case "prd":
+        return display.status === "producing" ? "把对话汇总成一页" : "这是接下来 coder 唯一要听的东西";
+      case "run":
+        return display.reportReceived ? "我正把它的技术汇报翻译给你" : "我盯着它,你看进程就好";
+      case "rogue":
+        return display.asked ? "理由如上,现在回到你的抉择" : "它在 PRD 之外加了个东西,你看怎么处理";
+      case "end":
+        return display.accepted
+          ? "你接受了偏离——下次我会更早提醒你"
+          : "这一刻交付和你说的完全一致 ✓";
+    }
+  })();
+
+  const stepName = STEPS[Math.min(step, STEPS.length - 1)];
+
+  /* ---------- 渲染 ---------- */
   return (
     <div className={styles.stage}>
+      {/* topbar */}
       <div className={styles.topbar}>
         <div className={styles.dotrow}>
           <span className={styles.dot} style={{ background: "#ff5f57" }} />
           <span className={styles.dot} style={{ background: "#febc2e" }} />
           <span className={styles.dot} style={{ background: "#28c840" }} />
         </div>
-        <div className={styles.topbarTitle}>vibe-lab · 开发演示舞台 · 一个循环</div>
+        <div className={styles.topbarTitle}>vibe-lab · 一个开发循环</div>
         <div className={styles.paneTag}>{scene === "end" ? "演示完成" : scene === "intro" ? "序章" : stepName}</div>
       </div>
 
+      {/* steps */}
       <div className={styles.steps}>
         {STEPS.map((s, i) => (
-          <span key={s} className={styles.step + (i <= step ? " " + styles.stepOn : "")} />
+          <span key={s} className={`${styles.step} ${i <= step ? styles.stepOn : ""}`} />
         ))}
       </div>
 
-      <div className={styles.panes}>
-        {/* 开发者 · 你 */}
-        <section className={styles.pane + " " + styles.youPane}>
-          <div className={styles.paneHead}>
-            <span>开发者 · 你</span>
-            <span className={styles.paneSub}>YOU</span>
+      {/* 双画布 */}
+      <div className={styles.canvas}>
+        {/* 左：Claude Code 工作画面 */}
+        <div className={styles.codeCanvas} aria-label="Claude Code 工作画面">
+          {code.map((ln, i) => (
+            <div key={i} className={styles.codeLine}>
+              <span className={`${styles.codeBadge} ${styles[BADGE_CLS[ln.badge]]}`}>
+                {BADGE_TXT[ln.badge]}
+              </span>
+              <span className={`${styles.codeText} ${styles[TONE_CLS[ln.tone]]}`}>{ln.text}</span>
+            </div>
+          ))}
+          {(scene === "intro" || codeBusy) && <span className={styles.cursor} />}
+        </div>
+
+        {/* 中：监工视线 */}
+        <div className={styles.linkZone} aria-hidden="true">
+          <div className={styles.linkTrack}>
+            <span className={styles.linkDot} />
           </div>
-          <div className={styles.youFlow}>
-            {ui === "pick" && (
-              <>
-                <div className={styles.statusNote}>选一个任务开演——或者写下你自己的。</div>
-                <div className={styles.taskList}>
-                  {TASKS.map((t) => (
-                    <button key={t.id} className={styles.taskCard} onClick={() => onPick(t.id)}>
-                      <div className={styles.taskTitle}>{t.title}</div>
-                      <div className={styles.taskHint}>{t.idea.slice(0, 24)}…</div>
-                    </button>
-                  ))}
-                </div>
-                <div className={styles.orNote}>──── 或写你自己的 ────</div>
-                <div className={styles.customBox}>
-                  <input
-                    className={styles.youInput}
-                    placeholder="比如：做一个给爸妈的用药提醒…"
-                    value={customDraft}
-                    onChange={(e) => setCustomDraft(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && onCustomStart()}
-                  />
-                  <button className={styles.actBtn} disabled={!customDraft.trim()} onClick={onCustomStart}>
-                    开演
-                  </button>
-                </div>
-              </>
-            )}
+          <div className={styles.linkLabel}>{linkLabel}</div>
+        </div>
 
-            {ui === "ask" && askUI && (
-              <>
-                <div className={styles.youBubble}>
-                  <b>Lab Agent 追问：{askUI.q}</b>
-                  <div className={styles.qLabel}>点一个答复，或自己输入一句</div>
-                </div>
-                <div className={styles.chipRow}>
-                  {askUI.options.map((o) => (
-                    <button key={o} className={styles.chip} onClick={() => pick(o)}>
-                      {o}
-                    </button>
-                  ))}
-                </div>
-                <div className={styles.customBox}>
-                  <input id="agent-ask-input" className={styles.youInput} placeholder="自己答一句…" onKeyDown={(e) => e.key === "Enter" && onAskType()} />
-                  <button className={styles.actBtn} onClick={onAskType}>
-                    答
-                  </button>
-                </div>
-              </>
-            )}
-
-            {ui === "rogue" && rogueUI && (
-              <>
-                <div className={styles.statusNote}>{rogueUI.note}</div>
-                <div className={styles.chipRow}>
-                  <button className={styles.chip} onClick={() => pick("accept")}>
-                    算了，让它加上也行
-                  </button>
-                  <button className={styles.chip} onClick={() => pick("reject")}>
-                    删掉，按我说的来
-                  </button>
-                  {!rogueUI.asked && (
-                    <button className={styles.chip} onClick={() => pick("ask")}>
-                      为什么不能加？让它说说
-                    </button>
-                  )}
-                </div>
-              </>
-            )}
-
-            {answers.map((p, i) => (
-              <div key={i} className={styles.youBubble}>
-                <span className={styles.qLabel}>Q{i + 1} · {p.q}</span>
-                <br />
-                <b>你：{p.a}</b>
-              </div>
-            ))}
-
-            {ui === "idle" && scene === "play" && !askUI && !rogueUI && answers.length === 0 && (
-              <div className={styles.statusNote}>正在上演——请看 Claude Code 与 Lab Agent 两侧。</div>
-            )}
+        {/* 右：Lab Agent 监工姿态 */}
+        <div className={styles.labCanvas}>
+          <div className={styles.labHeader}>
+            <div className={styles.labKicker}>LAB AGENT · 监工姿态</div>
+            <div className={styles.labTitle}>{labTitle}</div>
+            <div className={styles.labSub}>{labSub}</div>
           </div>
-        </section>
-
-        {/* Claude Code 终端 */}
-        <section className={styles.pane + " " + styles.codePane}>
-          <div className={styles.paneHead}>
-            <span>Claude Code · 执行</span>
-            <span className={styles.paneTag}>{codeTag}</span>
-          </div>
-          <div className={styles.codeScroll}>
-            {code.map((ln, i) => (
-              <div key={i} className={styles.codeLine + " " + styles[CODE_TONE[ln.tone]]}>
-                {ln.text}
-              </div>
-            ))}
-            {(scene === "intro" || codeBusy) && <span className={styles.cursor} />}
-          </div>
-        </section>
-
-        {/* Lab Agent 监工 */}
-        <section className={styles.pane + " " + styles.labPane}>
-          <div className={styles.paneHead}>
-            <span>Lab Agent · 监工</span>
-            <span className={styles.paneTag}>{scene === "end" ? "收工" : "跟随中"}</span>
-          </div>
-          <div className={styles.labScroll}>
-            {labMsgs.map((m, i) =>
-              m.kind === "trans" ? (
-                <div key={i} className={styles.labBubble + " " + styles.ok}>
-                  <b>“{m.pair.t}”</b>
-                  <br />
-                  意思是 —— {m.pair.p}
-                </div>
-              ) : (
-                <div key={i} className={styles.labBubble + (m.tone === "ok" ? " " + styles.ok : m.tone === "warn" ? " " + styles.warn : "")}>
-                  {m.text}
-                </div>
-              ),
-            )}
-            {prd && (
-              <div className={styles.labBubble}>
-                <b>PRD · {prd.title}</b>
-                <br />
-                {prd.summary}
-                {prd.sections.map((s, j) => (
-                  <div key={j}>
-                    <br />
-                    <b>{s.h}</b>
-                    <br />
-                    {s.items.map((it, k) => (
-                      <span key={k}>
-                        · {it}
-                        <br />
-                      </span>
-                    ))}
+          <div className={styles.labBody}>
+            {display.kind === "prd" && display.status === "ready" && display.card && (
+              <div className={styles.prdCard}>
+                <div className={styles.prdTitle}>{display.card.title}</div>
+                <p className={styles.prdSummary}>{display.card.summary}</p>
+                {display.card.sections.map((s, j) => (
+                  <div key={j} className={styles.prdSection}>
+                    <h4>{s.h}</h4>
+                    <ul>
+                      {s.items.map((it, k) => (
+                        <li key={k}>{it}</li>
+                      ))}
+                    </ul>
                   </div>
                 ))}
               </div>
             )}
-            {(ui === "ask" || (scene === "play" && codeBusy)) && <span className={styles.typing} />}
+
+            {display.kind === "rogue" && (
+              <div className={styles.rogueCard}>
+                <b>它加了：</b>
+                <span className={styles.rogueLabel}>{display.label}</span>
+                <p style={{ margin: "8px 0 0", fontSize: 12, lineHeight: 1.7, color: "#5b4a1a" }}>
+                  {display.note}
+                </p>
+                {display.asked && display.rejectVerdict && (
+                  <p style={{ margin: "8px 0 0", fontSize: 12, lineHeight: 1.7, color: "#3c3489" }}>
+                    <b>我的理由：</b>
+                    {display.rejectVerdict}
+                  </p>
+                )}
+                <div className={styles.choiceRow}>
+                  <button className={styles.choice} onClick={() => pick("accept")}>
+                    算了,让它加上也行
+                  </button>
+                  <button className={styles.choice} onClick={() => pick("reject")}>
+                    删掉,按我说的来
+                  </button>
+                  {!display.asked && (
+                    <button className={styles.choice} onClick={() => pick("ask")}>
+                      为什么不能加？让它说说
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {display.kind === "end" && (
+              <div className={styles.endCard}>
+                <b>一个开发循环,走完了</b>
+                <p>{ENDING.body}</p>
+                <div className={styles.endCtas}>
+                  <button className={styles.actBtn} onClick={replay}>
+                    再演一次
+                  </button>
+                  <a className={styles.ghostBtn} href="/home">
+                    看完整概念 →
+                  </a>
+                  <a className={styles.ghostBtn} href="/contact">
+                    支持我们
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {(display.kind === "idle" || display.kind === "run" || display.kind === "ask") && (
+              <div className={styles.statRow}>
+                <span className={styles.statChip}>已对齐 {answers.length}/3</span>
+                <span>·</span>
+                <span className={styles.statChip}>PRD 待产</span>
+                <span>·</span>
+                <span className={styles.statChip}>偏离 0</span>
+              </div>
+            )}
+            {(display.kind === "prd" || display.kind === "run" || display.kind === "rogue" || display.kind === "end") && (
+              <div className={styles.statRow}>
+                <span className={styles.statChip}>已对齐 {answers.length}/3</span>
+                <span>·</span>
+                <span className={styles.statChip}>PRD 已签</span>
+                <span>·</span>
+                <span className={styles.statChip}>偏离 1</span>
+              </div>
+            )}
           </div>
-        </section>
+        </div>
       </div>
 
-      {scene === "end" ? (
-        <div className={styles.endCard}>
-          <h3 className={styles.endTitle}>一个开发循环，走完了</h3>
-          <p className={styles.endBody}>{ENDING.body}</p>
-          <div className={styles.endCtas}>
-            <button className={styles.actBtn} onClick={replay}>
-              再演一次
+      {/* 底部对话区 / sysbar */}
+      {display.kind === "ask" ? (
+        <div className={styles.dialogue}>
+          <div className={styles.askPrompt}>
+            <b>Lab Agent 追问：</b>
+            {display.q}
+          </div>
+          {display.options && (
+            <div className={styles.askChips}>
+              {display.options.map((o) => (
+                <button key={o} className={styles.chip} onClick={() => pick(o)}>
+                  {o}
+                </button>
+              ))}
+            </div>
+          )}
+          <div className={styles.dialogueInput}>
+            <input id="agent-ask-input" placeholder="或者自己答一句…" onKeyDown={(e) => e.key === "Enter" && onAskType()} />
+            <button className={styles.actBtn} onClick={onAskType}>
+              答
             </button>
-            <a className={styles.ghostBtn} href="/home">
-              看完整概念 →
-            </a>
-            <a className={styles.ghostBtn} href="/contact">
-              支持我们
-            </a>
+          </div>
+        </div>
+      ) : display.kind === "idle" && scene !== "end" ? (
+        <div className={styles.dialogue}>
+          <div className={styles.taskChipsBox}>
+            <div className={styles.dialogueIdle}>挑一个开演,或者写下你自己的:</div>
+            <div className={styles.taskRow}>
+              {TASKS.map((t) => (
+                <button key={t.id} className={styles.taskChip} onClick={() => onPick(t.id)}>
+                  {t.title}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className={styles.customBox}>
+            <input
+              placeholder="比如:做一个给爸妈的用药提醒…"
+              value={customDraft}
+              onChange={(e) => setCustomDraft(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && onCustomStart()}
+              style={{ flex: 1, border: "1px solid var(--line)", background: "var(--bg)", color: "var(--ink)", borderRadius: 9, padding: "7px 11px", font: "inherit", fontSize: 12.5 }}
+            />
+            <button className={styles.actBtn} disabled={!customDraft.trim()} onClick={onCustomStart}>
+              开演
+            </button>
           </div>
         </div>
       ) : (
         <div className={styles.sysBar}>
-          {sys || (scene === "intro" ? "序章：先看没有监工会发生什么……" : "就绪")}
+          <span>
+            <b>{sys || (scene === "intro" ? "序章进行中…" : "演完了一段")}</b>
+          </span>
           {scene === "intro" && (
-            <button className={styles.ghostBtn} style={{ float: "right", marginTop: -6 }} onClick={skipIntro}>
+            <button className={styles.skipBtn} onClick={skipIntro}>
               跳过序章 →
             </button>
           )}
@@ -596,4 +639,3 @@ export default function DemoStage() {
     </div>
   );
 }
-
