@@ -14,23 +14,23 @@ export default function AgentPage() {
   return (
     <>
       <SiteNav />
-      <main style={{ maxWidth: 1120, margin: "0 auto", padding: "46px 24px 110px" }}>
-        <div className="sec-no" style={{ marginBottom: 12 }}>
-          <span className="mono">LAB AGENT · 交互演示</span>
+      <main style={{ maxWidth: 1120, margin: "0 auto", padding: "30px 24px 70px" }}>
+        <div style={{ display: "flex", alignItems: "baseline", gap: 14, flexWrap: "wrap", marginBottom: 6 }}>
+          <span className="sec-no" style={{ marginBottom: 0 }}>
+            <span className="mono">LAB AGENT · 交互演示</span>
+          </span>
+          <span style={{ color: "var(--ink-faint)", fontSize: 12.5 }}>
+            画布上的两个终端 · 你只跟 Lab Agent 聊 · Coding Agent 是哪个 engine 由你切
+          </span>
         </div>
-        <h1 style={{ fontSize: 34, margin: "0 0 10px", fontWeight: 700, lineHeight: 1.2 }}>
-          你当一次开发者，<br style={{ display: "none" }} />
-          看监工怎么保住你的意图
+        <h1 style={{ fontSize: 25, margin: "0 0 10px", fontWeight: 700, lineHeight: 1.25, maxWidth: 760 }}>
+          你当一次开发者，看监工怎么保住你的意图
         </h1>
-        <p style={{ color: "var(--ink-soft)", margin: "0 0 26px", maxWidth: 640, lineHeight: 1.8, fontSize: 14.5 }}>
-          下面的画面里，真正写代码的是 Claude Code——而 Lab Agent 全程不碰代码，只做三件事：
-          开工前把你的想法问清楚写成 PRD，执行时盯着别跑偏，交差时逐句翻给你听、对照验收。
-          走完这一个循环，你就知道「监工」在 Vibe Coding 里到底值多少钱。
+        <p style={{ color: "var(--ink-soft)", margin: "0 0 18px", maxWidth: 680, lineHeight: 1.7, fontSize: 13.5 }}>
+          写代码的是 Coding Agent（Claude Code / Codex / Cursor…任你切换）；Lab Agent 不写代码，只守住「你想要的」：
+          开工前问清楚写成 PRD、执行时盯着别跑偏、交差时翻译汇报并对照验收。走完一个循环，你就知道监工值多少。
         </p>
         <DemoStage />
-        <p className="mono" style={{ marginTop: 18, textAlign: "center", fontSize: 11, color: "var(--ink-faint)", letterSpacing: "0.04em" }}>
-          演示对话由 DeepSeek 实时生成 · 失败时自动回落内置剧本 · 纯前端演出，不写真实代码
-        </p>
       </main>
       <SiteFooter />
     </>

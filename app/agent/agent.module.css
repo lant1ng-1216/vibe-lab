@@ -129,7 +129,9 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
   user-select: none;
   transition: border-color 0.2s, box-shadow 0.2s;
+  cursor: grab;
 }
+.node:active { cursor: grabbing; }
 .nodeActive {
   border-color: #534ab7;
   box-shadow: 0 10px 32px rgba(83, 74, 183, 0.35);
@@ -202,14 +204,19 @@
 
 .nodeBody {
   height: 220px;
-  overflow: hidden;
+  overflow-y: auto;
   padding: 8px 10px 10px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 11.5px;
   line-height: 1.7;
   color: #c5c3bc;
   position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: #2a2a2d transparent;
 }
+.nodeBody::-webkit-scrollbar { width: 6px; }
+.nodeBody::-webkit-scrollbar-thumb { background: #2a2a2d; border-radius: 3px; }
+.nodeBody::-webkit-scrollbar-track { background: transparent; }
 .lineYou { color: #9ecb7f; }
 .lineLab { color: #c0badc; }
 .lineCode { color: #d7d5cf; }
@@ -231,17 +238,18 @@
 /* 节点 handles(input/output) */
 .handle {
   position: absolute;
-  width: 12px;
-  height: 12px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
-  background: #0c0c0d;
-  border: 2px solid #534ab7;
+  background: #1a1a1d;
+  border: 2px solid #7f77dd;
   top: 50%;
   transform: translateY(-50%);
   z-index: 3;
+  box-shadow: 0 0 0 2px rgba(127, 119, 221, 0.15);
 }
-.handleIn { left: -7px; }
-.handleOut { right: -7px; }
+.handleIn { left: -8px; }
+.handleOut { right: -8px; }
 .handleCoderOut {
   border-color: #1d9e75;
 }
@@ -265,7 +273,9 @@
   cursor: pointer;
   font: inherit;
   font-size: 10.5px;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
 }
+.engineChip:hover { border-color: #1d9e75; color: #b9e3cf; background: rgba(29, 158, 117, 0.08); }
 .engineChipOn {
   border-color: #1d9e75;
   color: #b9e3cf;
@@ -279,7 +289,10 @@
   bottom: 18px;
   transform: translateX(-50%);
   z-index: 6;
-  width: min(640px, calc(100% - 48px));
+  width: min(660px, calc(100% - 40px));
+  max-height: 168px;
+  overflow-y: auto;
+  scrollbar-width: thin;
   background: rgba(20, 20, 22, 0.92);
   border: 1px solid #2a2a2d;
   border-radius: 14px;
@@ -333,8 +346,9 @@
   font: inherit;
   font-size: 11.5px;
   cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
 }
-.chip:hover { border-color: #534ab7; color: #ece6ff; }
+.chip:hover { border-color: #534ab7; color: #ece6ff; background: rgba(83, 74, 183, 0.12); }
 
 /* 右下工具条(画布操作:缩放 / 重置) */
 .toolDock {
