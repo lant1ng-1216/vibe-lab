@@ -5,7 +5,7 @@ import type { WoolGate, WoolItem } from "@/data/wool";
 import { WOOL_GATES } from "@/data/wool";
 import styles from "./wool.module.css";
 
-/** 服务端已把 tools.ts 的 logo 解析好塞进来，客户端不必打包整个工具库 */
+/** 服务端已把 tools.ts 的 logo 解析好塞进来，客户端不必打包整个资源库 */
 export type WoolCard = WoolItem & { logo: string | null };
 
 function ArrowIcon() {
@@ -29,14 +29,7 @@ function ArrowIcon() {
   );
 }
 
-export default function WoolClient({
-  items,
-  embedded,
-}: {
-  items: WoolCard[];
-  /** 嵌入资源库 tab 时隐藏整页 hero（由资源库页头承接层级） */
-  embedded?: boolean;
-}) {
+export default function WoolClient({ items }: { items: WoolCard[] }) {
   const [gate, setGate] = useState<WoolGate | "全部">("全部");
   const [showDead, setShowDead] = useState(false);
 
@@ -53,8 +46,7 @@ export default function WoolClient({
 
   return (
     <div className={styles.page}>
-      {!embedded && (
-        <header className={styles.hero}>
+      <header className={styles.hero}>
         <p className={styles.eyebrow}>Free quota · 白嫖专区</p>
         <h1 className={styles.title}>羊毛专区</h1>
         <p className={styles.lede}>
@@ -76,7 +68,6 @@ export default function WoolClient({
           </div>
         </div>
       </header>
-      )}
 
       <div className={styles.filters}>
         {(["全部", ...WOOL_GATES] as const).map((g) => (
