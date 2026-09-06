@@ -1,0 +1,124 @@
+/* Lab Agent 首页概念演示页（home.module.css, scope 仅本页） */
+.wrap { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+
+/* ---------- Hero（墨黑 + 终端 demo） ---------- */
+.hero { background: #131313; color: #f2f0ea; }
+.heroGrid {
+  max-width: 1160px; margin: 0 auto; padding: 96px 28px 110px;
+  display: grid; grid-template-columns: 1.04fr 0.96fr; gap: 56px; align-items: center;
+}
+.eyebrow {
+  font-size: 11.5px; letter-spacing: 0.22em; color: #8b7dff;
+  font-family: var(--font-mono, ui-monospace, monospace);
+}
+.badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 22px; }
+.badge {
+  font-size: 11px; letter-spacing: 0.06em; color: rgba(242, 240, 234, 0.82);
+  border: 1px solid rgba(242, 240, 234, 0.22); border-radius: 999px; padding: 4px 11px;
+}
+.h1 {
+  font-family: var(--font-display); font-size: clamp(2.1rem, 4.6vw, 3.5rem);
+  line-height: 1.12; letter-spacing: -0.02em; margin: 0 0 18px; font-weight: 700;
+}
+.h1 .hl { color: #8b7dff; }
+.lead { color: rgba(242, 240, 234, 0.78); font-size: 15.5px; line-height: 1.9; margin: 0 0 30px; max-width: 600px; }
+.lead b { color: #f2f0ea; }
+.ctaRow { display: flex; gap: 12px; flex-wrap: wrap; }
+.btnMain {
+  background: #8b7dff; color: #14100f; font-weight: 700; font-size: 15px;
+  padding: 12px 22px; border-radius: 10px; text-decoration: none; transition: transform 0.15s, opacity 0.15s;
+}
+.btnMain:hover { transform: translateY(-1px); opacity: 0.94; }
+.btnGhost {
+  border: 1px solid rgba(242, 240, 234, 0.35); color: #f2f0ea; font-size: 15px;
+  padding: 12px 22px; border-radius: 10px; text-decoration: none;
+}
+@media (max-width: 940px) {
+  .heroGrid { grid-template-columns: 1fr; gap: 40px; padding-top: 64px; }
+}
+
+/* ---------- 终端 demo ---------- */
+.term {
+  background: #0e0d0c; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px;
+  overflow: hidden; box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
+}
+.termBar {
+  display: flex; align-items: center; gap: 8px; padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.termTitle {
+  margin-left: 8px; font-size: 11px; color: rgba(255, 255, 255, 0.5);
+  font-family: var(--font-mono, ui-monospace, monospace); letter-spacing: 0.04em;
+}
+.termBody { padding: 14px 16px 18px; min-height: 268px; }
+.line { display: flex; gap: 8px; margin-bottom: 10px; font-size: 12px; line-height: 1.75; color: rgba(242, 240, 234, 0.85); }
+.tag {
+  flex: none; font-size: 9.5px; padding: 2px 6px; border-radius: 5px; height: fit-content;
+  font-family: var(--font-mono, ui-monospace, monospace); letter-spacing: 0.05em; margin-top: 3px;
+}
+.tagYou { background: rgba(255, 255, 255, 0.12); color: rgba(255, 255, 255, 0.75); }
+.tagLab { background: #8b7dff; color: #131313; font-weight: 700; }
+.tagCode { background: rgba(139, 125, 255, 0.16); color: #a99bff; }
+.text { min-width: 0; overflow-wrap: anywhere; }
+.caret {
+  display: inline-block; width: 7px; height: 14px; background: #8b7dff;
+  margin-left: 2px; vertical-align: -2px; animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+.doneHint { margin-top: 10px; font-size: 10.5px; color: rgba(255, 255, 255, 0.38); }
+
+/* ---------- 通用分节 ---------- */
+.sec { padding: 96px 28px 110px; }
+.secAlt { background: rgba(19, 19, 19, 0.035); }
+.k { font-size: 11.5px; letter-spacing: 0.2em; color: var(--accent); font-weight: 600; }
+.h2 { font-family: var(--font-display); font-size: clamp(1.7rem, 3.4vw, 2.5rem); line-height: 1.2; margin: 14px 0 12px; }
+.sub { color: var(--ink-soft); font-size: 15px; line-height: 1.85; margin: 0 0 34px; max-width: 720px; }
+
+/* 定位条（logo 名称带 + 一句话） */
+.posRow {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px; row-gap: 10px;
+  border: 1px solid var(--line); border-radius: 16px; padding: 18px 22px; background: var(--bg-2);
+}
+.posLabel { font-size: 14px; color: var(--ink); font-weight: 600; margin-right: 4px; }
+.posTag { font-size: 12.5px; color: var(--ink-soft); border: 1px solid var(--line); border-radius: 8px; padding: 4px 9px; }
+.posLine { flex-basis: 100%; font-size: 13px; color: var(--ink-faint); }
+
+/* 能力格（动词式） */
+.abilityGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.ability {
+  border: 1px solid var(--line); border-radius: 16px; background: var(--bg-2);
+  padding: 20px 20px 18px; display: flex; flex-direction: column; gap: 8px;
+}
+.abilityHead { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.abilityName { font-size: 15.5px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.abilityNo { color: var(--accent); font-size: 12px; letter-spacing: 0.06em; font-weight: 700; }
+.abilityDesc { font-size: 13px; line-height: 1.75; color: var(--ink-soft); margin: 0; }
+.state { font-size: 10.5px; letter-spacing: 0.04em; border-radius: 999px; padding: 3px 9px; white-space: nowrap; }
+.stateDo { background: rgba(91, 75, 230, 0.1); color: var(--accent); }
+.statePlan { background: rgba(19, 19, 19, 0.05); color: var(--ink-faint); }
+
+/* 场景 chips */
+.sceneGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+.scene { border: 1px solid var(--line); border-radius: 16px; background: var(--bg-2); padding: 20px; display: flex; flex-direction: column; }
+.sceneK { font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 0.08em; margin-bottom: 8px; }
+.scene h3 { font-size: 15.5px; margin: 0 0 8px; }
+.scene p { font-size: 13px; line-height: 1.75; color: var(--ink-soft); margin: 0 0 14px; flex: 1; }
+.scene a { color: var(--accent); font-size: 13px; font-weight: 600; text-decoration: none; }
+
+/* 形态 tabs */
+.tabsHead { display: flex; gap: 8px; margin-bottom: 18px; }
+.tab {
+  border: 1px solid var(--line); background: transparent; color: var(--ink-soft);
+  padding: 9px 18px; border-radius: 999px; font: inherit; font-size: 14px; cursor: pointer;
+}
+.tabOn { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+.tabPanel { border: 1px solid var(--line); border-radius: 16px; background: var(--bg-2); padding: 22px 24px; max-width: 860px; }
+.tabPanel h3 { margin: 0 0 8px; font-size: 16px; }
+.tabPanel p { margin: 0; font-size: 14px; line-height: 1.85; color: var(--ink-soft); }
+
+/* 收尾 */
+.closer { background: #131313; color: #f2f0ea; text-align: center; padding: 90px 28px; }
+.closer .hl { color: #8b7dff; }
+.closer h2 { font-family: var(--font-display); font-size: clamp(1.9rem, 4vw, 3rem); margin: 0 0 12px; line-height: 1.15; }
+.closer p { color: rgba(242, 240, 234, 0.72); font-size: 15px; margin: 0 0 30px; }
