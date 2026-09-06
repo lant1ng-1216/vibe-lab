@@ -9,7 +9,7 @@ const LINKS = [
   { href: "/tutorials", label: "教程库" },
   { href: "/lab", label: "实验室" },
   { href: "/courses", label: "训练营" },
-  { href: "/contact", label: "关于 & 联系" },
+  { href: "/contact", label: "支持我们" },
 ];
 
 export default function SiteNav() {
