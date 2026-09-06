@@ -83,7 +83,7 @@ export default function DemoStage() {
   const [answers, setAnswers] = useState<{ q: string; a: string }[]>([]);
   const [engine, setEngine] = useState<CodingEngine>("claude-code");
   const [activeEdge, setActiveEdge] = useState<"labToCode" | "codeToLab" | null>(null);
-  const [canvas, setCanvas] = useState({ x: 0, y: 0, scale: 1 });
+  const [canvas, setCanvas] = useState({ x: 0, y: 0 });
   const [labPos, setLabPos] = useState({ x: 80, y: 130 });
   const [coderPos, setCoderPos] = useState({ x: 520, y: 280 });
   const [customDraft, setCustomDraft] = useState("");
@@ -147,7 +147,7 @@ export default function DemoStage() {
     })();
   }, []);
 
-  /* 画布平移 / 节点拖动 / 滚轮缩放 */
+  /* 画布平移 / 节点拖动(固定不缩放) */
   function onCanvasPointerDown(e: React.PointerEvent) {
     if (e.button !== 0) return;
     const target = e.target as HTMLElement;
@@ -166,8 +166,8 @@ export default function DemoStage() {
     if (d.kind === "canvas") {
       setCanvas((c) => ({ ...c, x: d.cx + (e.clientX - d.sx), y: d.cy + (e.clientY - d.sy) }));
     } else if (d.kind === "node") {
-      const dx = (e.clientX - d.sx) / canvas.scale;
-      const dy = (e.clientY - d.sy) / canvas.scale;
+      const dx = e.clientX - d.sx;
+      const dy = e.clientY - d.sy;
       if (d.who === "lab") setLabPos({ x: d.nx + dx, y: d.ny + dy });
       else setCoderPos({ x: d.nx + dx, y: d.ny + dy });
     }
@@ -175,16 +175,10 @@ export default function DemoStage() {
   function onCanvasPointerUp() {
     dragRef.current = null;
   }
-  function onWheel(e: React.WheelEvent) {
-    e.preventDefault();
-    const delta = e.deltaY > 0 ? -0.08 : 0.08;
-    setCanvas((c) => {
-      const s = Math.min(2, Math.max(0.5, c.scale + delta));
-      return { ...c, scale: s };
-    });
-  }
   function resetView() {
-    setCanvas({ x: 0, y: 0, scale: 1 });
+    setCanvas({ x: 0, y: 0 });
+    setLabPos({ x: 80, y: 130 });
+    setCoderPos({ x: 520, y: 280 });
   }
 
   function onNodePointerDown(who: "lab" | "coder", e: React.PointerEvent) {
@@ -470,14 +464,12 @@ export default function DemoStage() {
       onPointerMove={onCanvasPointerMove}
       onPointerUp={onCanvasPointerUp}
       onPointerLeave={onCanvasPointerUp}
-      onWheel={onWheel}
     >
       <div
         style={{
           position: "absolute",
           inset: 0,
-          transform: `translate(${canvas.x}px, ${canvas.y}px) scale(${canvas.scale})`,
-          transformOrigin: "0 0",
+          transform: `translate(${canvas.x}px, ${canvas.y}px)`,
         }}
       >
         <svg className={styles.edgeLayer} style={{ width: "100%", height: "100%" }}>
@@ -607,10 +599,7 @@ export default function DemoStage() {
       </div>
 
       <div className={styles.toolDock}>
-        <button className={styles.dockBtn} title="缩小" onClick={() => setCanvas((c) => ({ ...c, scale: Math.max(0.5, c.scale - 0.1) }))}>−</button>
-        <span style={{ width: 32, height: 32, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "#9a988f" }}>{Math.round(canvas.scale * 100)}%</span>
-        <button className={styles.dockBtn} title="放大" onClick={() => setCanvas((c) => ({ ...c, scale: Math.min(2, c.scale + 0.1) }))}>+</button>
-        <button className={styles.dockBtn} title="重置" onClick={resetView}>⊙</button>
+        <button className={styles.dockBtn} title="重置视图(节点归位)" onClick={resetView}>⊙</button>
       </div>
 
       {sys && scene !== "intro" && (
