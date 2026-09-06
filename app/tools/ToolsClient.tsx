@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Tool } from "@/data/tools";
 import { SKILLS, SKILL_PREVIEW_TAGS } from "@/data/skills";
-import WoolClient, { type WoolCard } from "./WoolClient";
 
 /* ---------- 图标 ---------- */
 function ArrowIcon() {
@@ -176,13 +175,11 @@ function SkillEmpty({ onContact }: { onContact: () => void }) {
 export default function ToolsClient({
   tools,
   categories,
-  wool,
 }: {
   tools: Tool[];
   categories: string[];
-  wool: WoolCard[];
 }) {
-  const [tab, setTab] = useState<"tools" | "skills" | "wool">("tools");
+  const [tab, setTab] = useState<"tools" | "skills">("tools");
   const [cat, setCat] = useState("全部");
   const [query, setQuery] = useState("");
   const [activeTool, setActiveTool] = useState<Tool | null>(null);
@@ -209,11 +206,14 @@ export default function ToolsClient({
   return (
     <>
       <div className="page-head">
-        <div className="sec-num">01 / TOOLBOX</div>
+        <div className="sec-num">01 / RESOURCES</div>
         <h1>资源库</h1>
         <p className="lead">
           工具装齐一套「能打」的，技能随用随装 —— 别把时间浪费在找链接和配环境上。
         </p>
+        <a className="btn-main" href="/wool" style={{ display: "inline-flex", marginTop: 16 }}>
+          🧪 羊毛专区 · 免费额度 / 白嫖渠道 →
+        </a>
       </div>
 
       {/* 主 Tab：AI 工具 / Skill */}
@@ -240,17 +240,6 @@ export default function ToolsClient({
           >
             <span className="ttab-no mono">02</span> Skill
             <span className="ttab-count mono">{SKILLS.length}</span>
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={tab === "wool"}
-            className={"ttab" + (tab === "wool" ? " is-on" : "")}
-            data-tone="wool"
-            onClick={() => setTab("wool")}
-          >
-            <span className="ttab-no mono">03</span> 羊毛专区
-            <span className="ttab-count mono">{wool.length}</span>
           </button>
         </div>
 
@@ -307,13 +296,9 @@ export default function ToolsClient({
               </div>
             )}
           </div>
-        ) : tab === "skills" ? (
-          <div className="ttab-panel">
-            <SkillEmpty onContact={() => (window.location.href = "/contact")} />
-          </div>
         ) : (
           <div className="ttab-panel">
-            <WoolClient items={wool} embedded />
+            <SkillEmpty onContact={() => (window.location.href = "/contact")} />
           </div>
         )}
       </div>
