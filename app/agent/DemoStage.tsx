@@ -84,8 +84,8 @@ export default function DemoStage() {
   const [engine, setEngine] = useState<CodingEngine>("claude-code");
   const [activeEdge, setActiveEdge] = useState<"labToCode" | "codeToLab" | null>(null);
   const [canvas, setCanvas] = useState({ x: 0, y: 0 });
-  const [labPos, setLabPos] = useState({ x: 80, y: 130 });
-  const [coderPos, setCoderPos] = useState({ x: 520, y: 280 });
+  const [labPos, setLabPos] = useState({ x: 60, y: 84 });
+  const [coderPos, setCoderPos] = useState({ x: 500, y: 84 });
   const [customDraft, setCustomDraft] = useState("");
 
   const waitRef = useRef<((v: string) => void) | null>(null);
@@ -97,6 +97,8 @@ export default function DemoStage() {
   });
   const verdictRef = useRef<string | null>(null);
   const genRef = useRef(0);
+  const labBodyRef = useRef<HTMLDivElement>(null);
+  const codeBodyRef = useRef<HTMLDivElement>(null);
 
   const dragRef = useRef<
     | { kind: "canvas"; sx: number; sy: number; cx: number; cy: number }
@@ -124,6 +126,25 @@ export default function DemoStage() {
     waitRef.current?.(v);
     waitRef.current = null;
   };
+
+  const submitAsk = () => {
+    const el = document.getElementById("agent-ask-input") as HTMLInputElement | null;
+    const v = el?.value?.trim();
+    if (v) {
+      pick(v);
+      if (el) el.value = "";
+    }
+  };
+
+  /* 内容更新后节点自动滚到底(不截断、不靠用户手拖) */
+  useEffect(() => {
+    const el = labBodyRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [labLines]);
+  useEffect(() => {
+    const el = codeBodyRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [codeLines]);
 
   /* 序章 */
   useEffect(() => {
@@ -177,12 +198,15 @@ export default function DemoStage() {
   }
   function resetView() {
     setCanvas({ x: 0, y: 0 });
-    setLabPos({ x: 80, y: 130 });
-    setCoderPos({ x: 520, y: 280 });
+    setLabPos({ x: 60, y: 84 });
+    setCoderPos({ x: 500, y: 84 });
   }
 
+  /* 节点拖动：点住节点任意处（按钮/输入除外）即可拖 */
   function onNodePointerDown(who: "lab" | "coder", e: React.PointerEvent) {
     if (e.button !== 0) return;
+    const t = e.target as HTMLElement;
+    if (t.closest("button,input,a,textarea")) return; // chips/输入自身不触发拖动
     e.stopPropagation();
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     const pos = who === "lab" ? labPos : coderPos;
@@ -380,7 +404,9 @@ export default function DemoStage() {
     });
     const ask = await waitChoice();
     if (genRef.current !== g) return;
+    let closing = "";
     if (ask === "discuss") {
+      closing = "整轮你只跟 Lab Agent 聊了一次,coder 没被打断 — 这就是'隔离上下文'。";
       setLabLines((cur) => [...cur, { role: "you", text: "→ 我拿不准 i18n 加不加,你觉得呢?" }]);
       await sleep(400);
       setLabLines((cur) => [
@@ -400,16 +426,21 @@ export default function DemoStage() {
           { role: "ok", text: "✓ 已回滚" },
         ]);
         setLabLines((cur) => [...cur, { role: "ok", text: "✓ auth 模块通过,与你对齐" }]);
+        closing = "你把疑问交给了 Lab Agent,由它打回 coder — 全程没污染 coder 的上下文。";
       } else if (c2 === "accept") {
         setLabLines((cur) => [...cur, { role: "you", text: "→ 留着" }]);
         setLabLines((cur) => [...cur, { role: "warn", text: "· 已接受,但 i18n 会让第一版膨胀" }]);
+        closing = "你决定留着 i18n — Lab Agent 记下了这条偏离,下次加戏前会先提醒你。";
       }
+    } else if (ask === "pass") {
+      closing = "这次你没有疑问 — Lab Agent 继续跟随,有需要随时找它聊,不打扰 coder。";
+      setLabLines((cur) => [...cur, { role: "lab", text: "好,我继续盯。有疑问随时找我,不打断它。" }]);
     }
     setStep(5);
     setScene("end");
-    setDisplay({ kind: "end", accepted: false });
+    setDisplay({ kind: "end", accepted: ask === "pass" });
     await sleep(300);
-    setSys("整轮你只跟我聊了一次,coder 没被打断 — 这就是'隔离上下文'。");
+    setSys(closing);
   }
 
   function rogueNoteFallback(t: ScriptTask | null, rogueLabel: string) {
@@ -493,8 +524,9 @@ export default function DemoStage() {
         <div
           className={styles.node + " " + (labStatus === "working" || labStatus === "warn" ? styles.nodeActive : "")}
           style={{ left: labPos.x, top: labPos.y }}
+          onPointerDown={(e) => onNodePointerDown("lab", e)}
         >
-          <div className={styles.nodeHeader} onPointerDown={(e) => onNodePointerDown("lab", e)}>
+          <div className={styles.nodeHeader}>
             <span className={`${styles.nodeDot} ${styles.nodeDotLab}`} />
             <span className={styles.nodeName}>Lab Agent</span>
             <span className={styles.nodeSub}>· 监工 · 不写代码</span>
@@ -515,7 +547,7 @@ export default function DemoStage() {
               {labStatus === "working" ? "working" : labStatus === "warn" ? "alert" : labStatus === "done" ? "done" : labStatus === "ready" ? "ready" : "idle"}
             </span>
           </div>
-          <div className={styles.nodeBody}>
+          <div className={styles.nodeBody} ref={labBodyRef}>
             {labLines.map((l, i) => (
               <div key={i} className={styles[roleClass(l.role)]}>{l.text}</div>
             ))}
@@ -527,11 +559,12 @@ export default function DemoStage() {
         <div
           className={styles.node + " " + (coderStatus === "working" ? styles.nodeActive : "")}
           style={{ left: coderPos.x, top: coderPos.y }}
+          onPointerDown={(e) => onNodePointerDown("coder", e)}
         >
-          <div className={styles.nodeHeader} onPointerDown={(e) => onNodePointerDown("coder", e)}>
+          <div className={styles.nodeHeader}>
             <span className={`${styles.nodeDot} ${styles.nodeDotCoder}`} />
             <span className={styles.nodeName}>Coding Agent</span>
-            <span className={styles.nodeSub}>· {ENGINES.find((e) => e.id === engine)?.label}</span>
+            <span className={styles.nodeSub}>engine 可切换 ↓</span>
             <span
               className={
                 styles.nodeStatus +
@@ -558,7 +591,7 @@ export default function DemoStage() {
               </button>
             ))}
           </div>
-          <div className={styles.nodeBody}>
+          <div className={styles.nodeBody} ref={codeBodyRef}>
             {codeLines.map((l, i) => (
               <div key={i} className={styles[roleClass(l.role)]}>{l.text}</div>
             ))}
@@ -606,33 +639,8 @@ export default function DemoStage() {
         <div className={styles.sysToast}>{sys}</div>
       )}
 
-      {display.kind === "idle" && scene !== "intro" && answers.length === 0 && labLines.length < 5 && (
-        <div className={styles.emptyStage}>
-          <div className={styles.emptyCard}>
-            <div className={styles.emptyTitle}>画布已就位 · 两个终端等待对话</div>
-            <div className={styles.emptyDesc}>
-              在底部输入你的想法 — Lab Agent 会先和你聊,直到产出 PRD、确认后驱动右侧的 Coding Agent;
-              <br />
-              也可以切到「边做边盯」,看 Coding Agent 已经在干活时,Lab Agent 怎么跟进。
-            </div>
-            <button
-              className={styles.emptyStart}
-              onClick={() => {
-                if (scenario === "first") void startFirst(null, customDraft);
-                else void startFollow();
-              }}
-              disabled={scenario === "first" && !customDraft.trim()}
-            >
-              开演 →
-            </button>
-            {scenario === "first" && (
-              <div className={styles.emptyHint}>或先在下面写你的想法 → 再点开演</div>
-            )}
-          </div>
-        </div>
-      )}
-
       <div className={styles.inputBar}>
+        {/* ① 追问阶段: chips + 自由输入 */}
         {display.kind === "ask" && display.options && (
           <>
             <div className={styles.inputLabel}>Lab Agent 追问 · Q{display.round + 1}/3</div>
@@ -641,8 +649,19 @@ export default function DemoStage() {
                 <button key={o} className={styles.chip} onClick={() => pick(o)}>{o}</button>
               ))}
             </div>
+            <div className={styles.inputRow}>
+              <input
+                id="agent-ask-input"
+                className={styles.inputField}
+                placeholder="或者自己答一句…"
+                onKeyDown={(e) => e.key === "Enter" && submitAsk()}
+              />
+              <button className={styles.sendBtn} onClick={submitAsk}>答</button>
+            </div>
           </>
         )}
+
+        {/* ② PRD 确认 */}
         {display.kind === "prd" && display.status === "ready" && (
           <>
             <div className={styles.inputLabel}>PRD 已出 · 审阅后可让 Coding Agent 开工</div>
@@ -652,7 +671,9 @@ export default function DemoStage() {
             </div>
           </>
         )}
-        {display.kind === "rogue" && !display.asked && (
+
+        {/* ③ 偏离处置: 场景① vs 场景② 按钮不同 */}
+        {display.kind === "rogue" && scenario === "first" && !display.asked && (
           <>
             <div className={styles.inputLabel}>Lab Agent 发现偏离 · 你的处置?</div>
             <div className={styles.chipRow}>
@@ -662,7 +683,7 @@ export default function DemoStage() {
             </div>
           </>
         )}
-        {display.kind === "rogue" && display.asked && (
+        {display.kind === "rogue" && scenario === "first" && display.asked && (
           <>
             <div className={styles.inputLabel}>Lab Agent 已给理由 · 回到抉择</div>
             <div className={styles.chipRow}>
@@ -671,41 +692,63 @@ export default function DemoStage() {
             </div>
           </>
         )}
-        {scenario === "follow" && display.kind === "run" && (
+        {display.kind === "rogue" && scenario === "follow" && !display.asked && (
           <>
-            <div className={styles.inputLabel}>Coding Agent 在写 · 你有疑问?</div>
+            <div className={styles.inputLabel}>Coding Agent 在写 · 你有疑问吗?</div>
             <div className={styles.chipRow}>
               <button className={styles.chip} onClick={() => pick("discuss")}>和 Lab Agent 讨论一下</button>
+              <button className={styles.chip} onClick={() => pick("pass")}>没疑问,让它继续</button>
             </div>
           </>
         )}
+        {display.kind === "rogue" && scenario === "follow" && display.asked && (
+          <>
+            <div className={styles.inputLabel}>Lab Agent 建议不打回 · 你来定</div>
+            <div className={styles.chipRow}>
+              <button className={styles.chip} onClick={() => pick("accept")}>接受,让它留着</button>
+              <button className={styles.chip} style={{ background: "rgba(216,90,48,0.2)", borderColor: "#d85a30", color: "#f0b9a5" }} onClick={() => pick("reject")}>打回,让它回滚</button>
+            </div>
+          </>
+        )}
+
         {display.kind === "end" && (
           <div className={styles.chipRow}>
             <button className={styles.chip} onClick={replay}>再演一次</button>
           </div>
         )}
 
-        {display.kind === "idle" && (
+        {/* ④ 空闲: 输入想法 → 开演; 或一键演示例; 场景②直接开始 */}
+        {display.kind === "idle" && scene === "play" && scenario === "first" && (
           <>
-            <div className={styles.inputLabel}>你想做什么?(发给 Lab Agent)</div>
+            <div className={styles.inputLabel}>想做什么?发给 Lab Agent(或一键试示例)</div>
             <div className={styles.inputRow}>
               <input
                 className={styles.inputField}
                 placeholder="比如:做一个给爸妈的用药提醒 App…"
                 value={customDraft}
                 onChange={(e) => setCustomDraft(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && customDraft.trim() && pick("go")}
+                onKeyDown={(e) => e.key === "Enter" && startFirst(null, customDraft)}
               />
-              <button className={styles.sendBtn} disabled={!customDraft.trim()} onClick={() => pick("go")}>
+              <button className={styles.sendBtn} disabled={!customDraft.trim()} onClick={() => startFirst(null, customDraft)}>
                 开演
               </button>
             </div>
             <div className={styles.chipRow}>
               {TASKS.slice(0, 3).map((t) => (
-                <button key={t.id} className={styles.chip} onClick={() => setCustomDraft(t.idea)}>
-                  {t.title}
+                <button key={t.id} className={styles.chip} onClick={() => void startFirst(t.id, "")}>
+                  {t.title} →
                 </button>
               ))}
+            </div>
+          </>
+        )}
+        {display.kind === "idle" && scene === "play" && scenario === "follow" && (
+          <>
+            <div className={styles.inputLabel}>边做边盯 · Coding Agent 已经开始写 auth 模块</div>
+            <div className={styles.chipRow}>
+              <button className={styles.chip} style={{ background: "rgba(83,74,183,0.2)", borderColor: "#534ab7", color: "#ece6ff" }} onClick={() => void startFollow()}>
+                开始这段 →
+              </button>
             </div>
           </>
         )}
