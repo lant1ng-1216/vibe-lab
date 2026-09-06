@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Tool } from "@/data/tools";
 import { SKILLS, SKILL_PREVIEW_TAGS } from "@/data/skills";
+import WoolClient, { type WoolCard } from "./WoolClient";
 
 /* ---------- 图标 ---------- */
 function ArrowIcon() {
@@ -175,11 +176,13 @@ function SkillEmpty({ onContact }: { onContact: () => void }) {
 export default function ToolsClient({
   tools,
   categories,
+  wool,
 }: {
   tools: Tool[];
   categories: string[];
+  wool: WoolCard[];
 }) {
-  const [tab, setTab] = useState<"tools" | "skills">("tools");
+  const [tab, setTab] = useState<"tools" | "skills" | "wool">("tools");
   const [cat, setCat] = useState("全部");
   const [query, setQuery] = useState("");
   const [activeTool, setActiveTool] = useState<Tool | null>(null);
@@ -238,6 +241,17 @@ export default function ToolsClient({
             <span className="ttab-no mono">02</span> Skill
             <span className="ttab-count mono">{SKILLS.length}</span>
           </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === "wool"}
+            className={"ttab" + (tab === "wool" ? " is-on" : "")}
+            data-tone="wool"
+            onClick={() => setTab("wool")}
+          >
+            <span className="ttab-no mono">03</span> 羊毛专区
+            <span className="ttab-count mono">{wool.length}</span>
+          </button>
         </div>
 
         {tab === "tools" ? (
@@ -293,9 +307,13 @@ export default function ToolsClient({
               </div>
             )}
           </div>
-        ) : (
+        ) : tab === "skills" ? (
           <div className="ttab-panel">
             <SkillEmpty onContact={() => (window.location.href = "/contact")} />
+          </div>
+        ) : (
+          <div className="ttab-panel">
+            <WoolClient items={wool} embedded />
           </div>
         )}
       </div>

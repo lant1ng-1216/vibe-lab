@@ -51,7 +51,7 @@ export default function SiteFooter() {
           {/* 产品列 */}
           <div className="footer-col">
             <h5 className="footer-h5 mono">产品</h5>
-            <Link href="/tools">工具库</Link>
+            <Link href="/tools">资源库</Link>
             <Link href="/tutorials">教程库</Link>
             <Link href="/courses">训练营</Link>
             <Link href="/contact">关于 & 联系</Link>

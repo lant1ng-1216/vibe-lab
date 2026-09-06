@@ -205,11 +205,6 @@ export const TOOLS: Tool[] = [
       "开源的网络代理客户端（Clash Meta 内核的 GUI 实现），支持多订阅、规则分流、TUN 模式。国内用户访问 ChatGPT / Claude / 多数海外 AI 服务前的“环境准备”工具。开源免费，跨 Windows / macOS / Linux。收录用于学习与科研场景的网络环境配置。",
     links: [
       {
-        label: "蓝奏云整合包 · 国内直下",
-        url: "https://wwaoy.lanzoue.com/irlYd46ucyeb",
-        note: "访问密码：45b4",
-      },
-      {
         label: "GitHub 仓库",
         url: "https://github.com/clash-verge-rev/clash-verge-rev",
       },

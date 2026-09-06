@@ -13,7 +13,7 @@ export default async function Sidebar() {
   return (
     <aside className="lab4-side">
       <div className="lab4-side-inner">
-        {/* Logo 品牌整体：带框烧杯（复刻工具库 Skill 收录中样式）+ 字标 */}
+        {/* Logo 品牌整体：带框烧杯（复刻资源库 Skill 收录中样式）+ 字标 */}
         <Link href="/lab" className="lab4-logo" aria-label="Lab 首页">
           <span className="lab4-logo-badge" aria-hidden="true">
             {/* eslint-disable-next-line @next/next/no-img-element */}
