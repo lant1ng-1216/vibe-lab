@@ -1,6 +1,6 @@
 /**
  * 带框品牌 Logo：方框 + 绿烧杯 + 右上紫点（整体一个"章"）。
- * 与 Lab 侧栏、工具库 Skill 收录中的品牌框同源，可缩放复用。
+ * 与 Lab 侧栏、资源库 Skill 收录中的品牌框同源，可缩放复用。
  */
 export default function FlaskBadge({
   size = 36,

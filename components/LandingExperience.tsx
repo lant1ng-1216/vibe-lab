@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import gsap from "gsap";
 import { CustomEase } from "gsap/CustomEase";
-import CourseGate from "@/components/CourseGate";
 import SocialPulse from "@/components/SocialPulse";
 import FlaskBadge from "@/components/FlaskBadge";
 
@@ -13,7 +12,7 @@ CustomEase.create("main", "0.65, 0.01, 0.05, 0.99");
 
 const MENU_LINKS = [
   { href: "/home", label: "首页", no: "01" },
-  { href: "/tools", label: "工具库", no: "02" },
+  { href: "/tools", label: "资源库", no: "02" },
   { href: "/tutorials", label: "教程库", no: "03" },
   { href: "/lab", label: "实验室", no: "04" },
   { href: "/courses", label: "训练营", no: "05" },
@@ -145,7 +144,6 @@ function RotatingText({
 
 export type PulseInit = { onlineVisitors: number; totalViews: number };
 export default function LandingExperience({ pulseInitial }: { pulseInitial?: PulseInit }) {
-  const [gate, setGate] = useState(false);
   const [openSocial, setOpenSocial] = useState<string | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -317,12 +315,6 @@ export default function LandingExperience({ pulseInitial }: { pulseInitial?: Pul
                   <a
                     className="menu-link"
                     href={l.href}
-                    onClick={(e) => {
-                      if (l.href === "/courses") {
-                        e.preventDefault();
-                        setGate(true);
-                      }
-                    }}
                   >
                     <span className="menu-link-title">{l.label}</span>
                     <span className="menu-link-no">{l.no}</span>
@@ -376,16 +368,6 @@ export default function LandingExperience({ pulseInitial }: { pulseInitial?: Pul
         © 2026 VIBE LAB · <a href="/contact">联系与合作</a>
       </p>
       </main>
-
-      {gate && (
-        <CourseGate
-          onClose={() => setGate(false)}
-          onGo={() => {
-            setGate(false);
-            window.location.href = "/courses";
-          }}
-        />
-      )}
     </>
   );
 }

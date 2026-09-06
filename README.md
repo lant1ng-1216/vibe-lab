@@ -7,7 +7,7 @@
 > 面向想用 AI 真正做出东西的人：从 0 上手 AI 工具，到独立做出自己的作品，
 > 再到把作品摆上台、被更多人看见。
 
-[🌐 在线站点](https://www.labagent.online) · [🔧 工具库](https://www.labagent.online/tools) · [📚 教程库](https://www.labagent.online/tutorials) · [🧪 实验室](https://www.labagent.online/lab) · [📮 联系](https://www.labagent.online/contact)
+[🌐 在线站点](https://www.labagent.online) · [🔧 资源库](https://www.labagent.online/tools) · [📚 教程库](https://www.labagent.online/tutorials) · [🧪 实验室](https://www.labagent.online/lab) · [📮 联系](https://www.labagent.online/contact)
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square)
 ![Next.js](https://img.shields.io/badge/Next.js-15-000000?style=flat-square)
@@ -48,7 +48,7 @@ Vibe Lab 不是又一个工具合集站，也不是纯教程站——它是把�
 
 | 板块 | 做什么 | 免费？ |
 |---|---|---|
-| **🔧 工具库** | 70+ 精选 AI 工具，按用途分类收录，附上手介绍 | ✅ 永久免费 |
+| **🔧 资源库** | 70+ 精选 AI 工具，按用途分类收录，附上手介绍 | ✅ 永久免费 |
 | **📚 教程库** | 开源 AI 教程站内精读，整本读完不跳来跳去 | ✅ 永久免费 |
 | **🎓 实战训练营** | Starter / Builder / Hacker 三档，录播+作业+点评，亲手做出能上线的作品 | 💰 付费（邀请码体验 → 解锁码开课） |
 | **🧪 实验室 Lab** | 创作者作品展示场：作品摆上台，被更多人看见 | ✅ 免费入驻（白名单制） |
@@ -76,11 +76,11 @@ Lab 欢迎每一个把作品摆上台的人——**白名单制，先邮件申�
 - 🧑‍🎓 人读教程：[`creators/README.md`](creators/README.md) —— 入驻与日常操作
 - 🤖 AI Agent 操作手册：[`AGENTS.md`](AGENTS.md) —— 白名单 / sync / 封面 SOP
 
-**协议**：工具库 / 教程库 / 实验室内容永久免费；训练营课程与创始人亲自指导为付费内容。
+**协议**：资源库 / 教程库 / 实验室内容永久免费；训练营课程与创始人亲自指导为付费内容。
 
 ## Roadmap
 
-- ✅ **v1** 工具库 · 教程库 · 实验室
+- ✅ **v1** 资源库 · 教程库 · 实验室
 - ✅ **v2** 仓库转公开 · main 分支保护 · 创作者白名单 CI · 删报名页 · 关于&联系融合 · 训练营「邀请码 + 解锁码」两把锁 · 数据协议 schema 化（profile/works/sync）
 - ✅ **v3** 正式上线 `labagent.online` · AI 封面链路 · Lab Agent（DeepSeek）接入
 - 🚧 **进行中** Lab Agent：从问询助手 → 真正能帮上忙的 AI 产品
@@ -91,7 +91,7 @@ Lab 欢迎每一个把作品摆上台的人——**白名单制，先邮件申�
 本仓库代码采用 **[Apache License 2.0](LICENSE)** —— 可自由使用、修改、分发（含商业用途），保留版权声明即可。
 
 内容版权边界（与代码许可相互独立）：
-- **工具库 / 教程库**：收录链接指向官方来源；教程内容来自 GitHub 开源项目，版权归原作者，站内阅读页标注作者与开源协议；
+- **资源库 / 教程库**：收录链接指向官方来源；教程内容来自 GitHub 开源项目，版权归原作者，站内阅读页标注作者与开源协议；
 - **创作者作品**（`creators/`）：版权归创作者本人；
 - **训练营课程与创始人指导**：付费内容，观看授权随课程购买发放，不得转售/再分发。
 

@@ -23,7 +23,7 @@ export const POSTS: PostItem[] = [
     id: "p2",
     date: "09-04",
     tag: "上新",
-    title: "工具库收录 Clash Verge Rev",
+    title: "资源库收录 Clash Verge Rev",
     desc: "访问 ChatGPT / Claude 等海外服务时的环境准备工具，已按分类收录。",
     href: "/tools",
   },

@@ -29,7 +29,14 @@ function ArrowIcon() {
   );
 }
 
-export default function WoolClient({ items }: { items: WoolCard[] }) {
+export default function WoolClient({
+  items,
+  embedded,
+}: {
+  items: WoolCard[];
+  /** 嵌入资源库 tab 时隐藏整页 hero（由资源库页头承接层级） */
+  embedded?: boolean;
+}) {
   const [gate, setGate] = useState<WoolGate | "全部">("全部");
   const [showDead, setShowDead] = useState(false);
 
@@ -46,11 +53,12 @@ export default function WoolClient({ items }: { items: WoolCard[] }) {
 
   return (
     <div className={styles.page}>
-      <header className={styles.hero}>
+      {!embedded && (
+        <header className={styles.hero}>
         <p className={styles.eyebrow}>Free quota · 白嫖专区</p>
         <h1 className={styles.title}>羊毛专区</h1>
         <p className={styles.lede}>
-          工具库只告诉你「这个能用」，这里只回答一件事：<strong>能白嫖多少、门槛多高、什么时候过期</strong>。
+          资源库只告诉你「这个能用」，这里只回答一件事：<strong>能白嫖多少、门槛多高、什么时候过期</strong>。
           每条都标了核实日期，薅之前先看一眼，别白跑。
         </p>
         <div className={styles.stats}>
@@ -68,6 +76,7 @@ export default function WoolClient({ items }: { items: WoolCard[] }) {
           </div>
         </div>
       </header>
+      )}
 
       <div className={styles.filters}>
         {(["全部", ...WOOL_GATES] as const).map((g) => (
