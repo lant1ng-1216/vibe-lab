@@ -82,9 +82,9 @@ export default function AgentDemo() {
         )}
         {done && (
           <div className={styles.doneHint}>
-            点卡片重播 · 或{" "}
+            点卡片重播，或{" "}
             <a href="/agent" style={{ color: "#8b7dff" }}>
-              去工作台亲自试试 →
+              去体验演示
             </a>
           </div>
         )}

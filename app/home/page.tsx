@@ -50,7 +50,6 @@ export default function HomePage() {
             <div className={styles.badges}>
               <span className={styles.badge}>Apache-2.0 开源</span>
               <span className={styles.badge}>概念验证中 · 2026</span>
-              <span className={styles.badge}>已在 vibe-lab 站内可对话</span>
             </div>
             <h1 className={styles.h1}>
               你的 Coding Agent 负责快，
