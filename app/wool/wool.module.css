@@ -13,9 +13,9 @@
   --fresh: #2f7d32;
   --warn: #a8620a;
   --old: #b3261e;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 3rem 1.25rem 5rem;
+  /* 铺满可用宽度，不居中 —— 卡片网格本来就该横向铺开 */
+  margin: 0;
+  padding: 3rem clamp(1rem, 2.5vw, 2.25rem) 5rem;
 }
 
 /* ---------- Hero ---------- */
@@ -205,7 +205,8 @@ a.filter {
 /* ---------- 方块卡片 ---------- */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(212px, 1fr));
+  /* 铺满后列数会变多，最小宽度调大一点，免得卡片被挤成细条 */
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 0.9rem;
 }
 

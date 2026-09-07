@@ -10,9 +10,10 @@
   --fresh: #2f7d32;
   --warn: #a8620a;
   --old: #b3261e;
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 2rem 1.25rem 5rem;
+  /* 铺满可用宽度，不居中。方块边框跟着撑开，
+     但正文行宽靠 .blockBody 的 78ch 兜住 —— 一行太长读着累 */
+  margin: 0;
+  padding: 2rem clamp(1rem, 2.5vw, 2.25rem) 5rem;
 }
 
 .back {
@@ -137,13 +138,6 @@
   background: rgba(179, 38, 30, 0.06);
   border-color: var(--old);
 }
-.srcLine {
-  font-size: 0.78rem;
-  line-height: 1.7;
-  color: var(--ink-faint);
-  margin: 0.55rem 0 0;
-  word-break: break-all;
-}
 .link {
   color: var(--accent);
   text-decoration: underline;
@@ -192,6 +186,15 @@
   line-height: 1.75;
   color: var(--ink-soft);
   margin: 0;
+  max-width: 78ch;
+}
+.srcLine {
+  font-size: 0.78rem;
+  line-height: 1.7;
+  color: var(--ink-faint);
+  margin: 0.55rem 0 0;
+  max-width: 78ch;
+  word-break: break-all;
 }
 
 /* ---------- 交流区 ---------- */
@@ -225,6 +228,7 @@
   line-height: 1.7;
   color: var(--ink-soft);
   margin: 0 0 1.1rem;
+  max-width: 78ch;
 }
 .talkErr {
   font-size: 0.78rem;
@@ -369,6 +373,7 @@
   line-height: 1.7;
   color: var(--ink-soft);
   margin: 0 0 0.35rem;
+  max-width: 78ch;
   white-space: pre-wrap;
   word-break: break-word;
 }
