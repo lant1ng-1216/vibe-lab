@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { WoolGate, WoolItem } from "@/data/wool";
 import { WOOL_GATES } from "@/data/wool";
+import WoolSubmit from "./WoolSubmit";
 import styles from "./wool.module.css";
 
 /** 服务端已把 tools.ts 的 logo 解析好塞进来，客户端不必打包整个工具库 */
@@ -47,12 +49,15 @@ export default function WoolClient({ items }: { items: WoolCard[] }) {
   return (
     <div className={styles.page}>
       <header className={styles.hero}>
-        <p className={styles.eyebrow}>Free quota · 白嫖专区</p>
-        <h1 className={styles.title}>羊毛专区</h1>
-        <p className={styles.lede}>
-          工具库只告诉你「这个能用」，这里只回答一件事：<strong>能白嫖多少、门槛多高、什么时候过期</strong>。
-          每条都标了核实日期，薅之前先看一眼，别白跑。
-        </p>
+        <div className={styles.heroLeft}>
+          <p className={styles.eyebrow}>FREE QUOTA</p>
+          <h1 className={styles.title}>羊毛福利专区</h1>
+          <p className={styles.titleEn}>WOOL ZONE</p>
+          <p className={styles.lede}>
+            工具库只告诉你「这个能用」，这里只回答一件事：<strong>能白嫖多少、门槛多高、什么时候过期</strong>。
+            每条都标了核实日期，薅之前先看一眼，别白跑。
+          </p>
+        </div>
         <div className={styles.stats}>
           <div className={styles.stat}>
             <span className={styles.statNum}>{live}</span>
@@ -80,11 +85,11 @@ export default function WoolClient({ items }: { items: WoolCard[] }) {
             {g}
           </button>
         ))}
+        <WoolSubmit />
         <button
           type="button"
           className={styles.filter + (showDead ? " " + styles.filterOn : "")}
           onClick={() => setShowDead((v) => !v)}
-          style={{ marginLeft: "auto" }}
         >
           {showDead ? "隐藏已失效" : "显示已失效"}
         </button>
@@ -100,8 +105,9 @@ export default function WoolClient({ items }: { items: WoolCard[] }) {
           {list.map((item) => {
             const isDead = item.validity === "已失效";
             return (
-              <article
+              <Link
                 key={item.id}
+                href={`/wool/${item.id}`}
                 className={styles.card + (isDead ? " " + styles.cardDead : "")}
               >
                 <div className={styles.cardTop}>
@@ -140,16 +146,11 @@ export default function WoolClient({ items }: { items: WoolCard[] }) {
 
                 {item.trap ? <p className={styles.trap}>坑点：{item.trap}</p> : null}
 
-                <a
-                  className={styles.cta}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  去领取
+                <span className={styles.cta}>
+                  查看详情
                   <ArrowIcon />
-                </a>
-              </article>
+                </span>
+              </Link>
             );
           })}
         </div>

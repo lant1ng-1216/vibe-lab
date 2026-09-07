@@ -1,0 +1,114 @@
+name: 羊毛投稿
+description: 提交一条 AI 工具的免费额度 / 白嫖福利，经人工核实后上线羊毛福利专区
+title: "[羊毛] "
+labels: ["羊毛投稿"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 投稿前请读这三条
+
+        1. **必须亲自核实**。羊毛信息过期极快，抄来的、听说的一律不收。
+        2. **每个字段都要能验证**。写下你是在哪个页面看到这个额度的。
+        3. 提交后由站长人工复核，通过后会合入并上线；不通过会在本 Issue 里说明原因。
+
+        > 不确定的字段留空，别瞎填 —— 填错的比不填更糟。
+
+  - type: input
+    id: name
+    attributes:
+      label: 工具名
+      description: 如「GitHub Copilot」。站点工具库已收录的话，尽量用同一个名字。
+      placeholder: GitHub Copilot
+    validations:
+      required: true
+
+  - type: input
+    id: quota
+    attributes:
+      label: 白嫖额度
+      description: 这是卡片上最大的那行字，越短越好。写具体数字，不要写「很多」。
+      placeholder: 每月 2000 次补全 + 50 次高级请求
+    validations:
+      required: true
+
+  - type: dropdown
+    id: gate
+    attributes:
+      label: 领取门槛
+      description: 拿到这个额度，用户实际要付出什么？
+      options:
+        - 零门槛
+        - 需验证
+        - 需外网
+        - 需订阅
+    validations:
+      required: true
+
+  - type: dropdown
+    id: validity
+    attributes:
+      label: 有效期
+      options:
+        - 长期
+        - 限时
+        - 已失效
+    validations:
+      required: true
+
+  - type: input
+    id: deadline
+    attributes:
+      label: 截止日期
+      description: 有效期选了「限时」或「已失效」才填。格式 YYYY-MM-DD，如 2026-12-31。
+      placeholder: 2026-12-31
+    validations:
+      required: false
+
+  - type: textarea
+    id: how
+    attributes:
+      label: 怎么领
+      description: 一句话说清路径。用户看完就该知道点哪里、做什么。
+      placeholder: 登录 GitHub 账号即可开通免费档，VS Code 装插件直接用。
+    validations:
+      required: true
+
+  - type: textarea
+    id: trap
+    attributes:
+      label: 坑点提示
+      description: 选填。到期自动续费？国内没法用？额度悄悄缩水？这类信息最有价值。
+      placeholder: 到期后自动转付费，记得提前取消。
+    validations:
+      required: false
+
+  - type: input
+    id: href
+    attributes:
+      label: 领取链接
+      description: 直接指向领取页的 URL，不要放首页。
+      placeholder: https://github.com/features/copilot
+    validations:
+      required: true
+
+  - type: textarea
+    id: proof
+    attributes:
+      label: 你是怎么核实的
+      description: |
+        必填。写清两件事：什么时候看的、在哪个页面看到的。
+        例如：2026-09-06 在 https://xxx.com/pricing 看到 Free 档写着 2000 completions。
+        这条决定了我们敢不敢直接上线。
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: 确认
+      options:
+        - label: 以上信息由我本人在投稿当天核实，不是转述或推测
+          required: true
+        - label: 我同意这条内容以 CC BY 4.0 署名发布在羊毛福利专区
+          required: true

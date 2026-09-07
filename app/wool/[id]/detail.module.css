@@ -1,0 +1,336 @@
+/* 羊毛详情页 + 交流区 —— 局部样式，全部引用全局变量，不新增配色 */
+
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 20px 96px;
+}
+
+.back {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  margin-bottom: 24px;
+  transition: color 0.2s var(--ease-main);
+}
+.back:hover {
+  color: var(--accent);
+}
+
+/* ---------- 头部 ---------- */
+.hero {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--bg-2);
+  margin-bottom: 28px;
+}
+.heroDead {
+  opacity: 0.62;
+}
+
+.heroTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tag,
+.tagGate {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.tagGate {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: transparent;
+}
+.tagLive {
+  color: var(--ink);
+}
+.tagDead {
+  text-decoration: line-through;
+}
+
+.quota {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--accent);
+  margin: 0 0 8px;
+  letter-spacing: -0.02em;
+}
+
+.gateDesc {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 0 0 22px;
+}
+
+.cta {
+  display: inline-block;
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 14px;
+  text-decoration: none;
+  transition: transform 0.2s var(--ease-main), opacity 0.2s var(--ease-main);
+}
+.cta:hover {
+  transform: translateY(-1px);
+  opacity: 0.92;
+}
+
+/* ---------- 信息块 ---------- */
+.block {
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+}
+.blockTrap {
+  background: rgba(214, 69, 69, 0.05);
+  border-radius: 10px;
+  padding: 20px;
+  border-top: 1px solid var(--line);
+}
+.blockTitle {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 10px;
+  color: var(--ink);
+}
+.blockBody {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+/* ---------- 交流区 ---------- */
+.talk {
+  margin-top: 44px;
+  padding-top: 28px;
+  border-top: 2px solid var(--ink);
+}
+.talkHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.talkTitle {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0;
+}
+.talkCount {
+  font-size: 12px;
+  color: var(--ink-faint);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+.talkHint {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin: 0 0 20px;
+}
+.talkErr {
+  font-size: 13px;
+  color: #b3261e;
+  background: rgba(179, 38, 30, 0.07);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 0 0 16px;
+}
+.talkEmpty {
+  font-size: 13px;
+  color: var(--ink-faint);
+  padding: 24px 0;
+  text-align: center;
+}
+
+.form {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+  background: var(--bg-2);
+  margin-bottom: 28px;
+}
+.input,
+.textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color 0.2s var(--ease-main);
+}
+.input:focus,
+.textarea:focus {
+  border-color: var(--accent);
+}
+.input {
+  margin-bottom: 10px;
+}
+.textarea {
+  min-height: 84px;
+  resize: vertical;
+  line-height: 1.6;
+}
+.formBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+.counter {
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+.send {
+  font-size: 13px;
+  padding: 7px 20px;
+  border-radius: 999px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.2s var(--ease-main);
+}
+.send:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------- 叠楼 ---------- */
+.floors {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.floor {
+  padding: 14px 0 12px;
+  border-bottom: 1px solid var(--line);
+}
+.floor:last-child {
+  border-bottom: none;
+}
+/* 子楼层：左侧引导线，叠楼的「楼」感靠这条线 */
+.children {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0 0 0 12px;
+  border-left: 2px solid var(--line);
+}
+.children .children {
+  border-left-color: rgba(91, 75, 230, 0.28);
+}
+
+.floorHead {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+.floorNo {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+.floorNick {
+  font-size: 13px;
+  font-weight: 500;
+}
+/* 回复谁 —— 叠楼里靠这个认上下文 */
+.floorTo {
+  font-size: 11.5px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+.floorTime {
+  font-size: 11px;
+  color: var(--ink-faint);
+  margin-left: auto;
+}
+.floorBody {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin: 0 0 7px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.floorOps {
+  display: flex;
+  gap: 14px;
+}
+.opBtn {
+  font-size: 12px;
+  color: var(--ink-faint);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+.opBtn:hover {
+  color: var(--accent);
+}
+
+.replyForm {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+.replyForm .textarea {
+  min-height: 64px;
+}
+
+@media (max-width: 640px) {
+  .quota {
+    font-size: 27px;
+  }
+  .name {
+    font-size: 22px;
+  }
+}
