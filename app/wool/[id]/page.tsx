@@ -6,7 +6,20 @@ import { TOOLS } from "@/data/tools";
 import WoolTalk from "./WoolTalk";
 import styles from "./detail.module.css";
 
-export const dynamic = "force-dynamic";
+/**
+ * 详情页内容是静态的（数据来自 data/wool.ts 常量），走静态生成 + 每小时增量更新。
+ * 之前这里写的是 force-dynamic —— 每点一次都要服务端现渲染一遍，白等一秒多。
+ * 保留 revalidate 是为了让「新鲜度」随时间变化：构建后最多滞后一小时，
+ * 但访问到的是静态 HTML，点击即开。
+ */
+export const revalidate = 3600;
+
+/**
+ * 关闭动态参数：羊毛条目是 data/wool.ts 里的固定常量，不存在运行时新增。
+ * 不关的话，访问 /wool/不存在的id 会走动态渲染 —— notFound() 虽然渲染出 404 页面，
+ * 但 HTTP 状态码返回 200，而且这个错误响应还会被 ISR 缓存下来。
+ */
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return WOOL.map((w) => ({ id: w.id }));

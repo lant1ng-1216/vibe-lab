@@ -400,6 +400,58 @@
   min-height: 60px;
 }
 
+/* ---------- 加载骨架 ---------- */
+.skBack {
+  display: inline-block;
+  width: 9rem;
+  height: 1.75rem;
+  background: var(--bg-2);
+  border: 2px solid var(--ink);
+  margin-bottom: 1.25rem;
+  animation: skPulse 1.1s ease-in-out infinite;
+}
+.skHero {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 1.4rem;
+  background: var(--bg);
+  border: 2px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--ink);
+  margin-bottom: 1rem;
+}
+.skBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1.1rem 1.2rem;
+  background: var(--bg);
+  border: 2px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  margin-bottom: 0.85rem;
+}
+.skLine {
+  display: block;
+  height: 0.85rem;
+  background: var(--bg-deep);
+  animation: skPulse 1.1s ease-in-out infinite;
+}
+@keyframes skPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skBack,
+  .skLine {
+    animation: none;
+  }
+}
+
 @media (max-width: 560px) {
   .quota {
     font-size: 1.9rem;
