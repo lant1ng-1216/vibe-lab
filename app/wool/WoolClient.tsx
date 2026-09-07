@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { WoolGate, WoolItem } from "@/data/wool";
-import { WOOL_GATES } from "@/data/wool";
+import { WOOL_GATES, freshnessOf, FRESHNESS_TEXT } from "@/data/wool";
 import WoolSubmit from "./WoolSubmit";
 import styles from "./wool.module.css";
 
@@ -34,17 +34,35 @@ function ArrowIcon() {
 export default function WoolClient({ items }: { items: WoolCard[] }) {
   const [gate, setGate] = useState<WoolGate | "全部">("全部");
   const [showDead, setShowDead] = useState(false);
+  const [sort, setSort] = useState<"weight" | "fresh">("weight");
+
+  /** 服务端渲染与客户端 hydration 用同一个「今天」，避免水合不一致 */
+  const today = useMemo(() => new Date(), []);
 
   const list = useMemo(() => {
     return items
       .filter((i) => (showDead ? true : i.validity !== "已失效"))
       .filter((i) => (gate === "全部" ? true : i.gate === gate))
-      .sort((a, b) => b.weight - a.weight);
-  }, [items, gate, showDead]);
+      .sort((a, b) =>
+        sort === "fresh"
+          ? Date.parse(b.checkedAt) - Date.parse(a.checkedAt)
+          : b.weight - a.weight,
+      );
+  }, [items, gate, showDead, sort]);
 
-  const live = items.filter((i) => i.validity !== "已失效").length;
-  const dead = items.length - live;
+  /** 当前池子 = 筛选前的候选集，用于算每个门槛下有几条（含/不含失效随开关走） */
+  const pool = useMemo(
+    () => items.filter((i) => (showDead ? true : i.validity !== "已失效")),
+    [items, showDead],
+  );
+  const countOf = (g: WoolGate | "全部") =>
+    g === "全部" ? pool.length : pool.filter((i) => i.gate === g).length;
+
   const easy = items.filter((i) => i.gate === "零门槛" && i.validity !== "已失效").length;
+  const live = pool.length;
+  const dead = items.length - live;
+  /** 该复核的条数 —— 超过 30 天没核实过就催一下，别让人拿着过期信息白跑 */
+  const due = pool.filter((i) => freshnessOf(i.checkedAt, today) !== "fresh").length;
 
   return (
     <div className={styles.page}>
@@ -67,6 +85,10 @@ export default function WoolClient({ items }: { items: WoolCard[] }) {
             <span className={styles.statNum}>{easy}</span>
             <span className={styles.statLabel}>零门槛</span>
           </div>
+          <div className={styles.stat + (due > 0 ? " " + styles.statDue : "")}>
+            <span className={styles.statNum}>{due}</span>
+            <span className={styles.statLabel}>待复核</span>
+          </div>
           <div className={styles.stat}>
             <span className={styles.statNum}>{dead}</span>
             <span className={styles.statLabel}>已失效（留档）</span>
@@ -83,16 +105,26 @@ export default function WoolClient({ items }: { items: WoolCard[] }) {
             onClick={() => setGate(g as WoolGate | "全部")}
           >
             {g}
+            <span className={styles.filterNum}>{countOf(g)}</span>
           </button>
         ))}
-        <WoolSubmit />
-        <button
-          type="button"
-          className={styles.filter + (showDead ? " " + styles.filterOn : "")}
-          onClick={() => setShowDead((v) => !v)}
-        >
-          {showDead ? "隐藏已失效" : "显示已失效"}
-        </button>
+        <div className={styles.tools}>
+          <button
+            type="button"
+            className={styles.filter + (sort === "fresh" ? " " + styles.filterOn : "")}
+            onClick={() => setSort((s) => (s === "weight" ? "fresh" : "weight"))}
+          >
+            {sort === "fresh" ? "按核实时间排" : "按价值排"}
+          </button>
+          <button
+            type="button"
+            className={styles.filter + (showDead ? " " + styles.filterOn : "")}
+            onClick={() => setShowDead((v) => !v)}
+          >
+            {showDead ? "隐藏已失效" : "显示已失效"}
+          </button>
+          <WoolSubmit />
+        </div>
       </div>
 
       {list.length === 0 ? (
@@ -145,6 +177,16 @@ export default function WoolClient({ items }: { items: WoolCard[] }) {
                 <p className={styles.body}>{item.how}</p>
 
                 {item.trap ? <p className={styles.trap}>坑点：{item.trap}</p> : null}
+
+                <span
+                  className={`${styles.checked} ${
+                    styles[freshnessOf(item.checkedAt, today)]
+                  }`}
+                  title={`${FRESHNESS_TEXT[freshnessOf(item.checkedAt, today)]} · 最后核实 ${item.checkedAt}`}
+                >
+                  <i className={styles.dot} aria-hidden="true" />
+                  核实于 {item.checkedAt.slice(5).replace("-", "/")}
+                </span>
 
                 <span className={styles.cta}>
                   查看详情

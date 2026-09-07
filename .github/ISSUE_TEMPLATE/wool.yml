@@ -39,9 +39,9 @@ body:
       description: 拿到这个额度，用户实际要付出什么？
       options:
         - 零门槛
-        - 需验证
+        - 需学生
+        - 需绑卡
         - 需外网
-        - 需订阅
     validations:
       required: true
 

@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
  * 站长在 GitHub 上人工审核，通过后合入 data/wool.ts 即上线。
  */
 
-const GATES = ["零门槛", "需验证", "需外网", "需订阅"];
+const GATES = ["零门槛", "需学生", "需绑卡", "需外网"];
 const VALIDITIES = ["长期", "限时", "已失效"];
 
 const hits = new Map<string, number[]>();

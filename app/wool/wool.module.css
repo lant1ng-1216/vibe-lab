@@ -9,6 +9,10 @@
 
 .page {
   --px: "Pixelify Sans", var(--font-mono), monospace;
+  /* 新鲜度三色：只在羊毛专区内部用，不进全站 globals */
+  --fresh: #2f7d32;
+  --warn: #a8620a;
+  --old: #b3261e;
   max-width: 1000px;
   margin: 0 auto;
   padding: 3rem 1.25rem 5rem;
@@ -90,6 +94,15 @@
   color: var(--ink-soft);
 }
 
+/* 有条目超过复核期时，这个格子变红提醒维护者 */
+.statDue {
+  background: rgba(179, 38, 30, 0.08);
+}
+
+.statDue .statNum {
+  color: var(--old);
+}
+
 /* ---------- 筛选 ---------- */
 .filters {
   display: flex;
@@ -134,11 +147,35 @@
   color: #fff;
 }
 
+/* 门槛后的条数 —— 让用户一眼看出分布，也免得点到空的分类 */
+.filterNum {
+  display: inline-block;
+  margin-left: 0.35rem;
+  font-family: var(--px);
+  font-size: 0.68rem;
+  line-height: 1;
+  color: var(--ink-faint);
+  vertical-align: 1px;
+}
+
+.filterOn .filterNum {
+  color: rgba(255, 255, 255, 0.72);
+}
+
 a.filter {
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   line-height: 1.2;
+}
+
+/* ---------- 右侧工具组（排序 / 显示失效 / 投稿） ---------- */
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
 }
 
 /* ---------- 投稿按钮 ---------- */
@@ -150,7 +187,6 @@ a.filter {
   border: 2px solid var(--ink);
   box-shadow: 2px 2px 0 var(--ink);
   padding: 0.28rem 0.85rem;
-  margin-left: auto;
   cursor: pointer;
   white-space: nowrap;
   transition: transform 0.06s, box-shadow 0.06s;
@@ -293,6 +329,37 @@ a.filter {
   margin: 0 0 0.6rem;
   padding-left: 0.5rem;
   border-left: 2px solid var(--ink);
+}
+
+/* ---------- 核实时间 / 新鲜度 ---------- */
+.checked {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  margin: 0 0 0.5rem;
+  font-size: 0.68rem;
+  line-height: 1.4;
+  color: var(--ink-faint);
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border: 1px solid currentColor;
+  background: currentColor;
+}
+
+.checked.fresh {
+  color: var(--fresh);
+}
+
+.checked.warn {
+  color: var(--warn);
+}
+
+.checked.old {
+  color: var(--old);
 }
 
 .cta {
@@ -498,7 +565,7 @@ a.filter {
   .hero {
     align-items: flex-start;
   }
-  .submit {
+  .tools {
     margin-left: 0;
   }
   .row2 {

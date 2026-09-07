@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { WOOL } from "@/data/wool";
+import { WOOL, freshnessOf, FRESHNESS_TEXT } from "@/data/wool";
 import { TOOLS } from "@/data/tools";
 import WoolTalk from "./WoolTalk";
 import styles from "./detail.module.css";
@@ -28,9 +28,9 @@ export async function generateMetadata({
 
 const GATE_DESC: Record<string, string> = {
   零门槛: "注册就能拿，不用额外验证",
-  需验证: "要完成学生 / 教师 / 身份认证",
+  需学生: "要完成学生 / 教师身份认证，毕业或认证过期即失效",
+  需绑卡: "要绑信用卡或支付方式，留意到期自动扣款",
   需外网: "需要非大陆网络环境",
-  需订阅: "要先有付费订阅才送",
 };
 
 export default async function WoolDetailPage({
@@ -44,6 +44,7 @@ export default async function WoolDetailPage({
 
   const tool = item.toolId ? TOOLS.find((t) => t.id === item.toolId) : undefined;
   const isDead = item.validity === "已失效";
+  const fresh = freshnessOf(item.checkedAt);
 
   return (
     <div className={styles.page}>
@@ -65,6 +66,10 @@ export default async function WoolDetailPage({
 
         <p className={styles.quota}>{item.quota}</p>
         <p className={styles.gateDesc}>{GATE_DESC[item.gate] ?? ""}</p>
+        <p className={`${styles.checked} ${styles[fresh]}`}>
+          <i className={styles.dot} aria-hidden="true" />
+          核实于 {item.checkedAt} · {FRESHNESS_TEXT[fresh]}
+        </p>
 
         <a
           className={styles.cta}
@@ -88,13 +93,27 @@ export default async function WoolDetailPage({
         </section>
       ) : null}
 
-      <section className={styles.block}>
+      <section className={styles.block + (fresh === "old" ? " " + styles.blockDue : "")}>
         <h2 className={styles.blockTitle}>信息时效</h2>
         <p className={styles.blockBody}>
-          本条信息最后核实于 <strong>{item.checkedAt}</strong>
-          {item.deadline ? `，截止时间 ${item.deadline}` : ""}。
-          羊毛信息过期极快，动手前建议先点上面的链接确认官网还挂着这个额度。
+          {fresh === "fresh"
+            ? `这条 ${item.checkedAt} 核实过。羊毛额度变动快，动手前还是扫一眼官网最稳。`
+            : `这条上次核实是 ${item.checkedAt}，放了一阵了 —— 额度可能变了甚至没了，动手前务必先点上面的链接确认官网还挂着。`}
+          {item.deadline ? ` 官方标注截止 ${item.deadline}。` : ""}
         </p>
+        {item.source ? (
+          <p className={styles.srcLine}>
+            来源：
+            <a
+              className={styles.link}
+              href={item.source}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {item.source}
+            </a>
+          </p>
+        ) : null}
       </section>
 
       {tool ? (
