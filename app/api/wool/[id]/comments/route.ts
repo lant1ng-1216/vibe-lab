@@ -22,10 +22,26 @@ export const dynamic = "force-dynamic";
 const MAX_BODY = 500;
 const MAX_NICK = 24;
 
+/** 留言列表短缓存（30s）：生产下每次访问都打 GitHub API，容易撞限流（2026-09-08 体检加） */
+const listCache = new Map<string, { at: number; items: unknown[] }>();
+const LIST_TTL = 30_000;
+/** 管理员删除后要立刻失效，避免删完还看得到（见 DELETE） */
+function dropListCache(woolId: string) {
+  listCache.delete(woolId);
+}
+
 /** 简易限流：同一 IP 60 秒内最多 3 条（进程内，够挡误触和脚本小子） */
 const hits = new Map<string, number[]>();
+/** 顺手清掉过期 IP，否则 Map 只增不减（2026-09-08 修内存泄漏） */
+function sweepHits(now: number) {
+  if (hits.size < 500) return; // 量小不折腾
+  for (const [ip, arr] of hits) {
+    if (arr.every((t) => now - t >= 60_000)) hits.delete(ip);
+  }
+}
 function rateOk(ip: string) {
   const now = Date.now();
+  sweepHits(now);
   const arr = (hits.get(ip) || []).filter((t) => now - t < 60_000);
   if (arr.length >= 3) return false;
   arr.push(now);
@@ -49,8 +65,28 @@ export async function GET(
   if (!id) {
     return NextResponse.json({ ok: false, error: "缺少 wool id" }, { status: 400 });
   }
+
+  // 命中缓存直接返回（30s 内不重复打 GitHub）
+  const cached = listCache.get(id);
+  if (cached && Date.now() - cached.at < LIST_TTL) {
+    return NextResponse.json({
+      ok: true,
+      items: cached.items,
+      total: cached.items.length,
+      ready: commentsReady(),
+      cached: true,
+    });
+  }
+
   const items = await listComments(id);
-  return NextResponse.json({ ok: true, items, total: items.length });
+  listCache.set(id, { at: Date.now(), items });
+  // ready=false 表示服务端没配好（缺 token/Issue），前端要提示「交流区未配置」而不是「还没人留言」
+  return NextResponse.json({
+    ok: true,
+    items,
+    total: items.length,
+    ready: commentsReady(),
+  });
 }
 
 export async function POST(
@@ -96,6 +132,7 @@ export async function POST(
   if (!item) {
     return NextResponse.json({ ok: false, error: "写入失败，请稍后重试" }, { status: 502 });
   }
+  dropListCache(id); // 新留言立刻可见
   return NextResponse.json({ ok: true, item });
 }
 
@@ -112,5 +149,9 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "缺少留言 id" }, { status: 400 });
   }
   const ok = await hideComment(id);
+  if (ok) {
+    const m = new URL(req.url).pathname.match(/^\/api\/wool\/([^/]+)\/comments/);
+    if (m) dropListCache(m[1]);
+  }
   return NextResponse.json({ ok });
 }

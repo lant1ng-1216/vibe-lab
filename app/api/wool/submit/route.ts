@@ -17,8 +17,16 @@ const GATES = ["零门槛", "需学生", "需绑卡", "需外网"];
 const VALIDITIES = ["长期", "限时", "已失效"];
 
 const hits = new Map<string, number[]>();
+/** 过期 IP 顺手清理（与 comments 路由一致，防 Map 只增不减） */
+function sweepHits(now: number) {
+  if (hits.size < 200) return;
+  for (const [ip, arr] of hits) {
+    if (arr.every((t) => now - t >= 600_000)) hits.delete(ip);
+  }
+}
 function rateOk(ip: string) {
   const now = Date.now();
+  sweepHits(now);
   const arr = (hits.get(ip) || []).filter((t) => now - t < 600_000);
   if (arr.length >= 3) return false; // 10 分钟最多 3 条投稿
   arr.push(now);
