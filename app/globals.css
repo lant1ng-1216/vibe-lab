@@ -2866,6 +2866,13 @@ a.finds-duo-item:hover { transform: translateX(3px); background: rgba(255,255,25
 .tools-home-wrap {
   padding-inline: var(--gutter);
 }
+/* 资源库主页标题区：去掉内层横向 padding（page-head 自带 var(--gutter) 会与
+   .tools-home-wrap 叠加成 2×gutter，导致标题比卡片更靠右、卡片显突出），
+   底部补 20px 呼吸感（替代已删的羊毛按钮占位） */
+.tools-home-wrap .page-head {
+  padding-inline: 0;
+  padding-bottom: 20px;
+}
 /* 资源库主页网格：固定卡片宽度（176~200px），全宽下从左排开、右侧自然留白 */
 .tools-home-grid {
   grid-template-columns: repeat(auto-fill, minmax(176px, 200px));

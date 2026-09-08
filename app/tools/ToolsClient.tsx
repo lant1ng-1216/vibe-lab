@@ -131,9 +131,6 @@ export default function ToolsClient({ toolCount }: { toolCount: number }) {
         <p className="lead">
           工具装齐一套「能打」的，技能随用随装 —— 别把时间浪费在找链接和配环境上。
         </p>
-        <a className="btn-main" href="/wool" style={{ display: "inline-flex", marginTop: 16 }}>
-          🧪 羊毛专区 · 免费额度 / 白嫖渠道 →
-        </a>
       </div>
 
       <div className="tgrid tools-home-grid">
