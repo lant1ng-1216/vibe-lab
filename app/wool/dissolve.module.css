@@ -1,0 +1,47 @@
+/* 粒子消散动画样式 —— 详情页交流区与管理员后台共用 */
+
+/* 楼层进入消散态：锁交互，框体快速退隐，字粒和碎片负责表演 */
+.dissolving {
+  pointer-events: none;
+  transition: opacity 0.25s ease 0.1s;
+  opacity: 0.35;
+}
+
+/* 字符粒子：每个 span 一个，随机方向/旋转/延迟（CSS 变量注入） */
+.chip {
+  display: inline-block;
+  animation: chipFly 0.95s cubic-bezier(0.25, 0.1, 0.6, 1) forwards;
+  animation-delay: var(--d, 0ms);
+}
+
+/* 方块碎片：沿楼层随机撒的 <i>，同一套飞散轨迹 */
+.shard {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  animation: chipFly 0.9s ease-in forwards;
+  animation-delay: var(--d, 0ms);
+}
+
+@keyframes chipFly {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx, 0), var(--dy, -60px)) rotate(var(--rot, 120deg))
+      scale(0.5);
+    filter: blur(3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip,
+  .shard {
+    animation-duration: 0.2s;
+    animation-delay: 0ms;
+    filter: none;
+  }
+}

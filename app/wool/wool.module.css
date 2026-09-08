@@ -15,11 +15,12 @@
   --old: #b3261e;
   /* 铺满可用宽度，不居中 —— 卡片网格本来就该横向铺开 */
   margin: 0;
-  padding: 3rem clamp(1rem, 2.5vw, 2.25rem) 5rem;
+  padding: 3rem var(--gutter) 5rem;
 }
 
 /* ---------- Hero ---------- */
 .hero {
+  position: relative; /* 返回按钮的定位锚点 */
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -364,6 +365,7 @@ a.filter {
 }
 
 .cta {
+  position: relative; /* 点阵铺满的定位锚点 */
   margin-top: auto;
   display: inline-flex;
   align-items: center;
@@ -376,14 +378,87 @@ a.filter {
   background: var(--bg-2);
 }
 
-.card:hover .cta {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--ink);
+/* hover 时整个 CTA 框铺满像素点（数量多、错相流动），文字浮在上层不受影响 */
+.ctaLoader {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;   /* 列数 +1 的余量裁掉，永远贴右缘 */
+  pointer-events: none;
+  z-index: 0;
+  /* 3 行 × N 列：行距拉开让「三行波点」清晰可辨，点 5px 随机律动 */
+  grid-auto-flow: row;
+  grid-template-rows: repeat(3, 5px);
+  grid-auto-columns: 5px;
+  gap: 4px 2px;
 }
+.card:hover .ctaLoader { display: flex; }
+/* hover 时文字与箭头淡出，整个框只剩啵啵啵 */
+.card:hover .ctaText,
+.card:hover .cta > svg {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.ctaText,
+.cta > svg { transition: opacity 0.15s ease; }
+.ctaDot {
+  width: 5px;
+  height: 5px;
+  background: var(--ink);
+  opacity: 0.15;
+  animation: pixelOn 650ms ease-in-out infinite;
+  transform-origin: center;
+}
+/* 随机律动：双峰起伏（像音频条），各点独立节奏靠内联随机 duration/delay 产生 */
+@keyframes pixelOn {
+  0%, 100% { opacity: 0.14; transform: scaleY(0.6) scaleX(0.85); }
+  32% { opacity: 1; transform: scaleY(1.45) scaleX(1.15); }
+  58% { opacity: 0.5; transform: scaleY(0.95) scaleX(1); }
+  76% { opacity: 0.85; transform: scaleY(1.2) scaleX(1.05); }
+}
+.ctaText,
+.cta > svg { position: relative; z-index: 1; }
+
+/* 「查看详情」文字流光：慢速（3s）一条亮带扫过，文字状态不变 */
+.ctaText {
+  background-image: linear-gradient(
+    90deg,
+    rgba(19, 19, 19, 0.35) 35%,
+    #131313 50%,
+    rgba(19, 19, 19, 0.35) 65%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: ctaShimmer 4s linear infinite;
+}
+@keyframes ctaShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ctaText {
+    animation: none;
+    background: none;
+    color: var(--ink);
+  }
+  .ctaDot { animation: none; opacity: 0.6; }
+}
+
+/* hover 不再刷紫底（2026-09-08 老大要求去掉紫色覆盖）：
+   CTA 保持原样，只出现墨色像素点 + 箭头滑格 */
 
 .ctaArrow {
   flex: none;
+  transition: transform 0.12s ease;
+}
+
+/* hover 时箭头往右上滑一小格，暗示「要出去了」 */
+.card:hover .ctaArrow {
+  transform: translate(2px, -2px);
 }
 
 /* ---------- 空态 ---------- */
@@ -405,6 +480,111 @@ a.filter {
 .emptyDesc {
   font-size: 0.8rem;
   margin: 0;
+}
+
+/* ---------- 跳转加载骨架（loading.tsx 用，跟详情页 sk* 同一套语言） ---------- */
+.skHero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+
+.skTitle {
+  height: 1.5rem;
+  width: min(16rem, 60%);
+  background: var(--bg-deep);
+  animation: skPulse 1.1s ease-in-out infinite;
+}
+
+.skTitleSub {
+  height: 0.9rem;
+  width: 9rem;
+  margin-top: 0.55rem;
+  background: var(--bg-deep);
+  animation: skPulse 1.1s ease-in-out infinite;
+  animation-delay: 0.1s;
+}
+
+.skStats {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.skStat {
+  width: 4.6rem;
+  height: 2.7rem;
+  background: var(--bg-2);
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  animation: skPulse 1.1s ease-in-out infinite;
+  animation-delay: 0.15s;
+}
+
+.skFilters {
+  height: 2.6rem;
+  background: var(--bg-2);
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  margin-bottom: 1.25rem;
+  animation: skPulse 1.1s ease-in-out infinite;
+  animation-delay: 0.2s;
+}
+
+.skGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.9rem;
+}
+
+.skCard {
+  min-height: 158px;
+  padding: 0.9rem;
+  background: var(--bg);
+  border: 2px solid var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.skLine {
+  display: block;
+  height: 0.85rem;
+  background: var(--bg-deep);
+  animation: skPulse 1.1s ease-in-out infinite;
+}
+
+/* 卡片之间错开闪烁相位，像波浪扫过而不是整齐划一地跳 */
+.skCard:nth-child(2n) .skLine {
+  animation-delay: 0.12s;
+}
+
+.skCard:nth-child(3n) .skLine {
+  animation-delay: 0.24s;
+}
+
+@keyframes skPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skTitle,
+  .skTitleSub,
+  .skStat,
+  .skFilters,
+  .skLine {
+    animation: none;
+  }
 }
 
 /* ---------- 投稿弹窗 ---------- */

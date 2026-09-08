@@ -13,7 +13,7 @@
   /* 铺满可用宽度，不居中。方块边框跟着撑开，
      但正文行宽靠 .blockBody 的 78ch 兜住 —— 一行太长读着累 */
   margin: 0;
-  padding: 2rem clamp(1rem, 2.5vw, 2.25rem) 5rem;
+  padding: 2rem var(--gutter) 5rem;
 }
 
 .back {
@@ -329,15 +329,44 @@
 .floor:last-child {
   border-bottom: none;
 }
-/* 子楼层靠左侧引导线分层 —— 叠楼的「楼」感 */
-.children {
+/* 楼内回复区：单层平铺，只有一条引导线 —— 不再递归嵌套（旧叠楼看串行，2026-09-07 改版） */
+.replies {
   list-style: none;
   margin: 0.6rem 0 0;
   padding: 0 0 0 0.75rem;
-  border-left: 2px solid var(--ink);
+  border-left: 2px solid var(--line);
 }
-.children .children {
-  border-left-color: var(--accent);
+.reply {
+  padding: 0.55rem 0 0.5rem;
+}
+.reply + .reply {
+  border-top: 1px dashed var(--line);
+}
+.replyHead {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.2rem;
+}
+.replyNick {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.replyTime {
+  font-size: 0.66rem;
+  color: var(--ink-faint);
+  margin-left: auto;
+}
+.replyBody {
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin: 0 0 0.25rem;
+  max-width: 78ch;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .floorHead {
@@ -455,6 +484,15 @@
   .skLine {
     animation: none;
   }
+}
+
+/* 危险操作按钮：删除用，跟普通操作区分 */
+.opDanger {
+  color: var(--old);
+}
+.opDanger:hover {
+  color: #fff;
+  background: var(--old);
 }
 
 @media (max-width: 560px) {
