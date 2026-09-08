@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import ToolsClient from "./ToolsClient";
-import { TOOLS, TOOL_CATEGORIES } from "@/data/tools";
+import { TOOLS } from "@/data/tools";
 
 export const metadata: Metadata = {
   title: "资源库 — Vibe Lab · 振动实验室",
@@ -15,7 +15,7 @@ export default function ToolsPage() {
     <>
       <SiteNav />
       <main>
-        <ToolsClient tools={TOOLS} categories={TOOL_CATEGORIES} />
+        <ToolsClient toolCount={TOOLS.length} />
       </main>
       <SiteFooter />
     </>

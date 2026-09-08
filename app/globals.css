@@ -15,6 +15,13 @@
   --menu-pad: 2em;
   --ease-main: cubic-bezier(0.65, 0.01, 0.05, 0.99);
 
+  /* ---- 全宽布局基准 ----
+     站点不再用「居中定宽容器」，改为铺满可用宽度。
+     页面级容器去掉 max-width，靠 --gutter 控制左右呼吸感；
+     正文/长段落自行套 --read-max，避免一行过长难读。 */
+  --gutter: clamp(1.25rem, 2.5vw, 2.5rem);
+  --read-max: 78ch;
+
   --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC",
     "Hiragino Sans GB", "Source Han Sans SC", "Microsoft YaHei", "Segoe UI",
     Roboto, Helvetica, Arial, sans-serif;
@@ -409,9 +416,7 @@ ul { list-style: none; }
    L2 聚合页设计体系 (SiteNav / page-head / toolbox)
    ==================================================== */
 .wrap {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 0 28px;
+  padding: 0 var(--gutter);
 }
 .mono { font-family: var(--font-mono); }
 
@@ -426,9 +431,7 @@ ul { list-style: none; }
   border-bottom: 1px solid var(--line);
 }
 .sitenav-inner {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 0 28px;
+  padding: 0 var(--gutter);
   height: 66px;
   display: flex;
   align-items: center;
@@ -468,7 +471,7 @@ ul { list-style: none; }
 }
 
 /* ---- page head (shared by inner pages) ---- */
-.page-head { max-width: 1240px; margin: 0 auto; padding: 96px 28px 0; }
+.page-head { padding: 24px var(--gutter) 0; }
 .page-head h1 {
   font-family: var(--font-display);
   font-size: clamp(2.4rem, 6vw, 4.4rem);
@@ -486,7 +489,7 @@ ul { list-style: none; }
 }
 
 /* ---- toolbox ---- */
-.toolbox { max-width: 1240px; margin: 0 auto; padding: 30px 28px 90px; }
+.toolbox { padding: 30px var(--gutter) 90px; }
 .toolbox-bar {
   display: flex;
   align-items: center;
@@ -674,13 +677,15 @@ a.tcard:hover .tcard-link { color: var(--accent); }
 .sitefooter {
   border-top: 1px solid var(--line);
   background: var(--bg);
+  /* 和上方内容拉开呼吸距离（2026-09-07 老大三次反馈，逐档加大） */
+  margin-top: clamp(150px, 20vw, 300px);
 }
 .sitefooter .footer-grid {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 34px;
-  padding: 46px 0 10px;
+  gap: 24px;
+  padding: 40px 0 8px;
 }
 .sitefooter .footer-brand p {
   color: var(--ink-faint);
@@ -689,18 +694,18 @@ a.tcard:hover .tcard-link { color: var(--accent); }
   max-width: 260px;
   margin-top: 10px;
 }
-.sitefooter .footer-col { display: flex; flex-direction: column; gap: 9px; }
+.sitefooter .footer-col { display: flex; flex-direction: column; gap: 7px; }
 .sitefooter .footer-col h5 {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--ink-faint);
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 .sitefooter .footer-col a {
   color: var(--ink-soft);
-  font-size: 13.5px;
+  font-size: 12.5px;
   transition: color 0.15s;
 }
 .sitefooter .footer-col a:hover { color: var(--accent); }
@@ -710,11 +715,11 @@ a.tcard:hover .tcard-link { color: var(--accent); }
   gap: 10px;
   flex-wrap: wrap;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10px;
   color: var(--ink-faint);
   border-top: 1px solid var(--line);
-  margin-top: 30px;
-  padding: 16px 0 30px;
+  margin-top: 20px;
+  padding: 12px 0 20px;
 }
 
 @media (max-width: 680px) {
@@ -734,13 +739,13 @@ a.tcard:hover .tcard-link { color: var(--accent); }
   gap: 8px;
   margin-top: 22px;
 }
-.home-cards { max-width: 1240px; margin: 0 auto; padding: 34px 28px 90px; }
+.home-cards { padding: 34px var(--gutter) 90px; }
 
 /* quick entry cards */
 .ql-grid {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 16px;
   margin: 0;
 }
@@ -825,7 +830,7 @@ a.ql-card:hover .ql-arrow {
 /* ====================================================
    首页 /home 动态优先布局（v2）
    ==================================================== */
-.home-hero { max-width: 1240px; margin: 0 auto; padding: 96px 28px 0; }
+.home-hero { padding: 96px var(--gutter) 0; }
 .home-hero h1 {
   font-family: var(--font-display);
   font-size: clamp(2.4rem, 5.8vw, 4.4rem);
@@ -844,9 +849,7 @@ a.ql-card:hover .ql-arrow {
 
 /* dash two-column */
 .home-dash {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 44px 28px 0;
+  padding: 44px var(--gutter) 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 380px;
   gap: 40px;
@@ -975,13 +978,11 @@ a.ql-card:hover .ql-arrow {
 
 /* showcase */
 .home-showcase {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 70px 28px 90px;
+  padding: 70px var(--gutter) 90px;
 }
 .showcase-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 14px;
 }
 .showcase-slot {
@@ -1014,9 +1015,7 @@ a.ql-card:hover .ql-arrow {
    首页 /home v3 卡片化杂志版
    ==================================================== */
 .home-main {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 40px 28px 0;
+  padding: 40px var(--gutter) 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 360px;
   gap: 44px;
@@ -1094,7 +1093,7 @@ a.ql-card:hover .ql-arrow {
 /* more news mini grid */
 .mini-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 10px;
 }
 .mini-card {
@@ -1203,9 +1202,7 @@ a.ql-card:hover .ql-arrow {
 
 /* ---- hero 左右分栏 ---- */
 .home-hero-grid {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 96px 28px 0;
+  padding: 96px var(--gutter) 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 560px;
   gap: 56px;
@@ -1507,9 +1504,8 @@ a.ql-card:hover .ql-arrow {
 
 /* ---- Vibe Lab 动态窄条 ---- */
 .lab-ticker {
-  max-width: 1240px;
-  margin: 52px auto 0;
-  padding: 16px 28px;
+  margin: 52px 0 0;
+  padding: 16px var(--gutter);
   display: flex;
   align-items: center;
   gap: 24px;
@@ -1543,9 +1539,7 @@ a.ql-card:hover .ql-arrow {
 
 /* ---- 内容区（导读 + 词典 + 收藏） ---- */
 .home-lower {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 60px 28px 90px;
+  padding: 60px var(--gutter) 90px;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 420px;
   gap: 56px;
@@ -1654,9 +1648,7 @@ a.find-item:hover .find-title { color: var(--accent); }
    ==================================================== */
 /* ---------- 多巴胺内容区（dopa） ---------- */
 .dopa-wrap {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 70px 28px 90px;
+  padding: 70px var(--gutter) 90px;
   display: flex;
   flex-direction: column;
   gap: 56px;
@@ -1676,7 +1668,7 @@ a.find-item:hover .find-title { color: var(--accent); }
 /* 导读 3 撞色大卡 */
 .dopa-guide-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0,1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
 }
 .dopa-guide-card {
@@ -1787,7 +1779,7 @@ a.finds-duo-item:hover { transform: translateX(3px); background: rgba(255,255,25
 /* ====================================================
    首页 v6 —— Vibe Agent(Claude.ai 产品窗) + 三 Tab 容器
    ==================================================== */
-.agent-zone { max-width: 1240px; margin: 56px auto 0; padding: 0 28px; }
+.agent-zone { margin: 56px 0 0; padding: 0 var(--gutter); }
 
 /* ---------- Claude.ai 质感面板 ---------- */
 .vag {
@@ -1982,7 +1974,7 @@ a.finds-duo-item:hover { transform: translateX(3px); background: rgba(255,255,25
 .vag-send:disabled { opacity: .35; cursor: default; }
 
 /* ---------- 三 Tab 撞色容器 ---------- */
-.dopa-wrap { max-width: 1240px; margin: 0 auto; padding: 70px 28px 90px; }
+.dopa-wrap { padding: 70px var(--gutter) 90px; }
 .htabs { }
 .htabs-bar {
   display: inline-flex;
@@ -2258,10 +2250,11 @@ a.finds-duo-item:hover { transform: translateX(3px); background: rgba(255,255,25
 .sitefooter {
   background: var(--bg);
   border-top: 1px solid var(--line);
-  margin-top: 0;
+  /* 真正生效的一条（覆盖 677 行的同名规则）：分隔线与上方内容的距离 */
+  margin-top: clamp(150px, 20vw, 300px);
   padding: 56px 0 26px;
 }
-.sitefooter .container { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+.sitefooter .container { padding: 0 var(--gutter); }
 .footer-grid {
   display: grid;
   grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
@@ -2767,14 +2760,173 @@ a.finds-duo-item:hover { transform: translateX(3px); background: rgba(255,255,25
 /* ====================================================
    /tools v2 —— 主 Tab + 详情 Modal + Skill 空态 + Logo 头像
    ==================================================== */
-/* ---- 主 Tab 栏 ---- */
-.ttabs-bar {
+/* ---- 入口卡（2026-09-07 终版：竖版大方块，logo 铺满整卡，信息条叠底部；
+   没内容就留空，不加凑数板块（老大明确要求） ---- */
+.tentry {
+  position: relative;
+  aspect-ratio: 1 / 0.92;
+  background: var(--bg-2);
+  border: 1.5px solid var(--ink);
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: center;
+  transition: border-color 0.15s, box-shadow 0.18s ease, transform 0.15s ease, background 0.15s;
+}
+.tentry:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(19, 19, 19, 0.12);
+}
+.tentry.is-on {
+  border-color: var(--accent);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(91, 75, 230, 0.14), 0 10px 24px rgba(19, 19, 19, 0.06);
+}
+/* logo 铺满整卡（留 8% 呼吸边），下移 3px（老大要求），hover 轻微放大 */
+.tentry-logo {
+  position: absolute;
+  inset: 0;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8%;
+  transform: translateY(3px);
+  transition: transform 0.2s ease;
+}
+.tentry-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+/* Skill 卡：大字母铺满 */
+.tentry-logo--text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(90px, 13vw, 150px);
+  color: var(--accent);
+  opacity: 0.9;
+}
+.tentry:hover .tentry-logo { transform: translateY(3px) scale(1.05); }
+/* 主页描述文字上移 2px（只作用于资源库主页，不动全站） */
+.tools-home-wrap .page-head .lead { transform: translateY(-2px); }
+/* 底部信息条：渐变衬底保证可读（缩小版） */
+.tentry-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 16px 10px 9px;
+  background: linear-gradient(transparent, rgba(247, 246, 242, 0.97) 42%);
+}
+.tentry-title {
+  font-size: clamp(13.5px, 1.3vw, 15.5px);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   gap: 6px;
+}
+.tentry-count {
+  font-size: 9.5px;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+.tentry-desc {
+  font-size: 10.5px;
+  color: var(--ink-faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.tentry-hint {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  z-index: 1;
+  font-size: 9px;
+  color: var(--ink-faint);
+  border: 1px solid var(--line);
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* 资源库主页：回归全站标准布局（全宽 + gutter），卡片尺寸保持不变不拉伸 */
+.tools-home-wrap {
+  padding-inline: var(--gutter);
+}
+/* 资源库主页网格：固定卡片宽度（176~200px），全宽下从左排开、右侧自然留白 */
+.tools-home-grid {
+  grid-template-columns: repeat(auto-fill, minmax(176px, 200px));
+  gap: 22px;
+  /* 视觉下移 3px，不改变文档流 —— 上下文字都不被推动 */
+  transform: translateY(3px);
+}
+
+/* ---- AI 工具二级页布局（2026-09-07） ---- */
+/* 标题区：横排压缩，返回按钮挂右上，比主页 page-head 紧凑 */
+.aitools-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  padding: 3px; /* 整体向内收缩 3px（四周） */
+}
+/* 标题下方的内容与标题左缘对齐（同样整体收缩 3px） */
+.aitools-panel { padding: 3px; }
+.aitools-head h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 6px;
+}
+.aitools-head .lead { font-size: 14px; color: var(--ink-soft); margin: 0; }
+.aitools-head .skill-empty-btn { flex: none; margin-top: 6px; }
+/* 搜索 + 统计 + 分类收进同一个面板容器 */
+.aitools-box {
   background: var(--bg-2);
   border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 5px;
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+.aitools-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.aitools-toolbar .tsearch { flex: 1 1 260px; max-width: 440px; }
+.aitools-toolbar .toolbox-stats { margin-left: auto; margin-bottom: 0; }
+.aitools-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ---- 主 Tab 栏（已废弃：入口改为网格内 .tentry 卡片，样式保留以防其他页复用） ---- */
+.ttabs-bar {
+  display: flex;
+  gap: 10px;
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
   width: fit-content;
   max-width: 100%;
   margin-bottom: 22px;
@@ -2787,20 +2939,29 @@ a.finds-duo-item:hover { transform: translateX(3px); background: rgba(255,255,25
   font-size: 13.5px;
   letter-spacing: 0.02em;
   color: var(--ink-soft);
-  border: none;
-  background: transparent;
-  border-radius: 999px;
-  padding: 8px 18px;
+  border: 2px solid var(--ink);
+  background: var(--bg-2);
+  border-radius: 0;
+  box-shadow: 3px 3px 0 var(--ink);
+  padding: 9px 20px;
   cursor: pointer;
-  transition: background 0.18s, color 0.18s, transform 0.12s;
+  transition: background 0.15s, color 0.15s, transform 0.1s ease, box-shadow 0.1s ease;
   white-space: nowrap;
 }
-.ttab:hover { color: var(--ink); }
+.ttab:hover {
+  color: var(--ink);
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.ttab:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
 .ttab-no { font-size: 9.5px; opacity: 0.55; letter-spacing: 0.1em; }
 .ttab-count {
   font-size: 10px;
   background: rgba(19, 19, 19, 0.07);
-  border-radius: 999px;
+  border-radius: 0;
   padding: 2px 7px;
   color: var(--ink-faint);
 }
@@ -2968,30 +3129,78 @@ button.tcard:hover .tcard-more {
   gap: 14px;
   animation: ttab-in 0.22s var(--ease-main);
 }
+/* 悬浮方块容器（2026-09-07 改版：替代原圆形烧瓶座） */
 .skill-empty-icon {
-  width: 72px;
-  height: 72px;
-  border-radius: 22px;
+  width: auto;
+  height: auto;
+  background: none;
+  border: none;
+  margin: 10px 0 14px;
+  position: relative;
+}
+/* 方块本体：上下缓浮 */
+.skill-cube {
+  position: relative;
+  width: 96px;
+  height: 96px;
   background: var(--bg-2);
-  border: 1px solid var(--line);
+  border: 2px solid var(--ink);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 4px;
-  position: relative;
+  animation: skillFloat 3.2s ease-in-out infinite;
+  z-index: 1;
 }
-.skill-empty-icon::after {
-  content: "";
+/* 右上角品牌紫点（继承原 icon::after 的元素） */
+.skill-cube-dot {
   position: absolute;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+  width: 10px;
+  height: 10px;
   background: var(--accent);
-  top: -3px;
-  right: -3px;
   border: 2px solid var(--bg);
+  top: -5px;
+  right: -5px;
 }
+/* 地面阴影：方块浮起时缩小变淡，制造悬浮纵深 */
+.skill-cube-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: -18px;
+  width: 74px;
+  height: 8px;
+  background: rgba(19, 19, 19, 0.16);
+  transform: translateX(-50%);
+  animation: skillShadow 3.2s ease-in-out infinite;
+}
+/* 边缘粒子：从方框四边向外飘散，循环 + 负延迟错相 */
+.skill-particle {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  animation: skillDrift var(--dur) linear infinite;
+  animation-delay: var(--delay);
+}
+.skill-empty-flask { position: relative; z-index: 1; }
 .skill-empty-flask img { image-rendering: pixelated; }
+@keyframes skillFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
+}
+@keyframes skillShadow {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+  50% { transform: translateX(-50%) scale(0.72); opacity: 0.5; }
+}
+@keyframes skillDrift {
+  0% { opacity: 0; transform: translate(0, 0); }
+  14% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--dx, 0), var(--dy, -20px)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skill-cube,
+  .skill-cube-shadow { animation: none; }
+  .skill-particle { display: none; }
+}
 .skill-empty h3 { font-family: var(--font-display); font-size: 24px; font-weight: 700; letter-spacing: -0.01em; }
 .skill-empty p { color: var(--ink-soft); font-size: 14.5px; line-height: 1.8; max-width: 480px; }
 .skill-empty-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 4px; }
@@ -3010,7 +3219,7 @@ button.tcard:hover .tcard-more {
 .skill-empty-btn:hover { background: var(--accent); color: #fff; }
 
 @media (max-width: 560px) {
-  .ttabs-bar { width: 100%; justify-content: center; border-radius: 16px; }
+  .ttabs-bar { width: 100%; justify-content: center; }
   .ttab { flex: 1; justify-content: center; font-size: 12.5px; padding: 8px 10px; }
   .modal { padding: 24px 20px 18px; }
 }
@@ -3067,7 +3276,7 @@ a.tcard:hover .tcard-domain { color: var(--ink-soft); }
 .crumb a:hover { color: var(--accent); }
 
 /* ---- 教程封面/目录页 ---- */
-.tpage-inner { max-width: 1240px; margin: 0 auto; padding: 96px 28px 90px; }
+.tpage-inner { padding: 96px var(--gutter) 90px; }
 .tbook-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
 .tbook-head h1 {
   font-family: var(--font-display);
@@ -3117,7 +3326,7 @@ a.tcard:hover .tcard-domain { color: var(--ink-soft); }
 .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ---- 阅读页 ---- */
-.readpage { max-width: 1240px; margin: 0 auto; padding: 96px 28px 60px; }
+.readpage { padding: 96px var(--gutter) 60px; }
 .readpage-bar { display: flex; gap: 10px; align-items: center; font-size: 12.5px; color: var(--ink-faint); margin-bottom: 20px; flex-wrap: wrap; }
 .readpage-bar a { color: var(--ink-soft); }
 .readpage-bar a:hover { color: var(--accent); }
@@ -3245,7 +3454,7 @@ a.tcard:hover .tcard-meta { color: var(--ink-soft); }
 .md-body .md-unlinked { color: var(--ink-faint); border-bottom: 1px dashed var(--line); padding-bottom: 1px; cursor: help; }
 
 /* ================= 训练营 /courses ================= */
-.course-wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+.course-wrap { padding: 0 var(--gutter); }
 .course-wrap--narrow { max-width: 900px; }
 .sec-no { display: flex; align-items: baseline; gap: 12px; font-size: 12px; letter-spacing: 0.22em; color: var(--accent); font-weight: 600; }
 .sec-no .mono { font-size: 12px; letter-spacing: 0.08em; opacity: 0.85; }
@@ -3366,10 +3575,10 @@ a.tcard:hover .tcard-meta { color: var(--ink-soft); }
 .plan-unlock { margin-top: 12px; font-size: 11px; color: var(--ink-faint); border-top: 1px dashed var(--line); padding-top: 10px; }
 
 /* ============ 课程台 /courses ============ */
-.course-player-head { max-width: 1240px; margin: 0 auto; padding: 92px 28px 26px; }
+.course-player-head { padding: 92px var(--gutter) 26px; }
 .course-player-head h1 { font-family: var(--font-display); font-size: clamp(1.9rem, 4.6vw, 3.1rem); letter-spacing: -0.02em; line-height: 1.1; }
 .course-player-head .lead { color: var(--ink-soft); max-width: 640px; margin-top: 12px; line-height: 1.7; font-size: 15px; }
-.player-body { max-width: 1240px; margin: 0 auto; padding: 10px 28px 90px; }
+.player-body { padding: 10px var(--gutter) 90px; }
 .state-bar {
   display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
   border: 1px solid var(--line); border-radius: 16px; background: var(--bg-2);
@@ -3484,6 +3693,10 @@ a.tcard:hover .tcard-meta { color: var(--ink-soft); }
   color: var(--ink-soft);
   padding: 7px 12px; border-radius: 8px;
   transition: color .15s, background .15s;
+  /* Link（<a>）与旧 button 渲染一致：去下划线、行内块、继承字色 */
+  text-decoration: none;
+  display: inline-block;
+  line-height: 1.4;
 }
 .sitenav-link--btn:hover { color: var(--ink); background: rgba(19,19,19,.05); }
 .sitenav-link--btn.is-active { color: var(--accent); font-weight: 600; }
@@ -3690,7 +3903,7 @@ a.tcard:hover .tcard-meta { color: var(--ink-soft); }
 
 /* ================= Lab · 实验室 (/lab) ================= */
 .lab-page { min-height: 100vh; }
-.lab-wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px; }
+.lab-wrap { padding: 0 var(--gutter); }
 
 /* hero */
 .lab-hero { background: #131313; color: #f2f0ea; padding: 118px 0 84px; position: relative; overflow: hidden; }
@@ -3810,7 +4023,7 @@ a.tcard:hover .tcard-meta { color: var(--ink-soft); }
 }
 
 /* ================= Lab v2 · 作品展示场 ================= */
-.lab-wrap { max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+.lab-wrap { padding: 0 var(--gutter); }
 
 /* 页头：克制 */
 .lab2-head { padding: 110px 0 26px; max-width: 760px; }
@@ -3896,7 +4109,7 @@ a.tcard:hover .tcard-meta { color: var(--ink-soft); }
 }
 
 /* ============ Lab v3 · godly / leerob 气质 ============ */
-.lab3-wrap { max-width: 1240px; margin: 0 auto; padding: 0 28px 80px; }
+.lab3-wrap { padding: 0 var(--gutter) 80px; }
 
 /* hero */
 .lab3-hero { padding: 130px 0 46px; }
