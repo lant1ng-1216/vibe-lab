@@ -1,6 +1,7 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Brand from "./Brand";
 
 const LINKS = [
@@ -12,9 +13,13 @@ const LINKS = [
   { href: "/contact", label: "支持我们" },
 ];
 
+/**
+ * 全站导航。
+ * 注：用 <Link prefetch> 而非 button+router.push —— Next 会对视口内链接自动预取，
+ * 首次点击几乎瞬时（对齐 hemppp/wool 的跳转优化体检结论）。
+ */
 export default function SiteNav() {
   const path = usePathname();
-  const router = useRouter();
 
   return (
     <header className="sitenav">
@@ -24,15 +29,12 @@ export default function SiteNav() {
           {LINKS.map((l) => {
             const active =
               path === l.href || (l.href !== "/" && path.startsWith(l.href));
+            const cls =
+              "sitenav-link sitenav-link--btn" + (active ? " is-active" : "");
             return (
-              <button
-                key={l.href}
-                type="button"
-                onClick={() => router.push(l.href)}
-                className={"sitenav-link sitenav-link--btn" + (active ? " is-active" : "")}
-              >
+              <Link key={l.href} href={l.href} className={cls} prefetch>
                 {l.label}
-              </button>
+              </Link>
             );
           })}
         </nav>

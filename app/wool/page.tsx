@@ -6,7 +6,7 @@ import { WOOL } from "@/data/wool";
 import { TOOLS } from "@/data/tools";
 
 export const metadata: Metadata = {
-  title: "羊毛专区 — Vibe Lab · 振动实验室",
+  title: "羊毛福利专区 — Vibe Lab · 振动实验室",
   description:
     "主流 AI 工具的免费额度、白嫖姿势与门槛清单：能薅多少、要不要验证、什么时候过期，逐条标明核实日期。",
 };
