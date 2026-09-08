@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Brand from "./Brand";
 import CourseGate from "./CourseGate";
@@ -19,6 +20,12 @@ export default function SiteNav() {
   const router = useRouter();
   const [gate, setGate] = useState<string | null>(null);
 
+  /**
+   * 跳转优化（2026-09-08 体检）：
+   * 原先导航是 <button onClick={router.push}>，Next 的自动预取只对 <Link> 生效，
+   * 所以每个栏目首次点击都要现拉页面。改成 Link 后视口内链接自动预取，
+   * 全站跳转几乎瞬时；训练营那条要弹邀请码，仍保留 button。
+   */
   function handleNav(l: (typeof LINKS)[number]) {
     if (l.gate) {
       setGate(l.href); // 弹邀请码窗
@@ -35,16 +42,28 @@ export default function SiteNav() {
           {LINKS.map((l) => {
             const active =
               path === l.href || (l.href !== "/" && path.startsWith(l.href));
-            return (
+            const cls =
+              "sitenav-link sitenav-link--btn" + (active ? " is-active" : "");
+            const inner = (
+              <>
+                {l.locked && <span className="sitenav-lock" aria-hidden="true">🔒</span>}
+                {l.label}
+              </>
+            );
+            // 需要邀请码的走 button（弹窗），其余用 Link 拿自动预取
+            return l.gate ? (
               <button
                 key={l.href}
                 type="button"
                 onClick={() => handleNav(l)}
-                className={"sitenav-link sitenav-link--btn" + (active ? " is-active" : "")}
+                className={cls}
               >
-                {l.locked && <span className="sitenav-lock" aria-hidden="true">🔒</span>}
-                {l.label}
+                {inner}
               </button>
+            ) : (
+              <Link key={l.href} href={l.href} className={cls} prefetch>
+                {inner}
+              </Link>
             );
           })}
         </nav>
