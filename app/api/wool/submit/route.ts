@@ -65,8 +65,8 @@ export async function POST(req: NextRequest) {
     from: str(b.from, 24) || undefined,
   };
 
-  if (!s.name) return NextResponse.json({ ok: false, error: "请填写工具名" }, { status: 400 });
-  if (!s.quota) return NextResponse.json({ ok: false, error: "请填写白嫖额度" }, { status: 400 });
+  // 工具名 / 白嫖额度 / 有效期 / 核实方式 已改选填（2026-09-09 老大定的）；
+  // 硬校验只留 门槛、怎么领、领取链接 —— 缺了这三样,审核没法开工
   if (!GATES.includes(s.gate)) {
     return NextResponse.json({ ok: false, error: "门槛取值不合法" }, { status: 400 });
   }
@@ -76,12 +76,6 @@ export async function POST(req: NextRequest) {
   if (!s.how) return NextResponse.json({ ok: false, error: "请填写领取方式" }, { status: 400 });
   if (!/^https?:\/\//i.test(s.href)) {
     return NextResponse.json({ ok: false, error: "领取链接要以 http(s):// 开头" }, { status: 400 });
-  }
-  if (s.proof.length < 10) {
-    return NextResponse.json(
-      { ok: false, error: "请写清你是什么时候、在哪个页面核实到这个额度的（至少 10 个字）" },
-      { status: 400 }
-    );
   }
   if (!rateOk(clientIp(req))) {
     return NextResponse.json({ ok: false, error: "投得太快了，歇十分钟再来" }, { status: 429 });

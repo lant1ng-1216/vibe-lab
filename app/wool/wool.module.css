@@ -589,7 +589,9 @@ a.filter {
 
 /* ---------- 投稿弹窗 ---------- */
 .mask {
-  position: absolute;
+  /* fixed：遮罩和弹窗必须钉在视口上。曾经用 absolute，在没有定位祖先的情况下
+     会锚到文档顶部 —— 页面一滚，用户看到的就是「一大块黑色阴影」而弹窗不知所踪 */
+  position: fixed;
   inset: 0;
   z-index: 60;
   background: rgba(19, 19, 19, 0.45);
@@ -598,6 +600,7 @@ a.filter {
   justify-content: center;
   padding: 2rem 1rem;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .modal {

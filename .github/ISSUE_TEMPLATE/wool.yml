@@ -18,19 +18,19 @@ body:
     id: name
     attributes:
       label: 工具名
-      description: 如「GitHub Copilot」。站点工具库已收录的话，尽量用同一个名字。
+      description: 选填。如「GitHub Copilot」。站点工具库已收录的话，尽量用同一个名字。
       placeholder: GitHub Copilot
     validations:
-      required: true
+      required: false
 
   - type: input
     id: quota
     attributes:
       label: 白嫖额度
-      description: 这是卡片上最大的那行字，越短越好。写具体数字，不要写「很多」。
+      description: 选填。这是卡片上最大的那行字，越短越好。写具体数字，不要写「很多」。
       placeholder: 每月 2000 次补全 + 50 次高级请求
     validations:
-      required: true
+      required: false
 
   - type: dropdown
     id: gate
@@ -49,12 +49,13 @@ body:
     id: validity
     attributes:
       label: 有效期
+      description: 选填。拿不准就选「长期」，审核时会复核。
       options:
         - 长期
         - 限时
         - 已失效
     validations:
-      required: true
+      required: false
 
   - type: input
     id: deadline
@@ -97,11 +98,11 @@ body:
     attributes:
       label: 你是怎么核实的
       description: |
-        必填。写清两件事：什么时候看的、在哪个页面看到的。
+        选填，但强烈建议写。写清两件事：什么时候看的、在哪个页面看到的。
         例如：2026-09-06 在 https://xxx.com/pricing 看到 Free 档写着 2000 completions。
-        这条决定了我们敢不敢直接上线。
+        写了核实的投稿更容易过审、更快上线。
     validations:
-      required: true
+      required: false
 
   - type: checkboxes
     id: confirm
