@@ -33,7 +33,7 @@ function ghToken() {
 function toIssueBody(s: WoolSubmission): string {
   const line = (k: string, v: string) => `**${k}**：${v || "（未填）"}`;
   return [
-    `## ${s.name} —— ${s.quota}`,
+    `## ${s.name || "（工具名待补）"} —— ${s.quota || "（额度待补）"}`,
     "",
     line("工具名", s.name),
     line("白嫖额度", s.quota),
@@ -45,7 +45,7 @@ function toIssueBody(s: WoolSubmission): string {
     line("领取链接", s.href),
     "",
     "### 核实方式",
-    s.proof,
+    s.proof || "（投稿人未填，审核时需站长自行核实后再上线）",
     "",
     s.from ? `> 投稿人：${s.from}` : "> 投稿人：匿名",
     "",
@@ -74,7 +74,7 @@ export async function submitWool(
       "User-Agent": "vibe-lab",
     },
     body: JSON.stringify({
-      title: `[羊毛] ${s.name} —— ${s.quota}`,
+      title: `[羊毛] ${s.name || "（工具名待补）"} —— ${s.quota || "（额度待补）"}`,
       body: toIssueBody(s),
       labels: [WOOL_LABEL],
     }),

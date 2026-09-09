@@ -96,12 +96,12 @@ export default function WoolSubmit() {
             ) : (
               <div className={styles.fields}>
                 <label className={styles.field}>
-                  <span>工具名 *</span>
+                  <span>工具名（选填）</span>
                   <input value={f.name} maxLength={60} onChange={(e) => set("name", e.target.value)} placeholder="GitHub Copilot" />
                 </label>
 
                 <label className={styles.field}>
-                  <span>白嫖额度 *</span>
+                  <span>白嫖额度（选填）</span>
                   <input value={f.quota} maxLength={80} onChange={(e) => set("quota", e.target.value)} placeholder="每月 2000 次补全" />
                 </label>
 
@@ -115,7 +115,7 @@ export default function WoolSubmit() {
                     </select>
                   </label>
                   <label className={styles.field}>
-                    <span>有效期 *</span>
+                    <span>有效期（选填）</span>
                     <select value={f.validity} onChange={(e) => set("validity", e.target.value)}>
                       {VALIDITIES.map((v) => (
                         <option key={v} value={v}>{v}</option>
@@ -147,7 +147,7 @@ export default function WoolSubmit() {
                 </label>
 
                 <label className={styles.field}>
-                  <span>你是怎么核实的 *</span>
+                  <span>你是怎么核实的（选填）</span>
                   <textarea
                     value={f.proof}
                     maxLength={500}
